@@ -26,13 +26,14 @@ float DynamicSimulationContext::doReaction() {
     for (int n : _numberOfReactions) totalReactions += n;
     if (totalReactions == 0) return 0;
 
-    int reactionIndex = proportionalReactionRandomIndex();
+    float totalRate = 0;
+    int reactionIndex = proportionalReactionRandomIndex(&totalRate);
     reaction(reactionIndex)->doIt(randomSite(reactionIndex));
 
     float u;
     do u = randomN01();
     while (u == 0);
-    return -log(u) / reaction(reactionIndex)->rate();
+    return -log(u) / totalRate;
 }
 
 void DynamicSimulationContext::collectSites() {
@@ -68,14 +69,13 @@ void DynamicSimulationContext::collectSites() {
 #endif
 }
 
-int DynamicSimulationContext::proportionalReactionRandomIndex() const {
+int DynamicSimulationContext::proportionalReactionRandomIndex(float *totalRate) const {
     float rates[REACTIONS_NUM];
     for (int i = 0; i < REACTIONS_NUM; ++i) {
         rates[i] = _numberOfReactions[i] * reaction(i)->rate();
     }
 
-    int totalRate = 0;
-    for (int n : rates) totalRate += n;
+    for (float n : rates) *totalRate += n;
 
 #ifdef DEBUG_OUT
     auto printArrLambda = [](const char *name, float arr[REACTIONS_NUM]) {
@@ -90,12 +90,12 @@ int DynamicSimulationContext::proportionalReactionRandomIndex() const {
     auto printValueLambda = [](const char *name, float value) {
         std::cout << name << " = " << value << std::endl;
     };
-    printValueLambda("totalRate", totalRate);
+    printValueLambda("totalRate", *totalRate);
 #endif
 
     float normalizedRates[REACTIONS_NUM];
     for (int i = 0; i < REACTIONS_NUM; ++i) {
-        normalizedRates[i] = rates[i] / totalRate;
+        normalizedRates[i] = rates[i] / *totalRate;
     }
 
     for (int i = 1; i < REACTIONS_NUM; ++i) {
@@ -107,7 +107,7 @@ int DynamicSimulationContext::proportionalReactionRandomIndex() const {
 #endif
 
     int randomIndex = REACTIONS_NUM - 1;
-    float r = randomN01();
+    float r = randomN01(); // TODO: тут нужно учитывать то, что иногда нормированные скорости дают чуть больше единицы
 #ifdef DEBUG_OUT
     printValueLambda("r", r);
 #endif

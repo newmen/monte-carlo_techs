@@ -3,8 +3,11 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include "dynamicsimulation_context.h"
+#include <QTimer>
+#include "playbutton.h"
 #include "renderarea_context.h"
+//#include "dynamicsimulation_context.h"
+#include "kineticsimulation_context.h"
 
 class MainWindowContext : public QWidget
 {
@@ -18,13 +21,19 @@ public:
 private slots:
     void doReaction();
 
+    void playAnimation();
+    void stopAnimation();
+
 private:
     AreaData _area;
 
-    DynamicSimulationContext *_simulationContext;
+//    DynamicSimulationContext *_simulationContext;
+    KineticSimulationContext *_simulationContext;
     RenderAreaContext *_renderArea;
 
     QPushButton *_doButton;
+    PlayButton *_playButton;
+    QTimer *_animationTimer;
 };
 
 #endif // MAINWINDOW_CONTEXT_H

@@ -7,7 +7,9 @@ SOURCES += \
     renderarea_context.cpp \
     site_data.cpp \
     dynamicsimulation_context.cpp \
-    simulationbase_context.cpp
+    simulationbase_context.cpp \
+    kineticsimulation_context.cpp \
+    playbutton.cpp
 
 HEADERS += \
     drawing_role.h \
@@ -25,4 +27,6 @@ HEADERS += \
     reacting_role.h \
     ireacting_role.h \
     reactionmigrating_role.h \
-    simulationbase_context.h
+    simulationbase_context.h \
+    kineticsimulation_context.h \
+    playbutton.h

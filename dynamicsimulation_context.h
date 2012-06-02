@@ -15,7 +15,7 @@ public:
 
 private:
     void collectSites();
-    int proportionalReactionRandomIndex() const;
+    int proportionalReactionRandomIndex(float *totalRate) const;
     SiteData *randomSite(int reactionIndex);
 
     int _numberOfReactions[REACTIONS_NUM];
