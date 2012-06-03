@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/simulationbase_context.cpp
+../simulationbase_context.cpp

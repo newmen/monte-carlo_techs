@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/reactionmigrating_role.h
+../reactionmigrating_role.h

@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/kineticsimulation_context.cpp
+../kineticsimulation_context.cpp

@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/simulating_role.h
+../simulating_role.h

@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/site_data.h
+../site_data.h

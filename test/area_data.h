@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/area_data.h
+../area_data.h

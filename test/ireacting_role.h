@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/ireacting_role.h
+../ireacting_role.h

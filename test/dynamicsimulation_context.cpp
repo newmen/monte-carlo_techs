@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/dynamicsimulation_context.cpp
+../dynamicsimulation_context.cpp

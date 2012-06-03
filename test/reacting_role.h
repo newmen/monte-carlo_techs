@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/reacting_role.h
+../reacting_role.h

@@ -1,1 +1,1 @@
-/home/newmen/c++/Qt/qt_mc/reaction23_data.h
+../reaction23_data.h

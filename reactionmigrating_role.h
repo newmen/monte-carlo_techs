@@ -1,6 +1,7 @@
 #ifndef REACTIONMIGRATING_ROLE_H
 #define REACTIONMIGRATING_ROLE_H
 
+#include <cstdlib>
 #include <functional>
 #include "reacting_role.h"
 
