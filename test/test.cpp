@@ -10,10 +10,9 @@
 using namespace std;
 
 template <class SimulationContext>
-void runTest(const char *name, const int sizeX, const int sizeY) {
+void runTest(const char *name, const int sizeX, const int sizeY, const int repeats) {
     cout << name << endl;
 
-    const long long repeats = 10;
     float totalTime = 0, dt = 0;
     int iterations = 0;
 
@@ -49,12 +48,23 @@ void runTest(const char *name, const int sizeX, const int sizeY) {
     cout << "Calculating time: " << (stopTime - startTime) << "\n" << endl;
 }
 
-int main() {
-    srand(time(0));
-    const int sizeX = 50, sizeY = 50;
+int main(int argc, char *argv[]) {
+    if (argc != 4) {
+        cerr << "Wrong test running! Try this:\n"
+             << argv[0] << " sizeX sizeY repeats" << endl;
+        return 1;
+    }
+    const int sizeX = atoi(argv[1]), sizeY = atoi(argv[2]);
+    const int repeats = atoi(argv[3]);
 
-    runTest<DynamicSimulationContext>("Dynamic MC", sizeX, sizeY);
-    runTest<KineticSimulationContext>("Kinetic MC", sizeX, sizeY);
+    cout << "Running with:\n"
+         << "sizeX = " << sizeX << "\n"
+         << "sizeY = " << sizeY << "\n"
+         << "repeats = " << repeats << "\n" << endl;
+
+    srand(time(0));
+    runTest<DynamicSimulationContext>("Dynamic MC", sizeX, sizeY, repeats);
+    runTest<KineticSimulationContext>("Kinetic MC", sizeX, sizeY, repeats);
 
     return 0;
 }
