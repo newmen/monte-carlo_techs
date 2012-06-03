@@ -2,6 +2,8 @@
 *~
 *.autosave
 
+*.dot
+
 test/test_mc
 
 # Compiled Object files
