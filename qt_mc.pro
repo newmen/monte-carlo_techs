@@ -37,4 +37,5 @@ HEADERS += \
     stabilizationreacting_role.h
 
 OTHER_FILES += \
-    .gitignore
+    .gitignore \
+    README.md
