@@ -7,14 +7,23 @@
 #include "reaction21_data.h"
 #include "reaction23_data.h"
 #include "reaction3113m_data.h"
+#include "reaction34ms_data.h"
+#include "reaction35_data.h"
+#include "reaction51mr_data.h"
+
 #include "reacting_role.h"
 #include "reactionmigrating_role.h"
+#include "reactiondissolutionmigrating_role.h"
+#include "stabilizationreacting_role.h"
 
 SimulationBaseContext::SimulationBaseContext(AreaData *area) : _area(area) {
     _reactions[0] = new ReactingRole<Reaction12Data>;
     _reactions[1] = new ReactingRole<Reaction21Data>;
     _reactions[2] = new ReactingRole<Reaction23Data>;
     _reactions[3] = new ReactionMigratingRole<Reaction3113MData>;
+    _reactions[4] = new StabilizationReactingRole<Reaction34MSData>;
+    _reactions[5] = new ReactingRole<Reaction35Data>;
+    _reactions[6] = new ReactionDissolutionMigratingRole<Reaction51MRData, 3>;
 }
 
 SimulationBaseContext::~SimulationBaseContext() {

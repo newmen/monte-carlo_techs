@@ -6,7 +6,7 @@
 #include <QTimer>
 #include "playbutton.h"
 #include "renderarea_context.h"
-//#include "dynamicsimulation_context.h"
+#include "dynamicsimulation_context.h"
 #include "kineticsimulation_context.h"
 
 class MainWindowContext : public QWidget

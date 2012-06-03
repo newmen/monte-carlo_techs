@@ -29,7 +29,12 @@ HEADERS += \
     reactionmigrating_role.h \
     simulationbase_context.h \
     kineticsimulation_context.h \
-    playbutton.h
+    playbutton.h \
+    reaction35_data.h \
+    reaction51mr_data.h \
+    reaction34ms_data.h \
+    reactiondissolutionmigrating_role.h \
+    stabilizationreacting_role.h
 
 OTHER_FILES += \
     .gitignore
