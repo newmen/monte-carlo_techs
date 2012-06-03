@@ -40,7 +40,7 @@ void DrawingRole<AData, cellSideLength>::draw(QPainter *painter) const {
             color.setRgb(33, 33, 33);
             break;
         case 5:
-            color.setRgb(225, 125, 25);
+            color.setRgb(25, 225, 25);
             break;
         }
         painter->setBrush(color);
