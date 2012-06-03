@@ -12,7 +12,7 @@ public:
 
 template <class RData, int hopsNum>
 void ReactionDissolutionMigratingRole<RData, hopsNum>::doIt(SiteData *site) {
-    updateNeighbour(site, (this->migrationsNum() > hopsNum) ? this->nextState() : this->prevState());
+    updateNeighbour(site, (this->migrationsNum() % hopsNum == 0) ? this->nextState() : this->prevState());
     site->setCell(this->nextState());
 
     this->incMigrationsNum();

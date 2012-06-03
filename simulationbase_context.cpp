@@ -23,7 +23,7 @@ SimulationBaseContext::SimulationBaseContext(AreaData *area) : _area(area) {
     _reactions[3] = new ReactionMigratingRole<Reaction3113MData>;
     _reactions[4] = new StabilizationReactingRole<Reaction34MSData>;
     _reactions[5] = new ReactingRole<Reaction35Data>;
-    _reactions[6] = new ReactionDissolutionMigratingRole<Reaction51MRData, 3>;
+    _reactions[6] = new ReactionDissolutionMigratingRole<Reaction51MRData, 5>;
 }
 
 SimulationBaseContext::~SimulationBaseContext() {
