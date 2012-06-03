@@ -2,6 +2,8 @@
 *~
 *.autosave
 
+test/test_mc
+
 # Compiled Object files
 *.slo
 *.lo

@@ -42,14 +42,15 @@ void KineticSimulationContext::calcRatesPerSite(PerSite *perSite) const {
 
 int KineticSimulationContext::siteRandomIndex(float *dt) const {
     int indexOfMin = -1;
-    float min_dt = FLT_MAX * .5f; // чтобы на всякий случай не переполнилось, хотя это наверное глупо :)
+    float min_dt = 0;
     for (int i = 0; i < _perSites.size(); ++i) {
         float u = 0;
         while (u == 0) u = randomN01();
 
+        if (_perSites[i]->_commonRate == 0) continue;
         float local_dt = -log(u) / _perSites[i]->_commonRate;
 
-        if (local_dt >= min_dt) continue;
+        if (min_dt != 0 && local_dt >= min_dt) continue;
         min_dt = local_dt;
         indexOfMin = i;
     }

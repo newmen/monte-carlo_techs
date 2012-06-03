@@ -30,3 +30,6 @@ HEADERS += \
     simulationbase_context.h \
     kineticsimulation_context.h \
     playbutton.h
+
+OTHER_FILES += \
+    .gitignore

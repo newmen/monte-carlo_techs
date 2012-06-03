@@ -1,6 +1,13 @@
 #ifndef SIMULATING_ROLE_H
 #define SIMULATING_ROLE_H
 
+#include <functional>
+
+#ifndef NEIGHBOURS_NUM
+// страшный и ужасный костыль
+#define NEIGHBOURS_NUM 4
+#endif
+
 template <class AData>
 class SimulatingRole : public AData
 {

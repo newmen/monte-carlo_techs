@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include "simulationbase_context.h"
+#include "site_data.h"
 #include "simulating_role.h"
 
 #include "reaction12_data.h"
