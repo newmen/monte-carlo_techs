@@ -42,12 +42,12 @@ void runTest(const char *name, const int sizeX, const int sizeY, const int repea
     time_t stopTime = time(0);
 
     cout << "Total process time: " << (totalTime / repeats)
-         << " s; Iterations: " << ((float)iterations / repeats) << endl;
+         << " (sec); Iterations: " << ((float)iterations / repeats) << endl;
 
     double vm, rss;
     process_mem_usage(vm, rss);
     cout << "VM: " << vm << "; RSS: " << rss << endl;
-    cout << "Calculating time: " << (stopTime - startTime) << "\n" << endl;
+    cout << "Calculating time: " << (stopTime - startTime) << " seconds\n" << endl;
 }
 
 int main(int argc, char *argv[]) {
