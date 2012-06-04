@@ -6,8 +6,10 @@
 #include <QTimer>
 #include "playbutton.h"
 #include "renderarea_context.h"
+
 #include "dynamicsimulation_context.h"
 #include "kineticsimulation_context.h"
+#include "rejectionsimulation_context.h"
 
 class MainWindowContext : public QWidget
 {
@@ -28,7 +30,8 @@ private:
     AreaData _area;
 
 //    DynamicSimulationContext *_simulationContext;
-    KineticSimulationContext *_simulationContext;
+//    KineticSimulationContext *_simulationContext;
+    RejectionSimulationContext *_simulationContext;
     RenderAreaContext *_renderArea;
 
     QPushButton *_doButton;

@@ -5,7 +5,8 @@ MainWindowContext::MainWindowContext() : _area(8, 5) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _simulationContext = new DynamicSimulationContext(&_area);
-    _simulationContext = new KineticSimulationContext(&_area);
+//    _simulationContext = new KineticSimulationContext(&_area);
+    _simulationContext = new RejectionSimulationContext(&_area);
     _renderArea = new RenderAreaContext(&_area);
 
     _doButton = new QPushButton("Do reaction");
