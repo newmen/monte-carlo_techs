@@ -7,6 +7,7 @@
 #include "dynamicsimulation_context.h"
 #include "kineticsimulation_context.h"
 #include "rejectionsimulation_context.h"
+#include "rejectionfreesimulation_context.h"
 
 using namespace std;
 
@@ -67,6 +68,7 @@ int main(int argc, char *argv[]) {
     runTest<DynamicSimulationContext>("Dynamic MC", sizeX, sizeY, repeats);
     runTest<KineticSimulationContext>("Kinetic MC", sizeX, sizeY, repeats);
     runTest<RejectionSimulationContext>("Rejection MC", sizeX, sizeY, repeats);
+    runTest<RejectionFreeSimulationContext>("Rejection-free MC", sizeX, sizeY, repeats);
 
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <cmath>
 #include <cstdlib>
 #include "simulationbase_context.h"
 #include "site_data.h"
@@ -40,4 +41,10 @@ IReactingRole *SimulationBaseContext::reaction(int index) const {
 
 float SimulationBaseContext::randomN01() const {
     return (float)rand() / RAND_MAX;
+}
+
+float SimulationBaseContext::negativLogU() const {
+    float u;
+    do u = randomN01(); while (u == 0);
+    return u;
 }

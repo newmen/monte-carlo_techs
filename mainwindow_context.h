@@ -10,6 +10,7 @@
 #include "dynamicsimulation_context.h"
 #include "kineticsimulation_context.h"
 #include "rejectionsimulation_context.h"
+#include "rejectionfreesimulation_context.h"
 
 class MainWindowContext : public QWidget
 {
@@ -31,7 +32,8 @@ private:
 
 //    DynamicSimulationContext *_simulationContext;
 //    KineticSimulationContext *_simulationContext;
-    RejectionSimulationContext *_simulationContext;
+//    RejectionSimulationContext *_simulationContext;
+    RejectionFreeSimulationContext *_simulationContext;
     RenderAreaContext *_renderArea;
 
     QPushButton *_doButton;

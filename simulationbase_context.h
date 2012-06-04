@@ -19,6 +19,7 @@ protected:
     void throughArea(std::function<void (int *cell, int **neighbours)> lambda) const;
     IReactingRole *reaction(int index) const;
     float randomN01() const;
+    float negativLogU() const;
 
 private:
     AreaData *_area;

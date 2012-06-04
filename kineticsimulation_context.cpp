@@ -44,11 +44,8 @@ int KineticSimulationContext::siteRandomIndex(float *dt) const {
     int indexOfMin = -1;
     float min_dt = 0;
     for (int i = 0; i < _perSites.size(); ++i) {
-        float u = 0;
-        while (u == 0) u = randomN01();
-
         if (_perSites[i]->_commonRate == 0) continue;
-        float local_dt = -log(u) / _perSites[i]->_commonRate;
+        float local_dt = negativLogU() / _perSites[i]->_commonRate;
 
         if (min_dt != 0 && local_dt >= min_dt) continue;
         min_dt = local_dt;

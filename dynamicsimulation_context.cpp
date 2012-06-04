@@ -30,10 +30,7 @@ float DynamicSimulationContext::doReaction() {
     int reactionIndex = proportionalReactionRandomIndex(&totalRate);
     reaction(reactionIndex)->doIt(randomSite(reactionIndex));
 
-    float u;
-    do u = randomN01();
-    while (u == 0);
-    return -log(u) / totalRate;
+    return negativLogU() / totalRate;
 }
 
 void DynamicSimulationContext::collectSites() {

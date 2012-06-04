@@ -9,10 +9,7 @@ float RejectionSimulationContext::doReaction() {
     if (_totalRate == 0) return 0;
     doEvent(randomEventIndex());
 
-    float u = 0;
-    while (u == 0) u = randomN01();
-
-    return -log(u) / _totalRate;
+    return negativLogU() / _totalRate;
 }
 
 void RejectionSimulationContext::reviewAllEvents() {
