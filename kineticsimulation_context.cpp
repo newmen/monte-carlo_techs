@@ -35,9 +35,6 @@ void KineticSimulationContext::calcRatesPerSite(PerSite *perSite) const {
         perSite->_normedRates[i] = reaction(i)->couldBe(perSite->_site) * reaction(i)->rate();
         perSite->_commonRate += perSite->_normedRates[i];
     }
-
-    for (int i = 0; i < REACTIONS_NUM; ++i) perSite->_normedRates[i] /= perSite->_commonRate;
-    for (int i = 1; i < REACTIONS_NUM; ++i) perSite->_normedRates[i] += perSite->_normedRates[i - 1];
 }
 
 int KineticSimulationContext::siteRandomIndex(float *dt) const {
@@ -56,6 +53,9 @@ int KineticSimulationContext::siteRandomIndex(float *dt) const {
 }
 
 IReactingRole *KineticSimulationContext::randomReaction(int index) const {
+    for (int i = 0; i < REACTIONS_NUM; ++i) _perSites[index]->_normedRates[i] /= _perSites[index]->_commonRate;
+    for (int i = 1; i < REACTIONS_NUM; ++i) _perSites[index]->_normedRates[i] += _perSites[index]->_normedRates[i - 1];
+
     float r = randomN01(); // TODO: тут нужно учитывать то, что иногда нормированные скорости дают чуть больше единицы
     for (int i = 0; i < REACTIONS_NUM - 1; ++i) {
         if (r < _perSites[index]->_normedRates[i]) return reaction(i);
