@@ -1,5 +1,5 @@
+#include <sys/time.h>
 #include <cstdlib>
-#include <ctime>
 #include <iostream>
 #include "process_mem_usage.h"
 
@@ -21,7 +21,12 @@ void runTest(const char *name, const int sizeX, const int sizeY, const int repea
     AreaData *area = 0;
     SimulationBaseContext *simulationContext = 0;
 
-    time_t startTime = time(0);
+    timeval tv;
+    auto currTime = [&tv]() {
+        gettimeofday(&tv, 0);
+        return tv.tv_sec + tv.tv_usec / 1e6;
+    };
+    double startTime = currTime();
 
     for (int i = 0; i < repeats; ++i) {
         area = new AreaData(sizeX, sizeY);
@@ -39,7 +44,7 @@ void runTest(const char *name, const int sizeX, const int sizeY, const int repea
         delete area;
     }
 
-    time_t stopTime = time(0);
+    double stopTime = currTime();
 
     cout << "Total process time: " << (totalTime / repeats)
          << " (sec); Iterations: " << ((float)iterations / repeats) << endl;
