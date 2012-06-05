@@ -46,5 +46,5 @@ float SimulationBaseContext::randomN01() const {
 float SimulationBaseContext::negativLogU() const {
     float u;
     do u = randomN01(); while (u == 0);
-    return u;
+    return -log(u);
 }
