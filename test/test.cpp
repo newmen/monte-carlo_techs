@@ -20,6 +20,10 @@ void runTest(const char *name, const int sizeX, const int sizeY, const int repea
 
     AreaData *area = 0;
     SimulationBaseContext *simulationContext = 0;
+    auto freeUpMemory = [&area, &simulationContext]() {
+        delete simulationContext;
+        delete area;
+    };
 
     timeval tv;
     auto currTime = [&tv]() {
@@ -29,6 +33,8 @@ void runTest(const char *name, const int sizeX, const int sizeY, const int repea
     double startTime = currTime();
 
     for (int i = 0; i < repeats; ++i) {
+        freeUpMemory();
+
         area = new AreaData(sizeX, sizeY);
         simulationContext = new SimulationContext(area);
 
@@ -39,9 +45,6 @@ void runTest(const char *name, const int sizeX, const int sizeY, const int repea
             totalTime += dt;
             ++iterations;
         }
-
-        delete simulationContext;
-        delete area;
     }
 
     double stopTime = currTime();
@@ -53,6 +56,8 @@ void runTest(const char *name, const int sizeX, const int sizeY, const int repea
     process_mem_usage(vm, rss);
     cout << "VM: " << vm << "; RSS: " << rss << endl;
     cout << "Calculating time: " << (stopTime - startTime) << " seconds\n" << endl;
+
+    freeUpMemory();
 }
 
 int main(int argc, char *argv[]) {
