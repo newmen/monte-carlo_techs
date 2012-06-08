@@ -16,7 +16,7 @@ public:
 
 template <class RData>
 float ReactingRole<RData>::rate() const {
-    return this->rateValue();
+    return this->k();
 }
 
 template <class RData>

@@ -6,7 +6,7 @@
 class Reaction12Data : public ReactionData
 {
 public:
-    Reaction12Data() : ReactionData(2e1, 1, 2) {}
+    Reaction12Data() : ReactionData(144, 1, 2) {}
 };
 
 #endif // REACTION12_DATA_H

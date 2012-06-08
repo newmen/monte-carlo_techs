@@ -6,7 +6,7 @@
 class Reaction23Data : public ReactionData
 {
 public:
-    Reaction23Data() : ReactionData(7.4e2, 2, 3) {}
+    Reaction23Data() : ReactionData(55, 2, 3) {}
 };
 
 #endif // REACTION23_DATA_H

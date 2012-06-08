@@ -6,7 +6,7 @@
 class Reaction51MRData : public ReactionData
 {
 public:
-    Reaction51MRData() : ReactionData(4e2, 5, 1), _migrationsNum(0) {}
+    Reaction51MRData() : ReactionData(233, 5, 1), _migrationsNum(0) {}
 
 protected:
     void incMigrationsNum() { ++_migrationsNum; }

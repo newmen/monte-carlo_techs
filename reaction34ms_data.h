@@ -1,18 +1,19 @@
-#ifndef REACTION51MRS_DATA_H
-#define REACTION51MRS_DATA_H
+#ifndef REACTION34MS_DATA_H
+#define REACTION34MS_DATA_H
 
-#include "reaction_data.h"
+#include "reaction34_data.h"
 
-class Reaction34MSData : public ReactionData
+class Reaction34MSData : public Reaction34Data
 {
 public:
-    Reaction34MSData() : ReactionData(5.9e1, 3, 3), _stableState(4) {}
+    Reaction34MSData() : _stableState(Reaction34Data::nextState()) {}
 
 protected:
+    int nextState() const { return 3; }
     int stableState() const { return _stableState; }
 
 private:
     int _stableState;
 };
 
-#endif // REACTION51MRS_DATA_H
+#endif // REACTION34MS_DATA_H

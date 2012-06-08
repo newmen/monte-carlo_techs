@@ -1,13 +1,20 @@
 #include "mainwindow_context.h"
 #include <QVBoxLayout>
 
+#include "dynamicsimulation_context.h"
+#include "kineticsimulation_context.h"
+#include "rejectionsimulation_context.h"
+#include "rejectionfreesimulation_context.h"
+#include "invertedlistsimulation_context.h"
+
 MainWindowContext::MainWindowContext() : _area(8, 5) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _simulationContext = new DynamicSimulationContext(&_area);
-//    _simulationContext = new KineticSimulationContext(&_area);
+    _simulationContext = new KineticSimulationContext(&_area);
 //    _simulationContext = new RejectionSimulationContext(&_area);
-    _simulationContext = new RejectionFreeSimulationContext(&_area);
+//    _simulationContext = new RejectionFreeSimulationContext(&_area);
+//    _simulationContext = new InvertedListSimulationContext(&_area);
     _renderArea = new RenderAreaContext(&_area);
 
     _doButton = new QPushButton("Do reaction");
