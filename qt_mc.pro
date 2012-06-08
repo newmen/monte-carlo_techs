@@ -11,7 +11,8 @@ SOURCES += \
     kineticsimulation_context.cpp \
     playbutton.cpp \
     rejectionsimulation_context.cpp \
-    rejectionfreesimulation_context.cpp
+    rejectionfreesimulation_context.cpp \
+    invertedlistsimulation_context.cpp
 
 HEADERS += \
     drawing_role.h \
@@ -38,7 +39,9 @@ HEADERS += \
     reactiondissolutionmigrating_role.h \
     stabilizationreacting_role.h \
     rejectionsimulation_context.h \
-    rejectionfreesimulation_context.h
+    rejectionfreesimulation_context.h \
+    invertedlistsimulation_context.h \
+    reaction34_data.h
 
 OTHER_FILES += \
     .gitignore \
