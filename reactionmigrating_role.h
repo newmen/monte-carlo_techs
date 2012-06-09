@@ -13,6 +13,7 @@ public:
     void doIt(SiteData *site);
 
 protected:
+    virtual int requiredNeighourState() const;
     void updateNeighbour(const SiteData *site, int neighbourState);
 
 private:
@@ -37,6 +38,11 @@ void ReactionMigratingRole<RData>::doIt(SiteData *site) {
 }
 
 template <class RData>
+int ReactionMigratingRole<RData>::requiredNeighourState() const {
+    return this->nextState();
+}
+
+template <class RData>
 void ReactionMigratingRole<RData>::updateNeighbour(const SiteData *site, int neighbourState) {
     int randomIndex = rand() % couldBe(*site);
     int currCouldIndex = 0;
@@ -48,7 +54,7 @@ void ReactionMigratingRole<RData>::updateNeighbour(const SiteData *site, int nei
 template <class RData>
 std::function<void (int *)> ReactionMigratingRole<RData>::validCaseLambda(std::function<void (int *)> innerLambda) const {
     return [this, &innerLambda](int *neighbour) {
-        if (*neighbour == this->nextState()) innerLambda(neighbour);
+        if (*neighbour == this->requiredNeighourState()) innerLambda(neighbour);
     };
 }
 

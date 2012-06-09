@@ -6,7 +6,7 @@
 template <class RData>
 class ReactingRole :
         public IReactingRole,
-        public RData
+        public virtual RData
 {
 public:
     float rate() const;

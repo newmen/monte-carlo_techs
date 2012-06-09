@@ -25,7 +25,6 @@ HEADERS += \
     reaction12_data.h \
     reaction21_data.h \
     reaction23_data.h \
-    reaction3113m_data.h \
     reaction_data.h \
     reacting_role.h \
     ireacting_role.h \
@@ -35,13 +34,13 @@ HEADERS += \
     playbutton.h \
     reaction35_data.h \
     reaction51mr_data.h \
-    reaction34ms_data.h \
     reactiondissolutionmigrating_role.h \
     stabilizationreacting_role.h \
     rejectionsimulation_context.h \
     rejectionfreesimulation_context.h \
     invertedlistsimulation_context.h \
-    reaction34_data.h
+    reaction34_data.h \
+    reaction31_data.h
 
 OTHER_FILES += \
     .gitignore \

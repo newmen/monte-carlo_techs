@@ -40,7 +40,7 @@ void KineticSimulationContext::calcRatesPerSite(PerSite *perSite) const {
 int KineticSimulationContext::siteRandomIndex(float *dt) const {
     int indexOfMin = -1;
     float min_dt = 0;
-    for (int i = 0; i < _perSites.size(); ++i) {
+    for (int i = 0; i < (int)(_perSites.size()); ++i) {
         if (_perSites[i]->_commonRate == 0) continue;
         float local_dt = negativLogU() / _perSites[i]->_commonRate;
 

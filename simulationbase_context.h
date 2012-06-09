@@ -5,8 +5,8 @@
 #include "area_data.h"
 #include "ireacting_role.h"
 
-//#define REACTIONS_NUM 7
-#define REACTIONS_NUM 6
+#define REACTIONS_NUM 7
+//#define REACTIONS_NUM 6
 
 class SimulationBaseContext
 {

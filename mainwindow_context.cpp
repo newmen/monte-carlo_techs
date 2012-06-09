@@ -5,7 +5,7 @@
 #include "kineticsimulation_context.h"
 #include "rejectionsimulation_context.h"
 #include "rejectionfreesimulation_context.h"
-#include "invertedlistsimulation_context.h"
+//#include "invertedlistsimulation_context.h"
 
 MainWindowContext::MainWindowContext() : _area(8, 5) {
     setWindowTitle("Monte Carlo simulation");
