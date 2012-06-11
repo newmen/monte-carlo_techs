@@ -8,6 +8,7 @@
 #include "kineticsimulation_context.h"
 #include "rejectionsimulation_context.h"
 #include "rejectionfreesimulation_context.h"
+#include "treebasedsimulation_context.h"
 
 using namespace std;
 
@@ -79,6 +80,8 @@ int main(int argc, char *argv[]) {
     runTest<KineticSimulationContext>("Kinetic MC", sizeX, sizeY, repeats);
     runTest<RejectionSimulationContext>("Rejection MC", sizeX, sizeY, repeats);
     runTest<RejectionFreeSimulationContext>("Rejection-free MC", sizeX, sizeY, repeats);
+    runTest<TreeBasedSimulationContext<20> >("Faster <20> MC", sizeX, sizeY, repeats);
+    runTest<TreeBasedSimulationContext<2> >("Binary Faster MC", sizeX, sizeY, repeats);
 
     return 0;
 }

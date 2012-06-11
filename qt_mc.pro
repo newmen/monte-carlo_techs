@@ -12,7 +12,7 @@ SOURCES += \
     playbutton.cpp \
     rejectionsimulation_context.cpp \
     rejectionfreesimulation_context.cpp \
-    invertedlistsimulation_context.cpp
+    nodebase.cpp
 
 HEADERS += \
     drawing_role.h \
@@ -38,9 +38,13 @@ HEADERS += \
     stabilizationreacting_role.h \
     rejectionsimulation_context.h \
     rejectionfreesimulation_context.h \
-    invertedlistsimulation_context.h \
     reaction34_data.h \
-    reaction31_data.h
+    reaction31_data.h \
+    mctree.h \
+    treebasedsimulation_context.h \
+    nodebase.h \
+    nodes.h \
+    noden.h
 
 OTHER_FILES += \
     .gitignore \
