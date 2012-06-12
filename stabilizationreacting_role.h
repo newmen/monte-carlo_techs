@@ -15,7 +15,7 @@ protected:
 
 template <class RData>
 void StabilizationReactingRole<RData>::doIt(SiteData *site) {
-    updateNeighbour(site, this->nextState());
+    this->updateNeighbour(site, this->nextState());
     site->setCell(this->nextState());
 }
 

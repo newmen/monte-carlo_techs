@@ -22,7 +22,7 @@ private:
     void depthUpdate(Cache *cache, SiteNode *siteNode, int depth = 2);
 
     MCTree<treeBaseWidth> _tree;
-    std::map<int *, SiteNode *> _cellsToNodes;
+    std::map<const int *, SiteNode *> _cellsToNodes;
 };
 
 template <int treeBaseWidth>
@@ -30,8 +30,8 @@ TreeBasedSimulationContext<treeBaseWidth>::TreeBasedSimulationContext(AreaData *
     throughArea([this](int *cell, int **neighbours) {
         SiteNode *siteNode = new SiteNode(cell, neighbours); // was deleted into MCTree
         this->updateRates(siteNode);
-        _cellsToNodes[cell] = siteNode;
-        _tree.add(siteNode);
+        this->_cellsToNodes[cell] = siteNode;
+        this->_tree.add(siteNode);
     });
 }
 
@@ -70,7 +70,7 @@ void TreeBasedSimulationContext<treeBaseWidth>::depthUpdate(Cache *cache, SiteNo
     if (depth == 0) return;
 
     siteNode->_site.neighboursIterator([this, &cache, &depth](int *neighbourCell) {
-        this->depthUpdate(cache, _cellsToNodes[neighbourCell], depth - 1);
+        this->depthUpdate(cache, this->_cellsToNodes[neighbourCell], depth - 1);
     });
 
 }
