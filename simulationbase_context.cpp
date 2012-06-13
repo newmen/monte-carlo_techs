@@ -22,14 +22,15 @@ SimulationBaseContext::SimulationBaseContext(AreaData *area) : _area(area) {
     _reactions[1] = new ReactingRole<Reaction21Data>;
     _reactions[2] = new ReactingRole<Reaction23Data>;
 
-    _reactions[3] = new ReactionMigratingRole<Reaction31Data>;
-    _reactions[4] = new StabilizationReactingRole<Reaction34Data>;
-    _reactions[5] = new ReactingRole<Reaction35Data>;
-    _reactions[6] = new ReactionDissolutionMigratingRole<Reaction51MRData, 5>;
+//    _reactions[3] = new ReactionMigratingRole<Reaction31Data>;
+//    _reactions[4] = new StabilizationReactingRole<Reaction34Data>;
+//    _reactions[5] = new ReactingRole<Reaction35Data>;
+//    _reactions[6] = new ReactionDissolutionMigratingRole<Reaction51MRData, 5>;
 
-//    _reactions[3] = new ReactingRole<Reaction34Data>;
-//    _reactions[4] = new ReactingRole<Reaction35Data>;
-//    _reactions[5] = new ReactingRole<Reaction51MRData>;
+    _reactions[3] = new ReactionMigratingRole<Reaction31Data>;
+    _reactions[4] = new ReactingRole<Reaction34Data>;
+    _reactions[5] = new ReactingRole<Reaction35Data>;
+    _reactions[6] = new ReactingRole<Reaction51MRData>;
 }
 
 SimulationBaseContext::~SimulationBaseContext() {

@@ -7,14 +7,14 @@
 #include "rejectionfreesimulation_context.h"
 #include "treebasedsimulation_context.h"
 
-MainWindowContext::MainWindowContext() : _area(8, 5) {
+MainWindowContext::MainWindowContext() : _area(13, 8) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _simulationContext = new DynamicSimulationContext(&_area);
 //    _simulationContext = new KineticSimulationContext(&_area);
 //    _simulationContext = new RejectionSimulationContext(&_area);
-//    _simulationContext = new RejectionFreeSimulationContext(&_area);
-    _simulationContext = new TreeBasedSimulationContext<2>(&_area);
+    _simulationContext = new RejectionFreeSimulationContext(&_area);
+//    _simulationContext = new TreeBasedSimulationContext<5>(&_area);
     _renderArea = new RenderAreaContext(&_area);
 
     _doButton = new QPushButton("Do reaction");
@@ -43,12 +43,12 @@ MainWindowContext::~MainWindowContext() {
 }
 
 void MainWindowContext::doReaction() {
-    _simulationContext->doReaction();
+    float dt = _simulationContext->doReaction();
     _renderArea->update();
 }
 
 void MainWindowContext::playAnimation() {
-    _animationTimer->start(100);
+    _animationTimer->start(10);
 }
 
 void MainWindowContext::stopAnimation() {

@@ -3,6 +3,9 @@
 *.autosave
 
 *.dot
+*.png
+*.mcr
+*.prf
 
 test/test_mc
 

@@ -4,7 +4,7 @@
 #include <functional>
 
 #ifndef NEIGHBOURS_NUM
-// страшный и ужасный костыль
+// TODO: страшный и ужасный костыль
 #define NEIGHBOURS_NUM 4
 #endif
 

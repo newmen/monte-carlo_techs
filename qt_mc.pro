@@ -12,7 +12,8 @@ SOURCES += \
     playbutton.cpp \
     rejectionsimulation_context.cpp \
     rejectionfreesimulation_context.cpp \
-    nodebase.cpp
+    nodebase.cpp \
+    store_context.cpp
 
 HEADERS += \
     drawing_role.h \
@@ -44,7 +45,9 @@ HEADERS += \
     treebasedsimulation_context.h \
     nodebase.h \
     nodes.h \
-    noden.h
+    noden.h \
+    storing_role.h \
+    store_context.h
 
 OTHER_FILES += \
     .gitignore \

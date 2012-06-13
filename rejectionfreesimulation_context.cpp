@@ -6,50 +6,34 @@ RejectionFreeSimulationContext::RejectionFreeSimulationContext(AreaData *area) :
 float RejectionFreeSimulationContext::doReaction() {
     reviewAllEvents();
 
-    float rates[REACTIONS_NUM];
     float totalRate = 0;
-    for (int i = 0; i < REACTIONS_NUM; ++i) {
-        rates[i] = _numberOfReactions[i] * reaction(i)->rate();
-        totalRate += rates[i];
+    for (auto p = _events.cbegin(); p != _events.cend(); ++p) {
+        totalRate += p->_rate;
     }
 
     if (totalRate == 0) return 0;
 
-    for (int i = 1; i < REACTIONS_NUM; ++i) {
-        rates[i] += rates[i - 1];
-    }
-
-    int n = REACTIONS_NUM - 1;
     float r = randomN01() * totalRate;
-    for (int i = 0; i < REACTIONS_NUM - 1; ++i) {
-        if (r < rates[i]) {
-            n = i;
+    float accRate = 0;
+    for (auto p = _events.cbegin(); p != _events.cend(); ++p) {
+        accRate += p->_rate;
+        if (r < accRate) {
+            reaction(p->_reactionIndex)->doIt(p->_site.get());
             break;
         }
     }
 
-    float min = (n == 0) ? 0 : rates[n - 1];
-    float max = rates[n];
-    int siteIndex = _sites[n].size() * (r - min) / (max - min);
-
-    reaction(n)->doIt(&_sites[n][siteIndex]);
     return negativLogU() / totalRate;
 }
 
 void RejectionFreeSimulationContext::reviewAllEvents() {
-    for (int i = 0; i < REACTIONS_NUM; ++i) {
-        _numberOfReactions[i] = 0;
-        _sites[i].clear();
-    }
+    _events.clear();
 
     throughArea([this](int *cell, int **neighbours) {
-        SiteData site(cell, neighbours);
+        std::shared_ptr<SiteData> site(new SiteData(cell, neighbours));
         for (int i = 0; i < REACTIONS_NUM; ++i) {
-            int reactionsNum = reaction(i)->couldBe(site);
-            if (reactionsNum > 0) {
-                _numberOfReactions[i] += reactionsNum;
-                _sites[i].push_back(site);
-            }
+            int reactionsNum = reaction(i)->couldBe(*site);
+            if (reactionsNum > 0) _events.push_back(Event(site, i, reactionsNum * reaction(i)->rate()));
         }
     });
 }
