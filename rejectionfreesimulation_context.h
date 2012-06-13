@@ -1,7 +1,8 @@
 #ifndef REJECTIONFREESIMULATION_CONTEXT_H
 #define REJECTIONFREESIMULATION_CONTEXT_H
 
-#include <list>
+//#include <list>
+#include <vector>
 #include <memory>
 #include "simulationbase_context.h"
 
@@ -24,7 +25,8 @@ private:
             _site(site), _reactionIndex(reactionIndex), _rate(rate) {}
     };
 
-    std::list<Event> _events;
+//    std::list<Event> _events;
+    std::vector<Event> _events;
 };
 
 #endif // REJECTIONFREESIMULATION_CONTEXT_H
