@@ -45,6 +45,8 @@ public:
     PerformanceSaver() {}
 
     ~PerformanceSaver() {
+        if (_dataNames.empty()) return;
+
         const char ext[4] = "prf";
 
         bool filesAlreadyExists = true;
@@ -141,7 +143,7 @@ void runTest(PerformanceSaver &ps,
     const string fullFilePath = buildFilePath(fileName, "mcr");
 
     cout << name << endl;
-    ps.storeName(name);
+    if (!needGraph) ps.storeName(name);
 
     double totalTime = 0, dt = 0;
     unsigned long long iterations = 0;
@@ -189,13 +191,15 @@ void runTest(PerformanceSaver &ps,
     cout << "VM: " << vm << "; RSS: " << rss << endl;
     cout << "Calculating time: " << calcTime << " seconds" << endl;
 
-    unsigned int size = sizeX * sizeY;
-    ps.storeValue("times", size, calcTime);
-    ps.storeValue("virtuals", size, vm);
-    ps.storeValue("rss", size, rss);
-
     if (needGraph) printFileWasSaved(fullFilePath);
-    else cout << endl;
+    else {
+        cout << endl;
+
+        unsigned int size = sizeX * sizeY;
+        ps.storeValue("times", size, calcTime);
+        ps.storeValue("virtuals", size, vm);
+        ps.storeValue("rss", size, rss);
+    }
 
     freeUpMemory();
 }
