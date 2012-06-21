@@ -16,10 +16,10 @@ public:
 
 private:
     typedef NodeS<REACTIONS_NUM> SiteNode;
-    typedef std::set<const SiteNode *> Cache;
+    typedef std::set<const SiteNode *> SiteNodeCache;
 
     void updateRates(SiteNode *siteNode) const;
-    void depthUpdate(Cache *cache, SiteNode *siteNode, int depth = 2);
+    void depthUpdate(SiteNodeCache *cache, SiteNode *siteNode, int depth = 2);
 
     MCTree<treeBaseWidth> _tree;
     std::map<const int *, SiteNode *> _cellsToNodes;
@@ -46,7 +46,7 @@ float TreeBasedSimulationContext<treeBaseWidth>::doReaction() {
 
     reaction(reactionIndex)->doIt(&currentSiteNode->_site);
 
-    Cache cache;
+    SiteNodeCache cache;
     depthUpdate(&cache, currentSiteNode);
 
     return negativLogU() / totalRate;
@@ -62,7 +62,7 @@ void TreeBasedSimulationContext<treeBaseWidth>::updateRates(TreeBasedSimulationC
 }
 
 template <int treeBaseWidth>
-void TreeBasedSimulationContext<treeBaseWidth>::depthUpdate(Cache *cache, SiteNode *siteNode, int depth) {
+void TreeBasedSimulationContext<treeBaseWidth>::depthUpdate(SiteNodeCache *cache, SiteNode *siteNode, int depth) {
     if (cache->find(siteNode) != cache->end()) return;
     cache->insert(siteNode);
 

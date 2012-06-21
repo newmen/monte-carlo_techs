@@ -15,7 +15,8 @@ private:
     void reviewAllEvents();
 
     std::vector<SiteData> _sites[REACTIONS_NUM];
-    int _numberOfReactions[REACTIONS_NUM];
+    float _rates[REACTIONS_NUM];
+    float _totalRate;
 };
 
 #endif // DYNAMICSIMULATION_CONTEXT_H

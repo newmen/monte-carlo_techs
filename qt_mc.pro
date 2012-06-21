@@ -13,7 +13,8 @@ SOURCES += \
     rejectionsimulation_context.cpp \
     rejectionfreesimulation_context.cpp \
     nodebase.cpp \
-    store_context.cpp
+    store_context.cpp \
+    event_data.cpp
 
 HEADERS += \
     drawing_role.h \
@@ -47,7 +48,8 @@ HEADERS += \
     nodes.h \
     noden.h \
     storing_role.h \
-    store_context.h
+    store_context.h \
+    event_data.h
 
 OTHER_FILES += \
     .gitignore \

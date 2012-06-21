@@ -10,10 +10,10 @@
 MainWindowContext::MainWindowContext() : _area(13, 8) {
     setWindowTitle("Monte Carlo simulation");
 
-//    _simulationContext = new DynamicSimulationContext(&_area);
+    _simulationContext = new DynamicSimulationContext(&_area);
 //    _simulationContext = new KineticSimulationContext(&_area);
 //    _simulationContext = new RejectionSimulationContext(&_area);
-    _simulationContext = new RejectionFreeSimulationContext(&_area);
+//    _simulationContext = new RejectionFreeSimulationContext(&_area);
 //    _simulationContext = new TreeBasedSimulationContext<5>(&_area);
     _renderArea = new RenderAreaContext(&_area);
 
