@@ -190,8 +190,16 @@ def read_and_draw_perf_plots
 end
 
 def main
-  read_and_draw_mc_plots
-  read_and_draw_perf_plots
+  result_dir = ARGV[0]
+  if result_dir
+    Dir.chdir(result_dir)
+
+    read_and_draw_mc_plots
+    read_and_draw_perf_plots
+  else
+    puts "Неправильный запуск"
+    puts "Необходимо передавать первым параметром путь до директории с результатами расчёта"
+  end
 end
 
 main

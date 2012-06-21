@@ -14,7 +14,8 @@ SOURCES += \
     rejectionfreesimulation_context.cpp \
     nodebase.cpp \
     store_context.cpp \
-    event_data.cpp
+    event_data.cpp \
+    test/test.cpp
 
 HEADERS += \
     drawing_role.h \

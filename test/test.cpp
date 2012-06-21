@@ -30,6 +30,7 @@
 
 using namespace std;
 
+string resultDir = "."; // глобальные переменные - крайне плохо, но пока так :(
 const char *buildFilePath(const char *fileName, const char *ext) {
     stringstream ss;
     ss << "results/" << fileName << "." << ext;
@@ -205,14 +206,15 @@ void runTest(PerformanceSaver &ps,
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 4 || argc > 5) {
+    if (argc < 5 || argc > 6) {
         cerr << "Wrong test running! Try this:\n"
-             << argv[0] << " sizeX sizeY repeats store?" << endl;
+             << argv[0] << " resultDirPath sizeX sizeY repeats store?" << endl;
         return 1;
     }
-    const int sizeX = atoi(argv[1]), sizeY = atoi(argv[2]);
-    const int repeats = atoi(argv[3]);
-    const bool needGraph = (argc == 5 && strcmp(argv[4], "true") == 0);
+    resultDir = argv[1];
+    const int sizeX = atoi(argv[2]), sizeY = atoi(argv[3]);
+    const int repeats = atoi(argv[4]);
+    const bool needGraph = (argc == 6 && strcmp(argv[5], "true") == 0);
 
     cout << "Running with:\n"
          << "sizeX = " << sizeX << "\n"
