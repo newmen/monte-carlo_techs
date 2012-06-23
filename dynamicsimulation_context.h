@@ -14,6 +14,7 @@ public:
 private:
     void reviewAllEvents();
 
+private:
     std::vector<SiteData> _sites[REACTIONS_NUM];
     float _rates[REACTIONS_NUM];
     float _totalRate;

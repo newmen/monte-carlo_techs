@@ -9,13 +9,6 @@
 
 class KineticSimulationContext : public SimulationBaseContext
 {
-public:
-    KineticSimulationContext(AreaData *area);
-    ~KineticSimulationContext();
-
-    float doReaction();
-
-private:
     struct PerSite {
         SiteData _site;
         float _commonRate;
@@ -24,12 +17,20 @@ private:
         PerSite(int *cell, int **neighbours) : _site(cell, neighbours) {}
     };
 
+public:
+    KineticSimulationContext(AreaData *area);
+    ~KineticSimulationContext();
+
+    float doReaction();
+
+private:
     void calcRatesPerSite(PerSite *perSite) const;
     int siteRandomIndex(float *dt) const;
     IReactingRole *randomReaction(int index) const;
 
     void updateData(std::set<PerSite *> *cache, PerSite *perSite, int depth = 2);
 
+private:
     std::vector<PerSite *> _perSites;
     std::map<int *, PerSite *> _cellsToPerSites;
 };

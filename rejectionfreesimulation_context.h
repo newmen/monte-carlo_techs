@@ -16,6 +16,7 @@ public:
 private:
     void reviewAllEvents();
 
+private:
 //    std::list<EventData> _events;
     std::vector<EventData> _events;
     float _totalRate;

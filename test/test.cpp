@@ -167,6 +167,7 @@ void runTest(PerformanceSaver &ps,
 
     for (int i = 0; i < repeats; ++i) {
         freeUpMemory();
+
         area = new AreaData(sizeX, sizeY);
         simulationContext = new SimulationContext(area);
         if (needGraph) storeContext = new StoreContext(area, fullFilePath.c_str(), name);
@@ -186,10 +187,10 @@ void runTest(PerformanceSaver &ps,
     cout << "Total process time: " << (totalTime / repeats)
          << " (sec); Iterations: " << ((double)iterations / repeats) << endl;
 
-    double calcTime = (stopTime - startTime) / repeats;
     double vm, rss;
     process_mem_usage(vm, rss);
     cout << "VM: " << vm << "; RSS: " << rss << endl;
+    double calcTime = (stopTime - startTime) / repeats;
     cout << "Calculating time: " << calcTime << " seconds" << endl;
 
     if (needGraph) printFileWasSaved(fullFilePath);
@@ -236,6 +237,7 @@ int main(int argc, char *argv[]) {
     runTest<RejectionFreeSimulationContext>(ps, "Rejection-free MC", sizeX, sizeY, repeats, "rejection-free", needGraph);
 
     runTest<TreeBasedSimulationContext<100> >(ps, "Faster <100> MC", sizeX, sizeY, repeats, "faster_100", needGraph);
+    runTest<TreeBasedSimulationContext<50> >(ps, "Faster <50> MC", sizeX, sizeY, repeats, "faster_50", needGraph);
     runTest<TreeBasedSimulationContext<20> >(ps, "Faster <20> MC", sizeX, sizeY, repeats, "faster_20", needGraph);
     runTest<TreeBasedSimulationContext<10> >(ps, "Faster <10> MC", sizeX, sizeY, repeats, "faster_10", needGraph);
     runTest<TreeBasedSimulationContext<5> >(ps, "Faster <5> MC", sizeX, sizeY, repeats, "faster_5", needGraph);

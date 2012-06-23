@@ -9,18 +9,19 @@
 template <int treeBaseWidth>
 class TreeBasedSimulationContext : public SimulationBaseContext
 {
+    typedef NodeS<REACTIONS_NUM> SiteNode;
+    typedef std::set<const SiteNode *> SiteNodeCache;
+
 public:
     TreeBasedSimulationContext(AreaData *area);
 
     float doReaction();
 
 private:
-    typedef NodeS<REACTIONS_NUM> SiteNode;
-    typedef std::set<const SiteNode *> SiteNodeCache;
-
     void updateRates(SiteNode *siteNode) const;
     void depthUpdate(SiteNodeCache *cache, SiteNode *siteNode, int depth = 2);
 
+private:
     MCTree<treeBaseWidth> _tree;
     std::map<const int *, SiteNode *> _cellsToNodes;
 };

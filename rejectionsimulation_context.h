@@ -17,6 +17,7 @@ private:
     int randomEventIndex() const;
     void doEvent(int index);
 
+private:
     std::vector<EventData> _events;
     float _totalRate, _maxRate;
 };
