@@ -1,17 +1,26 @@
 #!/bin/sh
 
-test_mc_dir='/home/newmen/c++/Qt/qt_mc/test'
-result_dir=${test_mc_dir}/results
+min_size=25
+max_size=200
+size_step=25
+repeats=5
 
-${test_mc_dir}/test_mc ${result_dir} 200 200 1 true
+test_mc_dir=`pwd`
+test_mc_bin=${test_mc_dir}/test_mc
+plots_script=${test_mc_dir}/plots.rb
+results_dir=${test_mc_dir}/results
 
-${test_mc_dir}/test_mc ${result_dir} 20 20 10
-${test_mc_dir}/test_mc ${result_dir} 40 40 10
-${test_mc_dir}/test_mc ${result_dir} 60 60 10
-${test_mc_dir}/test_mc ${result_dir} 80 80 10
-${test_mc_dir}/test_mc ${result_dir} 100 100 10
-${test_mc_dir}/test_mc ${result_dir} 120 120 10
-${test_mc_dir}/test_mc ${result_dir} 140 140 10
-${test_mc_dir}/test_mc ${result_dir} 160 160 10
-${test_mc_dir}/test_mc ${result_dir} 180 180 10
-${test_mc_dir}/test_mc ${result_dir} 200 200 10
+if [ -x ${results_dir} ]; then
+    rm -f ${results_dir}/*
+else
+    mkdir ${results_dir}
+fi
+
+${test_mc_bin} ${results_dir} ${max_size} ${max_size} 1 true
+
+for i in `seq ${min_size} ${size_step} ${max_size}`; do
+    ${test_mc_bin} ${results_dir} $i $i ${repeats}
+done
+
+ruby ${plots_script} ${results_dir}
+
