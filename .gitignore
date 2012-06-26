@@ -7,6 +7,8 @@
 *.mcr
 *.prf
 
+*.gch
+
 test/test_mc
 
 # Compiled Object files

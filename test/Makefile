@@ -1,9 +1,12 @@
-C = g++
-FLAGS = -Wall -O3 -std=c++0x
-APP_NAME = test_mc
+CXX = g++
+CXX_CFLAGS = -Wall -O3 -std=c++0x
+LIBS = ../*.o
+NAME = test_mc
 
-all :
-	$(C) $(FLAGS) *.c *.cpp ../*.o -o $(APP_NAME)
+default:	$(NAME)
 
-clean :
-	rm $(APP_NAME)
+$(NAME):
+	$(CXX) $(CXX_CFLAGS) $(LIBS) *.cpp -o $(NAME)
+
+clean:
+	rm $(NAME)
