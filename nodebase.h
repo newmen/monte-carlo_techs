@@ -10,6 +10,8 @@ public:
 
     void accSum(double sum);
 
+    virtual void diagnoze() const = 0;
+
 protected:
     NodeBase(int level);
 

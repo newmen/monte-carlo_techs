@@ -43,6 +43,11 @@ double TreeBasedSimulationContext<treeBaseWidth>::doReaction() {
 
     double r = randomN01() * totalRate;
     SiteNode *currentSiteNode = static_cast<SiteNode *>(_tree.find(&r)); // here r is decreasing when we finds necessary site
+
+    if (currentSiteNode == 0) {
+        _tree.diagnostic();
+    }
+
     int reactionIndex = currentSiteNode->reactionIndex(r);
 
     reaction(reactionIndex)->doIt(&currentSiteNode->_site);

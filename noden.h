@@ -4,6 +4,8 @@
 #include "nodebase.h"
 #include "nodes.h"
 
+#include <iostream>
+
 template <int width>
 class NodeN : public NodeBase
 {
@@ -16,6 +18,8 @@ public:
     bool isFull() const;
 
     INodeS *find(double *r) const;
+
+    void diagnoze() const;
 
 private:
     void store(NodeBase *node);
@@ -62,18 +66,35 @@ bool NodeN<width>::isFull() const {
 template <int width>
 INodeS *NodeN<width>::find(double *r) const {
     for (int i = 0; i < _numberOfChilds; ++i) {
-        double childsSum = _childs[i]->sum();
-        if (*r < childsSum) {
+        double childSum = _childs[i]->sum();
+        if (*r < childSum) {
             if (level() == 1) {
                 return static_cast<INodeS *>(_childs[i]);
             } else {
                 return static_cast<NodeN<width> *>(_childs[i])->find(r);
             }
         } else {
-            *r -= childsSum;
+            *r -= childSum;
         }
     }
     return 0; // should not happen
+}
+
+template <int width>
+void NodeN<width>::diagnoze() const {
+    double childsSum  = 0;
+    for (int i = 0; i < width; ++i) {
+        if (_childs[i] == 0) continue;
+
+        _childs[i]->diagnoze();
+
+        childsSum += _childs[i]->sum();
+    }
+
+    if (sum() != childsSum) {
+        std::cout << "Trouble on N" << level() << " level!\n"
+                  << "diff: " << sum() << " % " << childsSum << std::endl;
+    }
 }
 
 template <int width>

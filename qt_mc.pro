@@ -16,7 +16,6 @@ SOURCES += \
     store_context.cpp \
     event_data.cpp \
     test/performancesaver.cpp \
-    test/process_mem_usage.c \
     test/pathbuilder.cpp \
     test/solving_ode.cpp
 
@@ -54,7 +53,6 @@ HEADERS += \
     storing_role.h \
     store_context.h \
     event_data.h \
-    test/process_mem_usage.h \
     test/performancesaver.h \
     test/solving_ode.h \
     test/pathbuilder.h

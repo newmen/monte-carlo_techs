@@ -18,6 +18,8 @@ public:
 
     INodeS *find(double *r) const;
 
+    void diagnostic() const;
+
 private:
     NodeN<width> *_root;
 };
@@ -50,6 +52,11 @@ double MCTree<width>::sum() const {
 template <int width>
 INodeS *MCTree<width>::find(double *r) const {
     return _root->find(r);
+}
+
+template <int width>
+void MCTree<width>::diagnostic() const {
+    _root->diagnoze();
 }
 
 #endif // MCTREE_H

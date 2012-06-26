@@ -4,6 +4,8 @@
 #include "nodebase.h"
 #include "site_data.h"
 
+#include <iostream>
+
 // чтобы можно было ссылаться не как на шаблон
 class INodeS : public NodeBase {
 protected:
@@ -21,6 +23,8 @@ public:
 
     void updateSum();
     int reactionIndex(double r);
+
+    void diagnoze() const;
 };
 
 template <int numberOfRates>
@@ -43,6 +47,19 @@ int NodeS<numberOfRates>::reactionIndex(double r) {
         else r -= _rates[i];
     }
     return numberOfRates - 1;
+}
+
+template <int numberOfRates>
+void NodeS<numberOfRates>::diagnoze() const {
+    double ratesSum = 0;
+    for (int i = 0; i < numberOfRates - 1; ++i) {
+        ratesSum += _rates[i];
+    }
+
+    if (sum() != ratesSum) {
+        std::cout << "Trouble on S" << level() << " level!\n"
+                  << "diff: " << sum() << " % " << ratesSum << std::endl;
+    }
 }
 
 #endif // NODES_H
