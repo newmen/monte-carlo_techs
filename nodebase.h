@@ -6,16 +6,16 @@ class NodeBase
 public:
     void setParent(NodeBase *parent) { _parent = parent; }
     int level() const { return _level; }
-    float sum() const { return _sum; }
+    double sum() const { return _sum; }
 
-    void accSum(float sum);
+    void accSum(double sum);
 
 protected:
     NodeBase(int level);
 
     NodeBase *parent() const { return _parent; }
 
-    float _sum;
+    double _sum;
 
 private:
     NodeBase *_parent;

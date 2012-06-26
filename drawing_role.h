@@ -3,27 +3,27 @@
 
 #include <QPainter>
 
-template <class AData, int cellSideLength>
+template <class AData>
 class DrawingRole : public AData
 {
 public:
     DrawingRole() {}
 
-    void draw(QPainter *painter) const;
+    void draw(QPainter *painter, float cellSideLength) const;
 
 private:
-    QPointF offset(int x, int y) const;
+    QPointF offset(float cellSideLength, int x, int y) const;
 };
 
-template <class AData, int cellSideLength>
-void DrawingRole<AData, cellSideLength>::draw(QPainter *painter) const {
+template <class AData>
+void DrawingRole<AData>::draw(QPainter *painter, float cellSideLength) const {
     QPen pen(Qt::black);
     painter->setPen(pen);
 
     QRect rect(0, 0, cellSideLength, cellSideLength);
-    coordsIterator([this, &painter, &rect](int x, int y) {
+    coordsIterator([this, &painter, &rect, cellSideLength](int x, int y) {
         painter->save();
-        painter->translate(this->offset(x, y));
+        painter->translate(this->offset(cellSideLength, x, y));
 
         QColor color;
         switch (*this->cell(x, y)) {
@@ -50,8 +50,8 @@ void DrawingRole<AData, cellSideLength>::draw(QPainter *painter) const {
     });
 }
 
-template <class AData, int cellSideLength>
-QPointF DrawingRole<AData, cellSideLength>::offset(int x, int y) const {
+template <class AData>
+QPointF DrawingRole<AData>::offset(float cellSideLength, int x, int y) const {
     return QPointF(x * cellSideLength, y * cellSideLength);
 }
 

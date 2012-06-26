@@ -6,7 +6,6 @@
 #include "ireacting_role.h"
 
 #define REACTIONS_NUM 7
-//#define REACTIONS_NUM 6
 
 class SimulationBaseContext
 {
@@ -14,13 +13,13 @@ public:
     SimulationBaseContext(AreaData *area);
     virtual ~SimulationBaseContext();
 
-    virtual float doReaction() = 0;
+    virtual double doReaction() = 0;
 
 protected:
     void throughArea(std::function<void (int *cell, int **neighbours)> lambda) const;
     IReactingRole *reaction(int index) const;
-    float randomN01() const;
-    float negativLogU() const;
+    double randomN01() const;
+    double negativLogU() const;
 
 private:
     AreaData *_area;

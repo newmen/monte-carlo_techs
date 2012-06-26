@@ -14,9 +14,9 @@ public:
     ~MCTree();
 
     void add(INodeS *node);
-    float sum() const;
+    double sum() const;
 
-    INodeS *find(float *r) const;
+    INodeS *find(double *r) const;
 
 private:
     NodeN<width> *_root;
@@ -43,12 +43,12 @@ void MCTree<width>::add(INodeS *node) {
 }
 
 template <int width>
-float MCTree<width>::sum() const {
+double MCTree<width>::sum() const {
     return _root->sum();
 }
 
 template <int width>
-INodeS *MCTree<width>::find(float *r) const {
+INodeS *MCTree<width>::find(double *r) const {
     return _root->find(r);
 }
 

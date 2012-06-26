@@ -10,7 +10,7 @@ class RejectionSimulationContext : public SimulationBaseContext
 public:
     RejectionSimulationContext(AreaData *area);
 
-    float doReaction();
+    double doReaction();
 
 private:
     void reviewAllEvents();
@@ -19,7 +19,7 @@ private:
 
 private:
     std::vector<EventData> _events;
-    float _totalRate, _maxRate;
+    double _totalRate, _maxRate;
 };
 
 #endif // REJECTIONSIMULATION_CONTEXT_H

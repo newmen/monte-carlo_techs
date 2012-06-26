@@ -28,6 +28,8 @@
 #define STATES_NUM 4
 #endif
 
+#define MAX_TIME 2.0
+
 using namespace std;
 
 string resultDir = "."; // глобальные переменные - крайне плохо, но пока так :(
@@ -48,7 +50,7 @@ public:
     ~PerformanceSaver() {
         if (_dataNames.empty()) return;
 
-        const char ext[4] = "prf";
+        const char ext[] = "prf";
 
         bool filesAlreadyExists = true;
         ifstream temp;
@@ -76,7 +78,7 @@ public:
 
             for (auto p = filePair->second.cbegin(); p != filePair->second.cend(); ++p) {
                 out << p->first;
-                for (float value : p->second) out << "\t" << value;
+                for (double value : p->second) out << "\t" << value;
                 out << endl;
             }
             out.close();
@@ -89,13 +91,13 @@ public:
         _dataNames.push_back(mcName);
     }
 
-    void storeValue(const char *fileName, unsigned int size, float value) {
+    void storeValue(const char *fileName, unsigned int size, double value) {
         _dataValues[fileName][size].push_back(value);
     }
 
 private:
     vector<string> _dataNames;
-    map<string, map<unsigned int, vector<float> > > _dataValues;
+    map<string, map<unsigned int, vector<double> > > _dataValues;
 };
 
 void solveODE(const char *fileName) {
@@ -112,14 +114,14 @@ void solveODE(const char *fileName) {
     Reaction35Data r35;
     Reaction51MRData r51;
 
-    float dt = 1e-3; // bad value
+    double dt = 1e-3; // bad value
     double tt = 0;
 
-    float concs[STATES_NUM], csNext[STATES_NUM];
+    double concs[STATES_NUM], csNext[STATES_NUM];
     for (int i = 0; i < STATES_NUM; ++i) concs[i] = 0;
 
-    while (tt < 2) { // bad value
-        float csSum = 0;
+    while (tt < MAX_TIME) { // bad value
+        double csSum = 0;
         for (int i = 0; i < STATES_NUM; ++i) csSum += concs[i];
 
         csNext[0] = concs[0] + dt * (r12.k() * (1 - csSum) - concs[0] * (r21.k() + r23.k()));
@@ -146,9 +148,6 @@ void runTest(PerformanceSaver &ps,
     cout << name << endl;
     if (!needGraph) ps.storeName(name);
 
-    double totalTime = 0, dt = 0;
-    unsigned long long iterations = 0;
-
     AreaData *area = 0;
     SimulationBaseContext *simulationContext = 0;
     StoreContext *storeContext = 0;
@@ -165,6 +164,8 @@ void runTest(PerformanceSaver &ps,
     };
     double startTime = currTime();
 
+    double totalTime, dt;
+    unsigned long long iterations = 0;
     for (int i = 0; i < repeats; ++i) {
         freeUpMemory();
 
@@ -172,10 +173,11 @@ void runTest(PerformanceSaver &ps,
         simulationContext = new SimulationContext(area);
         if (needGraph) storeContext = new StoreContext(area, fullFilePath.c_str(), name);
 
-        while (true) {
+        totalTime = 0;
+        while (totalTime < MAX_TIME) {
             dt = simulationContext->doReaction();
             if (needGraph) storeContext->store(dt);
-            if (dt == 0) break;
+            if (dt == 0.0) break;
 
             totalTime += dt;
             ++iterations;
@@ -184,8 +186,9 @@ void runTest(PerformanceSaver &ps,
 
     double stopTime = currTime();
 
-    cout << "Total process time: " << (totalTime / repeats)
-         << " (sec); Iterations: " << ((double)iterations / repeats) << endl;
+    double meanIterations = (double)iterations / repeats;
+    cout << "Total process time: " << totalTime
+         << " (sec); Iterations: " << meanIterations << endl;
 
     double vm, rss;
     process_mem_usage(vm, rss);
@@ -199,6 +202,7 @@ void runTest(PerformanceSaver &ps,
 
         unsigned int size = sizeX * sizeY;
         ps.storeValue("times", size, calcTime);
+        ps.storeValue("iterations", size, meanIterations);
         ps.storeValue("virtuals", size, vm);
         ps.storeValue("rss", size, rss);
     }
@@ -231,11 +235,15 @@ int main(int argc, char *argv[]) {
     PerformanceSaver ps;
 
     srand(time(0));
-    runTest<DynamicSimulationContext>(ps, "Dynamic MC", sizeX, sizeY, repeats, "dynamic", needGraph);
-    runTest<KineticSimulationContext>(ps, "Kinetic MC", sizeX, sizeY, repeats, "kinetic", needGraph);
-    runTest<RejectionSimulationContext>(ps, "Rejection MC", sizeX, sizeY, repeats, "rejection", needGraph);
-    runTest<RejectionFreeSimulationContext>(ps, "Rejection-free MC", sizeX, sizeY, repeats, "rejection-free", needGraph);
+//    runTest<DynamicSimulationContext>(ps, "Dynamic MC", sizeX, sizeY, repeats, "dynamic", needGraph);
+//    runTest<KineticSimulationContext>(ps, "Kinetic MC", sizeX, sizeY, repeats, "kinetic", needGraph);
+//    runTest<RejectionSimulationContext>(ps, "Rejection MC", sizeX, sizeY, repeats, "rejection", needGraph);
+//    runTest<RejectionFreeSimulationContext>(ps, "Rejection-free MC", sizeX, sizeY, repeats, "rejection-free", needGraph);
 
+    runTest<TreeBasedSimulationContext<2000> >(ps, "Faster <2000> MC", sizeX, sizeY, repeats, "faster_2000", needGraph);
+    runTest<TreeBasedSimulationContext<1000> >(ps, "Faster <1000> MC", sizeX, sizeY, repeats, "faster_1000", needGraph);
+    runTest<TreeBasedSimulationContext<500> >(ps, "Faster <500> MC", sizeX, sizeY, repeats, "faster_500", needGraph);
+    runTest<TreeBasedSimulationContext<200> >(ps, "Faster <200> MC", sizeX, sizeY, repeats, "faster_200", needGraph);
     runTest<TreeBasedSimulationContext<100> >(ps, "Faster <100> MC", sizeX, sizeY, repeats, "faster_100", needGraph);
     runTest<TreeBasedSimulationContext<50> >(ps, "Faster <50> MC", sizeX, sizeY, repeats, "faster_50", needGraph);
     runTest<TreeBasedSimulationContext<20> >(ps, "Faster <20> MC", sizeX, sizeY, repeats, "faster_20", needGraph);

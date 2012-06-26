@@ -15,7 +15,7 @@ public:
     void add(NodeN *node);
     bool isFull() const;
 
-    INodeS *find(float *r) const;
+    INodeS *find(double *r) const;
 
 private:
     void store(NodeBase *node);
@@ -60,17 +60,17 @@ bool NodeN<width>::isFull() const {
 }
 
 template <int width>
-INodeS *NodeN<width>::find(float *r) const {
+INodeS *NodeN<width>::find(double *r) const {
     for (int i = 0; i < _numberOfChilds; ++i) {
-        float childSum = _childs[i]->sum();
-        if (*r < childSum) {
+        double childsSum = _childs[i]->sum();
+        if (*r < childsSum) {
             if (level() == 1) {
                 return static_cast<INodeS *>(_childs[i]);
             } else {
                 return static_cast<NodeN<width> *>(_childs[i])->find(r);
             }
         } else {
-            *r -= childSum;
+            *r -= childsSum;
         }
     }
     return 0; // should not happen

@@ -9,15 +9,15 @@ class DynamicSimulationContext : public SimulationBaseContext
 public:
     DynamicSimulationContext(AreaData *area);
 
-    float doReaction();
+    double doReaction();
 
 private:
     void reviewAllEvents();
 
 private:
     std::vector<SiteData> _sites[REACTIONS_NUM];
-    float _rates[REACTIONS_NUM];
-    float _totalRate;
+    double _rates[REACTIONS_NUM];
+    double _totalRate;
 };
 
 #endif // DYNAMICSIMULATION_CONTEXT_H

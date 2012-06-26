@@ -14,8 +14,7 @@ SOURCES += \
     rejectionfreesimulation_context.cpp \
     nodebase.cpp \
     store_context.cpp \
-    event_data.cpp \
-    test/test.cpp
+    event_data.cpp
 
 HEADERS += \
     drawing_role.h \
@@ -54,4 +53,6 @@ HEADERS += \
 
 OTHER_FILES += \
     .gitignore \
-    README.md
+    README.md \
+    test/run.sh \
+    test/plots.rb

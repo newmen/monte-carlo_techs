@@ -7,16 +7,16 @@
 class EventData
 {
 public:
-    EventData(const std::shared_ptr<SiteData> &site, IReactingRole *reaction, float rate);
+    EventData(const std::shared_ptr<SiteData> &site, IReactingRole *reaction, double rate);
 
     SiteData *site() const { return _site.get(); }
     IReactingRole *reaction() const { return _reaction; }
-    float rate() const { return _rate; }
+    double rate() const { return _rate; }
 
 private:
     std::shared_ptr<SiteData> _site;
     IReactingRole * _reaction;
-    float _rate;
+    double _rate;
 };
 
 #endif // EVENT_DATA_H
