@@ -7,13 +7,13 @@
 #include "performancesaver.h"
 #include "solving_ode.h"
 
-#include "area_data.h"
-#include "dynamicsimulation_context.h"
-#include "kineticsimulation_context.h"
-#include "rejectionsimulation_context.h"
-#include "rejectionfreesimulation_context.h"
-#include "treebasedsimulation_context.h"
-#include "store_context.h"
+#include "../area_data.h"
+#include "../dynamicsimulation_context.h"
+#include "../kineticsimulation_context.h"
+#include "../rejectionsimulation_context.h"
+#include "../rejectionfreesimulation_context.h"
+#include "../treebasedsimulation_context.h"
+#include "../store_context.h"
 
 #define MAX_TIME 2.0
 

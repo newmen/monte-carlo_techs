@@ -14,10 +14,7 @@ SOURCES += \
     rejectionfreesimulation_context.cpp \
     nodebase.cpp \
     store_context.cpp \
-    event_data.cpp \
-    test/performancesaver.cpp \
-    test/pathbuilder.cpp \
-    test/solving_ode.cpp
+    event_data.cpp
 
 HEADERS += \
     drawing_role.h \
@@ -52,14 +49,8 @@ HEADERS += \
     noden.h \
     storing_role.h \
     store_context.h \
-    event_data.h \
-    test/performancesaver.h \
-    test/solving_ode.h \
-    test/pathbuilder.h
+    event_data.h
 
 OTHER_FILES += \
     .gitignore \
-    README.md \
-    test/run.sh \
-    test/plots.rb \
-    test/Makefile
+    README.md

@@ -2,12 +2,12 @@
 
 #include <fstream>
 #include <iostream>
-#include "reaction12_data.h"
-#include "reaction21_data.h"
-#include "reaction23_data.h"
-#include "reaction34_data.h"
-#include "reaction35_data.h"
-#include "reaction51mr_data.h"
+#include "../reaction12_data.h"
+#include "../reaction21_data.h"
+#include "../reaction23_data.h"
+#include "../reaction34_data.h"
+#include "../reaction35_data.h"
+#include "../reaction51mr_data.h"
 
 #ifndef STATES_NUM
 // TODO: нужно как-то выпилить
