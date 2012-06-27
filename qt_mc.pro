@@ -1,4 +1,4 @@
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x ../*.o
 
 SOURCES += \
     main.cpp \
@@ -54,4 +54,5 @@ HEADERS += \
 
 OTHER_FILES += \
     .gitignore \
-    README.md
+    README.md \
+    Makefile

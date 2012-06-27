@@ -1,11 +1,16 @@
 GCC_PATH = /opt/gcc47
-C = $(GCC_PATH)/bin/g++47
-FLAGS = -Wall -O3 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64
-APP_NAME = test_mc
+CXX = $(GCC_PATH)/bin/g++47
+CXX_CFLAGS = -Wall -O3 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64
+LIBS = ../*.o
+NAME = test_mc
 
-all :
-	$(C) $(FLAGS) *.cpp *.h -o $(APP_NAME)
+default:	$(NAME)
 
-clean :
-	rm -rf *.o
-	rm $(APP_NAME)
+$(NAME):
+	$(CXX) $(CXX_CFLAGS) $(LIBS) *.cpp -o $(NAME)
+
+heap_test:
+	$(CXX) $(CXX_CFLAGS) $(LIBS) -ltcmalloc *.cpp -o $@
+
+clean:
+	rm $(NAME)

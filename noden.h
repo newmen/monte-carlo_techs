@@ -4,6 +4,8 @@
 #include "nodebase.h"
 #include "nodes.h"
 
+#include <iostream>
+
 template <int width>
 class NodeN : public NodeBase
 {
@@ -15,7 +17,9 @@ public:
     void add(NodeN *node);
     bool isFull() const;
 
-    INodeS *find(float *r) const;
+    INodeS *find(double *r) const;
+
+    void diagnoze() const;
 
 private:
     void store(NodeBase *node);
@@ -60,9 +64,9 @@ bool NodeN<width>::isFull() const {
 }
 
 template <int width>
-INodeS *NodeN<width>::find(float *r) const {
+INodeS *NodeN<width>::find(double *r) const {
     for (int i = 0; i < _numberOfChilds; ++i) {
-        float childSum = _childs[i]->sum();
+        double childSum = _childs[i]->sum();
         if (*r < childSum) {
             if (level() == 1) {
                 return static_cast<INodeS *>(_childs[i]);
@@ -74,6 +78,23 @@ INodeS *NodeN<width>::find(float *r) const {
         }
     }
     return 0; // should not happen
+}
+
+template <int width>
+void NodeN<width>::diagnoze() const {
+    double childsSum  = 0;
+    for (int i = 0; i < width; ++i) {
+        if (_childs[i] == 0) continue;
+
+        _childs[i]->diagnoze();
+
+        childsSum += _childs[i]->sum();
+    }
+
+    if (sum() != childsSum) {
+        std::cout << "Trouble on N" << level() << " level!\n"
+                  << "diff: " << sum() << " % " << childsSum << std::endl;
+    }
 }
 
 template <int width>

@@ -11,14 +11,15 @@ class RejectionFreeSimulationContext : public SimulationBaseContext
 public:
     RejectionFreeSimulationContext(AreaData *area);
 
-    float doReaction();
+    double doReaction();
 
 private:
     void reviewAllEvents();
 
+private:
 //    std::list<EventData> _events;
     std::vector<EventData> _events;
-    float _totalRate;
+    double _totalRate;
 };
 
 #endif // REJECTIONFREESIMULATION_CONTEXT_H

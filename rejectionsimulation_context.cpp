@@ -4,7 +4,7 @@
 RejectionSimulationContext::RejectionSimulationContext(AreaData *area) :
     SimulationBaseContext(area), _totalRate(0), _maxRate(0) {}
 
-float RejectionSimulationContext::doReaction() {
+double RejectionSimulationContext::doReaction() {
     reviewAllEvents();
     if (_totalRate == 0) return 0;
     doEvent(randomEventIndex());
@@ -20,7 +20,7 @@ void RejectionSimulationContext::reviewAllEvents() {
         std::shared_ptr<SiteData> site(new SiteData(cell, neighbours));
         for (int i = 0; i < REACTIONS_NUM; ++i) {
             IReactingRole *const currentReaction = reaction(i);
-            float rate = currentReaction->couldBe(*site) * currentReaction->rate();
+            double rate = currentReaction->couldBe(*site) * currentReaction->rate();
             if (rate == 0) continue;
             if (rate > _maxRate) _maxRate = rate;
 
@@ -31,7 +31,7 @@ void RejectionSimulationContext::reviewAllEvents() {
 }
 
 int RejectionSimulationContext::randomEventIndex() const {
-    float r;
+    double r;
     int n;
     do {
         r = randomN01() * _events.size();

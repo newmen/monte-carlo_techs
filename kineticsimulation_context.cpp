@@ -1,5 +1,4 @@
 #include <cmath>
-#include <cfloat>
 #include "kineticsimulation_context.h"
 
 KineticSimulationContext::KineticSimulationContext(AreaData *area) : SimulationBaseContext(area) {
@@ -16,8 +15,8 @@ KineticSimulationContext::~KineticSimulationContext() {
     for (PerSite *perSite : _perSites) delete perSite;
 }
 
-float KineticSimulationContext::doReaction() {
-    float dt;
+double KineticSimulationContext::doReaction() {
+    double dt;
     int index = siteRandomIndex(&dt);
     if (index < 0) return 0;
 
@@ -37,12 +36,12 @@ void KineticSimulationContext::calcRatesPerSite(PerSite *perSite) const {
     }
 }
 
-int KineticSimulationContext::siteRandomIndex(float *dt) const {
+int KineticSimulationContext::siteRandomIndex(double *dt) const {
     int indexOfMin = -1;
-    float min_dt = 0;
+    double min_dt = 0;
     for (int i = 0; i < (int)(_perSites.size()); ++i) {
         if (_perSites[i]->_commonRate == 0) continue;
-        float local_dt = negativLogU() / _perSites[i]->_commonRate;
+        double local_dt = negativLogU() / _perSites[i]->_commonRate;
 
         if (min_dt != 0 && local_dt >= min_dt) continue;
         min_dt = local_dt;
@@ -56,7 +55,7 @@ IReactingRole *KineticSimulationContext::randomReaction(int index) const {
     for (int i = 0; i < REACTIONS_NUM; ++i) _perSites[index]->_normedRates[i] /= _perSites[index]->_commonRate;
     for (int i = 1; i < REACTIONS_NUM; ++i) _perSites[index]->_normedRates[i] += _perSites[index]->_normedRates[i - 1];
 
-    float r = randomN01(); // TODO: тут нужно учитывать то, что иногда нормированные скорости дают чуть больше единицы
+    double r = randomN01(); // TODO: тут нужно учитывать то, что иногда нормированные скорости дают чуть больше единицы (даже с double?)
     for (int i = 0; i < REACTIONS_NUM - 1; ++i) {
         if (r < _perSites[index]->_normedRates[i]) return reaction(i);
     }

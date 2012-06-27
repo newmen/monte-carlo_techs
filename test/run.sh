@@ -1,24 +1,33 @@
 #!/bin/sh
 
-test_mc_dir='/home/newmen/c++/qt_mc/test'
-result_dir=${test_mc_dir}/results
+min_size=1000
+max_size=2000
+size_step=1000
+repeats=3
 
-${test_mc_dir}/test_mc ${result_dir} 200 200 1 true
+test_mc_dir=`pwd`
+#test_mc_bin=${test_mc_dir}/test_mc
+test_mc_bin=${test_mc_dir}/heap_test
+plots_script=${test_mc_dir}/plots.rb
+#results_dir=${test_mc_dir}/results
+results_dir=${test_mc_dir}/ht_results
 
-${test_mc_dir}/test_mc ${result_dir} 20 20 10
-${test_mc_dir}/test_mc ${result_dir} 40 40 10
-${test_mc_dir}/test_mc ${result_dir} 60 60 10
-${test_mc_dir}/test_mc ${result_dir} 80 80 10
-${test_mc_dir}/test_mc ${result_dir} 100 100 10
-${test_mc_dir}/test_mc ${result_dir} 120 120 10
-${test_mc_dir}/test_mc ${result_dir} 140 140 10
-${test_mc_dir}/test_mc ${result_dir} 160 160 10
-${test_mc_dir}/test_mc ${result_dir} 180 180 10
-${test_mc_dir}/test_mc ${result_dir} 200 200 10
+export HEAPCHECK=normal
 
-big_result_dir=${test_mc_dir}/big_results
+if [ -x ${results_dir} ]; then
+    echo "Clearing ${results_dir} dir..."
+    rm -f ${results_dir}/*
+else
+    mkdir ${results_dir}
+    echo "${results_dir} dir was created"
+fi
 
-${test_mc_dir}/test_mc ${big_result_dir} 500 500 3
-${test_mc_dir}/test_mc ${big_result_dir} 1000 1000 3
-${test_mc_dir}/test_mc ${big_result_dir} 1500 1500 3
-${test_mc_dir}/test_mc ${big_result_dir} 2000 2000 3
+echo "Executing calculations..."
+
+#${test_mc_bin} ${results_dir} ${max_size} ${max_size} 1 true
+
+for i in `seq ${min_size} ${size_step} ${max_size}`; do
+    ${test_mc_bin} ${results_dir} ${i} ${i} ${repeats}
+done
+
+#ruby ${plots_script} ${results_dir}

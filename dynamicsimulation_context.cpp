@@ -3,7 +3,7 @@
 DynamicSimulationContext::DynamicSimulationContext(AreaData *area) :
     SimulationBaseContext(area), _totalRate(0) {}
 
-float DynamicSimulationContext::doReaction() {
+double DynamicSimulationContext::doReaction() {
     reviewAllEvents();
 
     if (_totalRate == 0) return 0;
@@ -13,7 +13,7 @@ float DynamicSimulationContext::doReaction() {
     }
 
     int n = REACTIONS_NUM - 1;
-    float r = randomN01() * _totalRate;
+    double r = randomN01() * _totalRate;
     for (int i = 0; i < REACTIONS_NUM - 1; ++i) {
         if (r < _rates[i]) {
             n = i;
@@ -21,8 +21,8 @@ float DynamicSimulationContext::doReaction() {
         }
     }
 
-    float min = (n == 0) ? 0 : _rates[n - 1];
-    float max = _rates[n];
+    double min = (n == 0) ? 0 : _rates[n - 1];
+    double max = _rates[n];
     int siteIndex = _sites[n].size() * (r - min) / (max - min);
 
     reaction(n)->doIt(&_sites[n][siteIndex]);
@@ -41,7 +41,7 @@ void DynamicSimulationContext::reviewAllEvents() {
         for (int i = 0; i < REACTIONS_NUM; ++i) {
             int reactionsNum = reaction(i)->couldBe(site);
             if (reactionsNum > 0) {
-                float currentRate = reactionsNum * reaction(i)->rate();
+                double currentRate = reactionsNum * reaction(i)->rate();
                 _rates[i] += currentRate;
                 _totalRate += currentRate;
                 _sites[i].push_back(site);

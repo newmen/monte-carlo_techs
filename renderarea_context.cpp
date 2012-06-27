@@ -2,17 +2,17 @@
 #include "renderarea_context.h"
 #include "drawing_role.h"
 
-#define SIDE_LENGTH 15
-
-RenderAreaContext::RenderAreaContext(const AreaData *area) : _area(area) {
-    setMinimumSize(SIDE_LENGTH * _area->sizeX(), SIDE_LENGTH * _area->sizeY());
+RenderAreaContext::RenderAreaContext(const AreaData *area, float cellSideLength) :
+    _area(area), _cellSideLength(cellSideLength)
+{
+    setMinimumSize(_cellSideLength * _area->sizeX(), _cellSideLength * _area->sizeY());
 }
 
 void RenderAreaContext::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    static_cast<const DrawingRole<AreaData, SIDE_LENGTH> *>(_area)->draw(&painter);
+    static_cast<const DrawingRole<AreaData> *>(_area)->draw(&painter, _cellSideLength);
 
     painter.setRenderHint(QPainter::Antialiasing, false);
 }

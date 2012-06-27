@@ -13,7 +13,7 @@ StoreContext::StoreContext(const AreaData *area, const char *fileName, const cha
     }
 }
 
-void StoreContext::store(float dt) {
+void StoreContext::store(double dt) {
     _totalTime += dt;
 
     _outFile << _totalTime;

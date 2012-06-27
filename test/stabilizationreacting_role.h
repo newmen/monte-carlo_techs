@@ -1,1 +1,0 @@
-../stabilizationreacting_role.h

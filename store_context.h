@@ -9,7 +9,7 @@ class StoreContext
 public:
     StoreContext(const AreaData *area, const char *fileName, const char *methodName);
 
-    void store(float dt);
+    void store(double dt);
 
 private:
     const AreaData *_area;

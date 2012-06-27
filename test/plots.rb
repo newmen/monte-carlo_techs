@@ -172,6 +172,7 @@ end
 
 def read_and_draw_mc_plots
   original_file = "original.#{EXT_MC}"
+  return unless File.exist?(original_file)
   original = read_mc_file(original_file)
 
   mc_files = Dir["*.#{EXT_MC}"] - [original_file]

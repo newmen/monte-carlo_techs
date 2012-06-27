@@ -45,12 +45,12 @@ IReactingRole *SimulationBaseContext::reaction(int index) const {
     return _reactions[index];
 }
 
-float SimulationBaseContext::randomN01() const {
-    return (float)rand() / RAND_MAX;
+double SimulationBaseContext::randomN01() const {
+    return (double)rand() / RAND_MAX;
 }
 
-float SimulationBaseContext::negativLogU() const {
-    float u;
+double SimulationBaseContext::negativLogU() const {
+    double u;
     do u = randomN01(); while (u == 0);
     return -log(u);
 }

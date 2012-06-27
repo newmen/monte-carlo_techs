@@ -9,18 +9,19 @@
 template <int treeBaseWidth>
 class TreeBasedSimulationContext : public SimulationBaseContext
 {
-public:
-    TreeBasedSimulationContext(AreaData *area);
-
-    float doReaction();
-
-private:
     typedef NodeS<REACTIONS_NUM> SiteNode;
     typedef std::set<const SiteNode *> SiteNodeCache;
 
+public:
+    TreeBasedSimulationContext(AreaData *area);
+
+    double doReaction();
+
+private:
     void updateRates(SiteNode *siteNode) const;
     void depthUpdate(SiteNodeCache *cache, SiteNode *siteNode, int depth = 2);
 
+private:
     MCTree<treeBaseWidth> _tree;
     std::map<const int *, SiteNode *> _cellsToNodes;
 };
@@ -28,7 +29,7 @@ private:
 template <int treeBaseWidth>
 TreeBasedSimulationContext<treeBaseWidth>::TreeBasedSimulationContext(AreaData *area) : SimulationBaseContext(area) {
     throughArea([this](int *cell, int **neighbours) {
-        SiteNode *siteNode = new SiteNode(cell, neighbours); // was deleted into MCTree
+        SiteNode *siteNode = new SiteNode(cell, neighbours); // will be deleted into MCTree
         this->updateRates(siteNode);
         this->_cellsToNodes[cell] = siteNode;
         this->_tree.add(siteNode);
@@ -36,12 +37,17 @@ TreeBasedSimulationContext<treeBaseWidth>::TreeBasedSimulationContext(AreaData *
 }
 
 template <int treeBaseWidth>
-float TreeBasedSimulationContext<treeBaseWidth>::doReaction() {
-    float totalRate = _tree.sum();
+double TreeBasedSimulationContext<treeBaseWidth>::doReaction() {
+    double totalRate = _tree.sum();
     if (totalRate == 0) return 0;
 
-    float r = randomN01() * totalRate;
+    double r = randomN01() * totalRate;
     SiteNode *currentSiteNode = static_cast<SiteNode *>(_tree.find(&r)); // here r is decreasing when we finds necessary site
+
+    if (currentSiteNode == 0) {
+        _tree.diagnostic();
+    }
+
     int reactionIndex = currentSiteNode->reactionIndex(r);
 
     reaction(reactionIndex)->doIt(&currentSiteNode->_site);

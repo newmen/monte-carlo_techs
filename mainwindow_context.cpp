@@ -10,12 +10,12 @@
 MainWindowContext::MainWindowContext() : _area(13, 8) {
     setWindowTitle("Monte Carlo simulation");
 
-    _simulationContext = new DynamicSimulationContext(&_area);
+//    _simulationContext = new DynamicSimulationContext(&_area);
 //    _simulationContext = new KineticSimulationContext(&_area);
 //    _simulationContext = new RejectionSimulationContext(&_area);
 //    _simulationContext = new RejectionFreeSimulationContext(&_area);
-//    _simulationContext = new TreeBasedSimulationContext<5>(&_area);
-    _renderArea = new RenderAreaContext(&_area);
+    _simulationContext = new TreeBasedSimulationContext<10>(&_area);
+    _renderArea = new RenderAreaContext(&_area, 10);
 
     _doButton = new QPushButton("Do reaction");
     connect(_doButton, SIGNAL(clicked()), this, SLOT(doReaction()));
@@ -43,12 +43,14 @@ MainWindowContext::~MainWindowContext() {
 }
 
 void MainWindowContext::doReaction() {
-    float dt = _simulationContext->doReaction();
+    double dt = _simulationContext->doReaction();
     _renderArea->update();
+    if (dt == 0.0) _playButton->click();
 }
 
 void MainWindowContext::playAnimation() {
     _animationTimer->start(10);
+//    _animationTimer->start(1);
 }
 
 void MainWindowContext::stopAnimation() {

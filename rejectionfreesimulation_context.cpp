@@ -3,13 +3,13 @@
 RejectionFreeSimulationContext::RejectionFreeSimulationContext(AreaData *area) :
     SimulationBaseContext(area), _totalRate(0) {}
 
-float RejectionFreeSimulationContext::doReaction() {
+double RejectionFreeSimulationContext::doReaction() {
     reviewAllEvents();
 
     if (_totalRate == 0) return 0;
 
-    float r = randomN01() * _totalRate;
-    float accRate = 0;
+    double r = randomN01() * _totalRate;
+    double accRate = 0;
     for (auto p = _events.cbegin(); p != _events.cend(); ++p) {
         accRate += p->rate();
         if (r < accRate) {
@@ -31,7 +31,7 @@ void RejectionFreeSimulationContext::reviewAllEvents() {
             IReactingRole *const currentReaction = reaction(i);
             int reactionsNum = currentReaction->couldBe(*site);
             if (reactionsNum > 0) {
-                float rate = reactionsNum * currentReaction->rate();
+                double rate = reactionsNum * currentReaction->rate();
                 _totalRate += rate;
                 _events.push_back(EventData(site, currentReaction, rate));
             }
