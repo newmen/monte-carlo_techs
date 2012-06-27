@@ -13,11 +13,11 @@ public:
     NodeN(int level);
     ~NodeN();
 
-    void add(INodeS *node);
+    void add(NodeS *node);
     void add(NodeN *node);
     bool isFull() const;
 
-    INodeS *find(double *r) const;
+    NodeS *find(double *r) const;
 
     void diagnoze() const;
 
@@ -40,7 +40,7 @@ NodeN<width>::~NodeN() {
 }
 
 template <int width>
-void NodeN<width>::add(INodeS *node) {
+void NodeN<width>::add(NodeS *node) {
     if (level() > 1) {
         if (_numberOfChilds == 0 || last()->isFull()) store(new NodeN<width>(level() - 1));
         last()->add(node);
@@ -64,12 +64,12 @@ bool NodeN<width>::isFull() const {
 }
 
 template <int width>
-INodeS *NodeN<width>::find(double *r) const {
+NodeS *NodeN<width>::find(double *r) const {
     for (int i = 0; i < _numberOfChilds; ++i) {
         double childSum = _childs[i]->sum();
         if (*r < childSum) {
             if (level() == 1) {
-                return static_cast<INodeS *>(_childs[i]);
+                return static_cast<NodeS *>(_childs[i]);
             } else {
                 return static_cast<NodeN<width> *>(_childs[i])->find(r);
             }
@@ -92,7 +92,7 @@ void NodeN<width>::diagnoze() const {
     }
 
     if (sum() != childsSum) {
-        std::cout << "Trouble on N" << level() << " level!\n"
+        std::cerr << "Trouble on N" << level() << " level!\n"
                   << "diff: " << sum() << " % " << childsSum << std::endl;
     }
 }

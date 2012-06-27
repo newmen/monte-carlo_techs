@@ -1,20 +1,29 @@
 #include "dynamicsimulation_context.h"
 
 DynamicSimulationContext::DynamicSimulationContext(AreaData *area) :
-    SimulationBaseContext(area), _totalRate(0) {}
+    SimulationBaseContext(area), _totalRate(0)
+{
+    _sites = new SitesList[reactionsNum()];
+    _rates = new double[reactionsNum()];
+}
+
+DynamicSimulationContext::~DynamicSimulationContext() {
+    delete [] _rates;
+    delete [] _sites;
+}
 
 double DynamicSimulationContext::doReaction() {
     reviewAllEvents();
 
     if (_totalRate == 0) return 0;
 
-    for (int i = 1; i < REACTIONS_NUM; ++i) {
+    for (int i = 1; i < reactionsNum(); ++i) {
         _rates[i] += _rates[i - 1];
     }
 
-    int n = REACTIONS_NUM - 1;
+    int n = reactionsNum() - 1;
     double r = randomN01() * _totalRate;
-    for (int i = 0; i < REACTIONS_NUM - 1; ++i) {
+    for (int i = 0; i < reactionsNum() - 1; ++i) {
         if (r < _rates[i]) {
             n = i;
             break;
@@ -31,17 +40,18 @@ double DynamicSimulationContext::doReaction() {
 
 void DynamicSimulationContext::reviewAllEvents() {
     _totalRate = 0;
-    for (int i = 0; i < REACTIONS_NUM; ++i) {
+    for (int i = 0; i < reactionsNum(); ++i) {
         _rates[i] = 0;
         _sites[i].clear();
     }
 
     throughArea([this](int *cell, int **neighbours) {
         SiteData site(cell, neighbours);
-        for (int i = 0; i < REACTIONS_NUM; ++i) {
-            int reactionsNum = this->reaction(i)->couldBe(site);
+        for (int i = 0; i < reactionsNum(); ++i) {
+            IReactingRole *currentReaction = reaction(i);
+            int reactionsNum = currentReaction->couldBe(site);
             if (reactionsNum > 0) {
-                double currentRate = reactionsNum * this->reaction(i)->rate();
+                double currentRate = reactionsNum * currentReaction->rate();
                 _rates[i] += currentRate;
                 _totalRate += currentRate;
                 _sites[i].push_back(site);

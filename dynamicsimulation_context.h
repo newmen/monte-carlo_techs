@@ -6,8 +6,11 @@
 
 class DynamicSimulationContext : public SimulationBaseContext
 {
+    typedef std::vector<SiteData> SitesList;
+
 public:
     DynamicSimulationContext(AreaData *area);
+    ~DynamicSimulationContext();
 
     double doReaction();
 
@@ -15,8 +18,8 @@ private:
     void reviewAllEvents();
 
 private:
-    std::vector<SiteData> _sites[REACTIONS_NUM];
-    double _rates[REACTIONS_NUM];
+    SitesList *_sites;
+    double *_rates;
     double _totalRate;
 };
 

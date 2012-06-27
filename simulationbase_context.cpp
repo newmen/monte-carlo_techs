@@ -18,28 +18,35 @@
 #include "stabilizationreacting_role.h"
 
 SimulationBaseContext::SimulationBaseContext(AreaData *area) : _area(area) {
-    _reactions[0] = new ReactingRole<Reaction12Data>;
-    _reactions[1] = new ReactingRole<Reaction21Data>;
-    _reactions[2] = new ReactingRole<Reaction23Data>;
+    _reactions.push_back(new ReactingRole<Reaction12Data>);
+    _reactions.push_back(new ReactingRole<Reaction21Data>);
+    _reactions.push_back(new ReactingRole<Reaction23Data>);
 
-//    _reactions[3] = new ReactionMigratingRole<Reaction31Data>;
-//    _reactions[4] = new StabilizationReactingRole<Reaction34Data>;
-//    _reactions[5] = new ReactingRole<Reaction35Data>;
-//    _reactions[6] = new ReactionDissolutionMigratingRole<Reaction51MRData, 5>;
+//    _reactions.push_back(new ReactionMigratingRole<Reaction31Data>);
+//    _reactions.push_back(new StabilizationReactingRole<Reaction34Data>);
+//    _reactions.push_back(new ReactingRole<Reaction35Data>);
+//    _reactions.push_back(new ReactionDissolutionMigratingRole<Reaction51MRData, 5>);
 
-    _reactions[3] = new ReactionMigratingRole<Reaction31Data>;
-    _reactions[4] = new ReactingRole<Reaction34Data>;
-    _reactions[5] = new ReactingRole<Reaction35Data>;
-    _reactions[6] = new ReactingRole<Reaction51MRData>;
+    _reactions.push_back(new ReactionMigratingRole<Reaction31Data>);
+    _reactions.push_back(new ReactingRole<Reaction34Data>);
+    _reactions.push_back(new ReactingRole<Reaction35Data>);
+    _reactions.push_back(new ReactingRole<Reaction51MRData>);
 }
 
 SimulationBaseContext::~SimulationBaseContext() {
-    for (int i = 0; i < REACTIONS_NUM; ++i) delete _reactions[i];
-//    for (IReactingRole *reaction : _reactions) delete reaction;
+    for (auto p = _reactions.begin(); p != _reactions.end(); ++p) delete *p;
 }
 
 void SimulationBaseContext::throughArea(std::function<void (int *, int **)> lambda) const {
     static_cast<SimulatingRole<AreaData> *>(_area)->cellsWithNeighsIter(lambda);
+}
+
+int SimulationBaseContext::reactionsNum() const {
+    return (int)(_reactions.size());
+}
+
+void SimulationBaseContext::eachReaction(std::function<void (IReactingRole *const)> lambda) const {
+    for (auto p = _reactions.cbegin(); p != _reactions.cend(); ++p) lambda(*p);
 }
 
 IReactingRole *SimulationBaseContext::reaction(int index) const {

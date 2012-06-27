@@ -13,10 +13,10 @@ public:
     MCTree();
     ~MCTree();
 
-    void add(INodeS *node);
+    void add(NodeS *node);
     double sum() const;
 
-    INodeS *find(double *r) const;
+    NodeS *find(double *r) const;
 
     void diagnostic() const;
 
@@ -35,7 +35,7 @@ MCTree<width>::~MCTree() {
 }
 
 template <int width>
-void MCTree<width>::add(INodeS *node) {
+void MCTree<width>::add(NodeS *node) {
     if (_root->isFull()) {
         NodeN<width> *newRoot = new NodeN<width>(_root->level() + 1);
         newRoot->add(_root);
@@ -50,7 +50,7 @@ double MCTree<width>::sum() const {
 }
 
 template <int width>
-INodeS *MCTree<width>::find(double *r) const {
+NodeS *MCTree<width>::find(double *r) const {
     return _root->find(r);
 }
 

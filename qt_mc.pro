@@ -15,7 +15,7 @@ SOURCES += \
     nodebase.cpp \
     store_context.cpp \
     event_data.cpp \
-    test/test.cpp
+    nodes.cpp
 
 HEADERS += \
     drawing_role.h \

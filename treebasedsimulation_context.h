@@ -9,7 +9,7 @@
 template <int treeBaseWidth>
 class TreeBasedSimulationContext : public SimulationBaseContext
 {
-    typedef NodeS<REACTIONS_NUM> SiteNode;
+    typedef NodeS SiteNode;
     typedef std::set<const SiteNode *> SiteNodeCache;
 
 public:
@@ -29,7 +29,7 @@ private:
 template <int treeBaseWidth>
 TreeBasedSimulationContext<treeBaseWidth>::TreeBasedSimulationContext(AreaData *area) : SimulationBaseContext(area) {
     throughArea([this](int *cell, int **neighbours) {
-        SiteNode *siteNode = new SiteNode(cell, neighbours); // will be deleted into MCTree
+        SiteNode *siteNode = new SiteNode(cell, neighbours, this->reactionsNum()); // will be deleted into MCTree
         this->updateRates(siteNode);
         this->_cellsToNodes[cell] = siteNode;
         this->_tree.add(siteNode);
@@ -50,7 +50,7 @@ double TreeBasedSimulationContext<treeBaseWidth>::doReaction() {
 
     int reactionIndex = currentSiteNode->reactionIndex(r);
 
-    reaction(reactionIndex)->doIt(&currentSiteNode->_site);
+    reaction(reactionIndex)->doIt(&currentSiteNode->site());
 
     SiteNodeCache cache;
     depthUpdate(&cache, currentSiteNode);
@@ -60,10 +60,10 @@ double TreeBasedSimulationContext<treeBaseWidth>::doReaction() {
 
 template <int treeBaseWidth>
 void TreeBasedSimulationContext<treeBaseWidth>::updateRates(TreeBasedSimulationContext<treeBaseWidth>::SiteNode *siteNode) const {
-    for (int i = 0; i < REACTIONS_NUM; ++i) {
-        IReactingRole *currReaction = reaction(i);
-        siteNode->_rates[i] = currReaction->couldBe(siteNode->_site) * currReaction->rate();
-    }
+    for (int i = 0; i < reactionsNum(); ++i) {
+        IReactingRole *currentReaction = reaction(i);
+        siteNode->rate(i, currentReaction->couldBe(siteNode->site()) * currentReaction->rate());
+    };
     siteNode->updateSum();
 }
 
@@ -75,7 +75,7 @@ void TreeBasedSimulationContext<treeBaseWidth>::depthUpdate(SiteNodeCache *cache
     updateRates(siteNode);
     if (depth == 0) return;
 
-    siteNode->_site.neighboursIterator([this, &cache, &depth](int *neighbourCell) {
+    siteNode->site().neighboursIterator([this, &cache, &depth](int *neighbourCell) {
         this->depthUpdate(cache, this->_cellsToNodes[neighbourCell], depth - 1);
     });
 

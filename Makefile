@@ -32,7 +32,7 @@ LIB_FILES = \
 	stabilizationreacting_role.h \
 	mctree.h \
 	treebasedsimulation_context.h \
-	nodes.h \
+	nodes.cpp \
 	noden.h \
 	storing_role.h
 

@@ -12,9 +12,15 @@ class KineticSimulationContext : public SimulationBaseContext
     struct PerSite {
         SiteData _site;
         double _commonRate;
-        double _normedRates[REACTIONS_NUM];
+        double *_normedRates;
 
-        PerSite(int *cell, int **neighbours) : _site(cell, neighbours) {}
+        PerSite(int *cell, int **neighbours, int reactionNums) : _site(cell, neighbours) {
+            _normedRates = new double[reactionNums];
+        }
+
+        ~PerSite() {
+            delete [] _normedRates;
+        }
     };
 
 public:

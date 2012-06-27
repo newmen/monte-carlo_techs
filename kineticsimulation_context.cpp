@@ -3,7 +3,7 @@
 
 KineticSimulationContext::KineticSimulationContext(AreaData *area) : SimulationBaseContext(area) {
     throughArea([this](int *cell, int **neighbours){
-        PerSite *perSite = new PerSite(cell, neighbours);
+        PerSite *perSite = new PerSite(cell, neighbours, this->reactionsNum());
         calcRatesPerSite(perSite);
 
         _perSites.push_back(perSite);
@@ -31,7 +31,7 @@ double KineticSimulationContext::doReaction() {
 
 void KineticSimulationContext::calcRatesPerSite(PerSite *perSite) const {
     perSite->_commonRate = 0;
-    for (int i = 0; i < REACTIONS_NUM; ++i) {
+    for (int i = 0; i < reactionsNum(); ++i) {
         perSite->_normedRates[i] = reaction(i)->couldBe(perSite->_site) * reaction(i)->rate();
         perSite->_commonRate += perSite->_normedRates[i];
     }
@@ -53,14 +53,14 @@ int KineticSimulationContext::siteRandomIndex(double *dt) const {
 }
 
 IReactingRole *KineticSimulationContext::randomReaction(int index) const {
-    for (int i = 0; i < REACTIONS_NUM; ++i) _perSites[index]->_normedRates[i] /= _perSites[index]->_commonRate;
-    for (int i = 1; i < REACTIONS_NUM; ++i) _perSites[index]->_normedRates[i] += _perSites[index]->_normedRates[i - 1];
+    for (int i = 0; i < reactionsNum(); ++i) _perSites[index]->_normedRates[i] /= _perSites[index]->_commonRate;
+    for (int i = 1; i < reactionsNum(); ++i) _perSites[index]->_normedRates[i] += _perSites[index]->_normedRates[i - 1];
 
-    double r = randomN01(); // TODO: тут нужно учитывать то, что иногда нормированные скорости дают чуть больше единицы (даже с double?)
-    for (int i = 0; i < REACTIONS_NUM - 1; ++i) {
+    double r = randomN01(); // тут нужно учитывать то, что иногда нормированные скорости дают чуть больше единицы (даже с double?)
+    for (int i = 0; i < reactionsNum() - 1; ++i) {
         if (r < _perSites[index]->_normedRates[i]) return reaction(i);
     }
-    return reaction(REACTIONS_NUM - 1);
+    return reaction(reactionsNum() - 1);
 }
 
 void KineticSimulationContext::updateData(std::set<PerSite *> *cache, PerSite *perSite, int depth) {
