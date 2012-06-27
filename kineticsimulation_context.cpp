@@ -12,7 +12,8 @@ KineticSimulationContext::KineticSimulationContext(AreaData *area) : SimulationB
 }
 
 KineticSimulationContext::~KineticSimulationContext() {
-    for (PerSite *perSite : _perSites) delete perSite;
+    for (auto p = _perSites.begin(); p != _perSites.end(); ++p) delete *p;
+//    for (PerSite *perSite : _perSites) delete perSite;
 }
 
 double KineticSimulationContext::doReaction() {

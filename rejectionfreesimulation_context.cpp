@@ -28,7 +28,7 @@ void RejectionFreeSimulationContext::reviewAllEvents() {
     throughArea([this](int *cell, int **neighbours) {
         std::shared_ptr<SiteData> site(new SiteData(cell, neighbours));
         for (int i = 0; i < REACTIONS_NUM; ++i) {
-            IReactingRole *const currentReaction = reaction(i);
+            IReactingRole *const currentReaction = this->reaction(i);
             int reactionsNum = currentReaction->couldBe(*site);
             if (reactionsNum > 0) {
                 double rate = reactionsNum * currentReaction->rate();

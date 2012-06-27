@@ -34,7 +34,8 @@ SimulationBaseContext::SimulationBaseContext(AreaData *area) : _area(area) {
 }
 
 SimulationBaseContext::~SimulationBaseContext() {
-    for (auto reaction : _reactions) delete reaction;
+    for (int i = 0; i < REACTIONS_NUM; ++i) delete _reactions[i];
+//    for (IReactingRole *reaction : _reactions) delete reaction;
 }
 
 void SimulationBaseContext::throughArea(std::function<void (int *, int **)> lambda) const {

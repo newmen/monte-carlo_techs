@@ -4,6 +4,8 @@
 class NodeBase
 {
 public:
+    virtual ~NodeBase() {}
+
     void setParent(NodeBase *parent) { _parent = parent; }
     int level() const { return _level; }
     double sum() const { return _sum; }
