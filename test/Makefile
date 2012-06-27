@@ -8,5 +8,8 @@ default:	$(NAME)
 $(NAME):
 	$(CXX) $(CXX_CFLAGS) $(LIBS) *.cpp -o $(NAME)
 
+heap_test:
+	$(CXX) $(CXX_CFLAGS) $(LIBS) -ltcmalloc *.cpp -o $@
+
 clean:
 	rm $(NAME)
