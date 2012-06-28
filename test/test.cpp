@@ -20,6 +20,7 @@
 #include "../store_context.h"
 
 #define MAX_TIME 2.0
+#define GRAPH_EXT "mcr"
 
 using namespace std;
 
@@ -48,7 +49,8 @@ struct TestConfig {
 
 void runTest(TestConfig *tc, const char *name, const char *fileName)
 {
-    const string fullFilePath = tc->pathBuilder.buildPath(fileName, "mcr");
+    const char graphExt[] = GRAPH_EXT;
+    const string fullFilePath = tc->pathBuilder.buildPath(fileName, graphExt);
 
     cout << name << endl;
     if (!tc->needGraph) tc->perfSaver.storeName(name);
@@ -133,7 +135,7 @@ int main(int argc, char *argv[]) {
          << "repeats = " << tc.repeats << "\n" << endl;
 
     if (tc.needGraph) {
-        const string originalFileName = tc.pathBuilder.buildPath("original", "mcr");
+        const string originalFileName = tc.pathBuilder.buildPath("original", GRAPH_EXT);
         solveODE(originalFileName.c_str(), MAX_TIME);
         tc.pathBuilder.printFileWasSaved(originalFileName);
     }

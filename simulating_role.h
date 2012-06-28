@@ -1,8 +1,6 @@
 #ifndef SIMULATING_ROLE_H
 #define SIMULATING_ROLE_H
 
-#include <functional>
-
 #ifndef NEIGHBOURS_NUM
 // TODO: страшный и ужасный костыль
 #define NEIGHBOURS_NUM 4
@@ -14,7 +12,8 @@ class SimulatingRole : public AData
 public:
     SimulatingRole() {}
 
-    void cellsWithNeighsIter(std::function<void (int *, int **)> lambda) const;
+    template <typename Lambda>
+    void cellsWithNeighsIter(const Lambda &lambda) const;
 
 private:
     int torus(int curr, int size) const;
@@ -23,7 +22,8 @@ private:
 };
 
 template <class AData>
-void SimulatingRole<AData>::cellsWithNeighsIter(std::function<void (int *, int **)> lambda) const {
+template <typename Lambda>
+void SimulatingRole<AData>::cellsWithNeighsIter(const Lambda &lambda) const {
     this->coordsIterator([this, &lambda](int x, int y) {
         int **nbrs = this->neighbours(x, y);
         lambda(this->cell(x, y), nbrs);
