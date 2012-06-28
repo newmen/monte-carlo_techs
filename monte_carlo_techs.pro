@@ -1,15 +1,15 @@
+TEMPLATE = lib
+CONFIG += console
+CONFIG -= qt
+
 QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += \
-    main.cpp \
     area_data.cpp \
-    mainwindow_context.cpp \
-    renderarea_context.cpp \
     site_data.cpp \
     dynamicsimulation_context.cpp \
     simulationbase_context.cpp \
     kineticsimulation_context.cpp \
-    playbutton.cpp \
     rejectionsimulation_context.cpp \
     rejectionfreesimulation_context.cpp \
     nodebase.cpp \
@@ -21,9 +21,6 @@ SOURCES += \
     treebasedsimulation_context.cpp
 
 HEADERS += \
-    drawing_role.h \
-    mainwindow_context.h \
-    renderarea_context.h \
     area_data.h \
     site_data.h \
     dynamicsimulation_context.h \
@@ -37,7 +34,6 @@ HEADERS += \
     reactionmigrating_role.h \
     simulationbase_context.h \
     kineticsimulation_context.h \
-    playbutton.h \
     reaction35_data.h \
     reaction51mr_data.h \
     reactiondissolutionmigrating_role.h \

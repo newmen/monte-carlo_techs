@@ -1,11 +1,11 @@
 #include "mainwindow_context.h"
 #include <QVBoxLayout>
 
-#include "dynamicsimulation_context.h"
-#include "kineticsimulation_context.h"
-#include "rejectionsimulation_context.h"
-#include "rejectionfreesimulation_context.h"
-#include "treebasedsimulation_context.h"
+#include "../dynamicsimulation_context.h"
+#include "../kineticsimulation_context.h"
+#include "../rejectionsimulation_context.h"
+#include "../rejectionfreesimulation_context.h"
+#include "../treebasedsimulation_context.h"
 
 MainWindowContext::MainWindowContext() : _area(13, 8) {
     setWindowTitle("Monte Carlo simulation");

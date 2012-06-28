@@ -6,7 +6,8 @@
 #include <QTimer>
 #include "playbutton.h"
 #include "renderarea_context.h"
-#include "simulationbase_context.h"
+
+#include "../simulationbase_context.h"
 
 class MainWindowContext : public QWidget
 {

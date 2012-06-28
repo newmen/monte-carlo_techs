@@ -2,7 +2,8 @@
 #define RENDERAREA_CONTEXT_H
 
 #include <QWidget>
-#include "area_data.h"
+
+#include "../area_data.h"
 
 class RenderAreaContext : public QWidget
 {
