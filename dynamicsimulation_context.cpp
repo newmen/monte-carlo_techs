@@ -47,8 +47,8 @@ void DynamicSimulationContext::reviewAllEvents() {
 
     throughArea([this](int *cell, int **neighbours) {
         SiteData site(cell, neighbours);
-        for (int i = 0; i < reactionsNum(); ++i) {
-            IReactingRole *currentReaction = reaction(i);
+        for (int i = 0; i < this->reactionsNum(); ++i) {
+            IReactingRole *currentReaction = this->reaction(i);
             int reactionsNum = currentReaction->couldBe(site);
             if (reactionsNum > 0) {
                 double currentRate = reactionsNum * currentReaction->rate();
