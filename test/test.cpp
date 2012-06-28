@@ -1,4 +1,5 @@
 #include <sys/time.h>
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -6,6 +7,9 @@
 #include "pathbuilder.h"
 #include "performancesaver.h"
 #include "solving_ode.h"
+
+#include "typicalsimcontextfactory.h"
+#include "treesimcontextfactory.h"
 
 #include "../area_data.h"
 #include "../dynamicsimulation_context.h"
@@ -22,17 +26,26 @@ using namespace std;
 struct TestConfig {
     const PathBuilder pathBuilder;
     PerformanceSaver perfSaver;
+    SimulationContextFactory *simFactory;
     const int sizeX, sizeY;
     const int repeats;
     const bool needGraph;
 
     TestConfig(const char *resultDir, int sizeX, int sizeY, int repeats, bool needGraph) :
-        pathBuilder(resultDir), perfSaver(&pathBuilder),
+        pathBuilder(resultDir), perfSaver(&pathBuilder), simFactory(0),
         sizeX(sizeX), sizeY(sizeY), repeats(repeats),
         needGraph(needGraph) {}
+
+    ~TestConfig() {
+        delete simFactory;
+    }
+
+    void changeFactory(SimulationContextFactory *factory) {
+        delete simFactory;
+        simFactory = factory;
+    }
 };
 
-template <class SimulationContext>
 void runTest(TestConfig *tc, const char *name, const char *fileName)
 {
     const string fullFilePath = tc->pathBuilder.buildPath(fileName, "mcr");
@@ -62,7 +75,7 @@ void runTest(TestConfig *tc, const char *name, const char *fileName)
         freeUpMemory();
 
         area = new AreaData(tc->sizeX, tc->sizeY);
-        simulationContext = new SimulationContext(area);
+        simulationContext = tc->simFactory->createContext(area);
         if (tc->needGraph) {
             storeContext = new StoreContext(area, fullFilePath.c_str(), name);
         }
@@ -95,8 +108,8 @@ void runTest(TestConfig *tc, const char *name, const char *fileName)
         cout << endl;
 
         unsigned int size = tc->sizeX * tc->sizeY;
-        tc->perfSaver.storeValue("times", size, calcTime);
         tc->perfSaver.storeValue("iterations", size, meanIterations);
+        tc->perfSaver.storeValue("times", size, calcTime);
         tc->perfSaver.storeValue("virtuals", size, vm);
         tc->perfSaver.storeValue("rss", size, rss);
     }
@@ -126,21 +139,37 @@ int main(int argc, char *argv[]) {
     }
 
     srand(time(0));
-//    runTest<DynamicSimulationContext>(&tc, "Dynamic MC", "dynamic");
-//    runTest<KineticSimulationContext>(&tc, "Kinetic MC", "kinetic");
-//    runTest<RejectionSimulationContext>(&tc, "Rejection MC", "rejection");
-//    runTest<RejectionFreeSimulationContext>(&tc, "Rejection-free MC", "rejection-free");
+//    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
+//    runTest(&tc, "Dynamic MC", "dynamic");
+//    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
+//    runTest(&tc, "Kinetic MC", "kinetic");
+//    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
+//    runTest(&tc, "Rejection MC", "rejection");
+//    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
+//    runTest(&tc, "Rejection-free MC", "rejection-free");
 
-    runTest<TreeBasedSimulationContext<2000> >(&tc, "Faster <2000> MC", "faster_2000");
-    runTest<TreeBasedSimulationContext<1000> >(&tc, "Faster <1000> MC", "faster_1000");
-    runTest<TreeBasedSimulationContext<500> >(&tc, "Faster <500> MC", "faster_500");
-    runTest<TreeBasedSimulationContext<200> >(&tc, "Faster <200> MC", "faster_200");
-    runTest<TreeBasedSimulationContext<100> >(&tc, "Faster <100> MC", "faster_100");
-    runTest<TreeBasedSimulationContext<50> >(&tc, "Faster <50> MC", "faster_50");
-    runTest<TreeBasedSimulationContext<20> >(&tc, "Faster <20> MC", "faster_20");
-    runTest<TreeBasedSimulationContext<10> >(&tc, "Faster <10> MC", "faster_10");
-    runTest<TreeBasedSimulationContext<5> >(&tc, "Faster <5> MC", "faster_5");
-    runTest<TreeBasedSimulationContext<2> >(&tc, "Faster Binary MC", "faster_binary");
+
+    int size = tc.sizeX * tc.sizeY;
+    int maxWidth = calcTreeWidthByK(size, 0.5);
+    int minWidth = 2;
+    TreeSimContextFactory *factory = new TreeSimContextFactory(maxWidth);
+    tc.changeFactory(factory);
+    runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
+    factory->setWidth(minWidth);
+    runTest(&tc, "Faster Binary MC", "faster_binary");
+
+    int optimalWidth = optimalTreeWidth(size);
+    if (optimalWidth < minWidth) optimalWidth = minWidth;
+    factory->setWidth(optimalWidth);
+    runTest(&tc, "Faster Optimal MC", "faster_optimal");
+    int lessWidth = optimalWidth - 1;
+    if (lessWidth < minWidth) lessWidth = minWidth;
+    factory->setWidth(lessWidth);
+    runTest(&tc, "Faster Less MC", "faster_less");
+    int moreWidth = optimalWidth + 1;
+    if (moreWidth > maxWidth) moreWidth = maxWidth;
+    factory->setWidth(moreWidth);
+    runTest(&tc, "Faster More MC", "faster_more");
 
     return 0;
 }

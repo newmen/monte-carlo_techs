@@ -10,6 +10,7 @@
 *.gch
 
 test/test_mc
+test/heap_test
 
 # Compiled Object files
 *.slo

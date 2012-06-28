@@ -1,4 +1,4 @@
-QMAKE_CXXFLAGS += -std=c++0x ../*.o
+QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += \
     main.cpp \
@@ -15,7 +15,10 @@ SOURCES += \
     nodebase.cpp \
     store_context.cpp \
     event_data.cpp \
-    nodes.cpp
+    nodes.cpp \
+    mctree.cpp \
+    noden.cpp \
+    treebasedsimulation_context.cpp
 
 HEADERS += \
     drawing_role.h \

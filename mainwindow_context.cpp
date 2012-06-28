@@ -14,7 +14,7 @@ MainWindowContext::MainWindowContext() : _area(13, 8) {
 //    _simulationContext = new KineticSimulationContext(&_area);
 //    _simulationContext = new RejectionSimulationContext(&_area);
 //    _simulationContext = new RejectionFreeSimulationContext(&_area);
-    _simulationContext = new TreeBasedSimulationContext<10>(&_area);
+    _simulationContext = new TreeBasedSimulationContext(optimalTreeWidth(_area.sizeX() * _area.sizeY()), &_area);
     _renderArea = new RenderAreaContext(&_area, 10);
 
     _doButton = new QPushButton("Do reaction");

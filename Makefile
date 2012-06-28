@@ -1,5 +1,6 @@
-CXX = g++
-CXX_CFLAGS = -Wall -O3 -std=c++0x
+GCC_PATH = /opt/gcc47
+CXX = $(GCC_PATH)/bin/g++
+CXX_CFLAGS = -Wall -O3 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64
 
 NAME = monte_carlo
 EXEC = lib$(NAME).a
@@ -13,7 +14,11 @@ LIB_FILES = \
 	kineticsimulation_context.cpp \
 	rejectionsimulation_context.cpp \
 	rejectionfreesimulation_context.cpp \
+	treebasedsimulation_context.cpp \
+	mctree.cpp \
 	nodebase.cpp \
+	noden.cpp \
+	nodes.cpp \
 	store_context.cpp \
 	event_data.cpp \
 	simulating_role.h \
@@ -30,10 +35,6 @@ LIB_FILES = \
 	reaction51mr_data.h \
 	reactiondissolutionmigrating_role.h \
 	stabilizationreacting_role.h \
-	mctree.h \
-	treebasedsimulation_context.h \
-	nodes.cpp \
-	noden.h \
 	storing_role.h
 
 LIBOFILES = $(LIB_FILES:%.cpp=%.o)

@@ -8,14 +8,18 @@ HEADERS += \
     process_mem_usage.h \
     performancesaver.h \
     solving_ode.h \
-    pathbuilder.h
+    pathbuilder.h \
+    simulationcontextfactory.h \
+    typicalsimcontextfactory.h \
+    treesimcontextfactory.h
 
 SOURCES += \
     test.cpp \
     process_mem_usage.cpp \
     performancesaver.cpp \
     pathbuilder.cpp \
-    solving_ode.cpp
+    solving_ode.cpp \
+    treesimcontextfactory.cpp
 
 OTHER_FILES += \
     run.sh \
