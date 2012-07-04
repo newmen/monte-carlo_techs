@@ -32,7 +32,7 @@ struct TestConfig {
     const int repeats;
     const bool needGraph;
 
-    TestConfig(const char *resultDir, int sizeX, int sizeY, int repeats, bool needGraph) :
+    TestConfig(const string &resultDir, int sizeX, int sizeY, int repeats, bool needGraph) :
         pathBuilder(resultDir), perfSaver(&pathBuilder), simFactory(0),
         sizeX(sizeX), sizeY(sizeY), repeats(repeats),
         needGraph(needGraph) {}
@@ -47,9 +47,9 @@ struct TestConfig {
     }
 };
 
-void runTest(TestConfig *tc, const char *name, const char *fileName)
+void runTest(TestConfig *tc, const string &name, const string &fileName)
 {
-    const char graphExt[] = GRAPH_EXT;
+    const string graphExt = GRAPH_EXT;
     const string fullFilePath = tc->pathBuilder.buildPath(fileName, graphExt);
 
     cout << name << endl;
@@ -79,7 +79,7 @@ void runTest(TestConfig *tc, const char *name, const char *fileName)
         area = new AreaData(tc->sizeX, tc->sizeY);
         simulationContext = tc->simFactory->createContext(area);
         if (tc->needGraph) {
-            storeContext = new StoreContext(area, fullFilePath.c_str(), name);
+            storeContext = new StoreContext(area, fullFilePath, name);
         }
 
         totalTime = 0;
@@ -136,42 +136,35 @@ int main(int argc, char *argv[]) {
 
     if (tc.needGraph) {
         const string originalFileName = tc.pathBuilder.buildPath("original", GRAPH_EXT);
-        solveODE(originalFileName.c_str(), MAX_TIME);
+        solveODE(originalFileName, MAX_TIME);
         tc.pathBuilder.printFileWasSaved(originalFileName);
     }
 
     srand(time(0));
-//    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
-//    runTest(&tc, "Dynamic MC", "dynamic");
-//    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
-//    runTest(&tc, "Kinetic MC", "kinetic");
-//    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
-//    runTest(&tc, "Rejection MC", "rejection");
-//    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
-//    runTest(&tc, "Rejection-free MC", "rejection-free");
+    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
+    runTest(&tc, "Rejection MC", "rejection");
+    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
+    runTest(&tc, "Rejection-free MC", "rejection-free");
+    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
+    runTest(&tc, "Dynamic MC", "dynamic");
+    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
+    runTest(&tc, "Kinetic MC", "kinetic");
 
-
-    int size = tc.sizeX * tc.sizeY;
-    int maxWidth = calcTreeWidthByK(size, 0.5);
-    int minWidth = 2;
-    TreeSimContextFactory *factory = new TreeSimContextFactory(maxWidth);
+    TreeSimContextFactory *factory = new TreeSimContextFactory(2);
     tc.changeFactory(factory);
     runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
-    factory->setWidth(minWidth);
+    factory->setWidth((int)log2(tc.sizeX * tc.sizeY));
     runTest(&tc, "Faster Binary MC", "faster_binary");
 
-    int optimalWidth = optimalTreeWidth(size);
-    if (optimalWidth < minWidth) optimalWidth = minWidth;
-    factory->setWidth(optimalWidth);
-    runTest(&tc, "Faster Optimal MC", "faster_optimal");
-    int lessWidth = optimalWidth - 1;
-    if (lessWidth < minWidth) lessWidth = minWidth;
-    factory->setWidth(lessWidth);
+    factory->setWidth(3);
     runTest(&tc, "Faster Less MC", "faster_less");
-    int moreWidth = optimalWidth + 1;
-    if (moreWidth > maxWidth) moreWidth = maxWidth;
-    factory->setWidth(moreWidth);
+    factory->setWidth(5);
     runTest(&tc, "Faster More MC", "faster_more");
+    factory->setWidth(6);
+    runTest(&tc, "Faster More 6 MC", "faster_more_6");
+
+    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
+    runTest(&tc, "Faster Optimal MC", "faster_optimal");
 
     return 0;
 }

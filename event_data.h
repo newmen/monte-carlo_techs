@@ -2,21 +2,24 @@
 #define EVENT_DATA_H
 
 #include <memory>
+#include "baseevent_data.h"
 #include "ireacting_role.h"
 
-class EventData
+template <class SDData>
+class EventData : public BaseEventData
 {
 public:
-    EventData(const std::shared_ptr<SiteData> &site, IReactingRole *reaction, double rate);
+    EventData(const std::shared_ptr<SDData> &siteOrDimer, const IReactingRole<SDData> *reaction, double rate) :
+        BaseEventData(rate), _siteOrDimer(siteOrDimer), _reaction(reaction) {}
 
-    SiteData *site() const { return _site.get(); }
-    IReactingRole *reaction() const { return _reaction; }
-    double rate() const { return _rate; }
+    void doIt() { _reaction->doIt(_siteOrDimer.get()); }
+
+    SDData *siteOrDimer() const { return _siteOrDimer.get(); }
+    IReactingRole<SDData> *reaction() const { return _reaction; }
 
 private:
-    std::shared_ptr<SiteData> _site;
-    IReactingRole * _reaction;
-    double _rate;
+    std::shared_ptr<SDData> _siteOrDimer;
+    const IReactingRole<SDData> *_reaction;
 };
 
 #endif // EVENT_DATA_H

@@ -1,21 +1,21 @@
 #include "mainwindow_context.h"
 #include <QVBoxLayout>
 
-#include "../dynamicsimulation_context.h"
-#include "../kineticsimulation_context.h"
 #include "../rejectionsimulation_context.h"
 #include "../rejectionfreesimulation_context.h"
+#include "../dynamicsimulation_context.h"
+#include "../kineticsimulation_context.h"
 #include "../treebasedsimulation_context.h"
 
-MainWindowContext::MainWindowContext() : _area(13, 8) {
+MainWindowContext::MainWindowContext() : _area(21, 13) {
     setWindowTitle("Monte Carlo simulation");
 
-//    _simulationContext = new DynamicSimulationContext(&_area);
-//    _simulationContext = new KineticSimulationContext(&_area);
 //    _simulationContext = new RejectionSimulationContext(&_area);
 //    _simulationContext = new RejectionFreeSimulationContext(&_area);
-    _simulationContext = new TreeBasedSimulationContext(optimalTreeWidth(_area.sizeX() * _area.sizeY()), &_area);
-    _renderArea = new RenderAreaContext(&_area, 10);
+//    _simulationContext = new DynamicSimulationContext(&_area);
+//    _simulationContext = new KineticSimulationContext(&_area);
+    _simulationContext = new TreeBasedSimulationContext(&_area);
+    _renderArea = new RenderAreaContext(&_area, 15);
 
     _doButton = new QPushButton("Do reaction");
     connect(_doButton, SIGNAL(clicked()), this, SLOT(doReaction()));
@@ -49,8 +49,7 @@ void MainWindowContext::doReaction() {
 }
 
 void MainWindowContext::playAnimation() {
-    _animationTimer->start(10);
-//    _animationTimer->start(1);
+    _animationTimer->start(25);
 }
 
 void MainWindowContext::stopAnimation() {

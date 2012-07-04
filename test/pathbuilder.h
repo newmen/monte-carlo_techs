@@ -6,9 +6,9 @@
 class PathBuilder
 {
 public:
-    PathBuilder(const char *resultDir);
+    PathBuilder(const std::string &resultDir);
 
-    const char *buildPath(const char *fileName, const char *ext) const;
+    const std::string buildPath(const std::string &fileName, const std::string &ext) const;
     void printFileWasSaved(const std::string &fileName) const;
 
 private:

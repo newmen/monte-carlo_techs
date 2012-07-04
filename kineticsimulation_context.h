@@ -1,44 +1,34 @@
 #ifndef KINETICSIMULATION_CONTEXT_H
 #define KINETICSIMULATION_CONTEXT_H
 
-#include <map>
 #include <vector>
-#include <set>
-#include "simulationbase_context.h"
-#include "site_data.h"
+#include "perdatasimulation_context.h"
 
-class KineticSimulationContext : public SimulationBaseContext
+class KineticSimulationContext : public PerDataSimulationContext
 {
-    struct PerSite {
-        SiteData _site;
-        double _commonRate;
-        double *_normedRates;
-
-        PerSite(int *cell, int **neighbours, int reactionNums) : _site(cell, neighbours) {
-            _normedRates = new double[reactionNums];
-        }
-
-        ~PerSite() {
-            delete [] _normedRates;
-        }
-    };
-
 public:
     KineticSimulationContext(AreaData *area);
     ~KineticSimulationContext();
 
     double doReaction();
 
-private:
-    void calcRatesPerSite(PerSite *perSite) const;
-    int siteRandomIndex(double *dt) const;
-    IReactingRole *randomReaction(int index) const;
+protected:
+    PerSite *createData(const SharedSite &site) const;
+    PerDimer *createData(const SharedDimer &dimer) const;
 
-    void updateData(std::set<PerSite *> *cache, PerSite *perSite, int depth = 2);
+    void store(PerSite *site);
+    void store(PerDimer *dimer);
+
+private:
+    template <class SDData>
+    PerSiteOrDimerData<SDData> *findMin(double *dt, const std::vector<PerSiteOrDimerData<SDData> *> &pers) const;
+
+    template <class PerData>
+    void doRandomReaction(PerData *perData);
 
 private:
     std::vector<PerSite *> _perSites;
-    std::map<int *, PerSite *> _cellsToPerSites;
+    std::vector<PerDimer *> _perDimers;
 };
 
 #endif // KINETICSIMULATION_CONTEXT_H

@@ -1,25 +1,16 @@
 #ifndef REJECTIONFREESIMULATION_CONTEXT_H
 #define REJECTIONFREESIMULATION_CONTEXT_H
 
-//#include <list>
-#include <vector>
-#include "simulationbase_context.h"
-#include "event_data.h"
+#include "eventbasedsimulation_context.h"
 
-class RejectionFreeSimulationContext : public SimulationBaseContext
+class RejectionFreeSimulationContext : public EventBasedSimulationContext
 {
 public:
     RejectionFreeSimulationContext(AreaData *area);
 
-    double doReaction();
+protected:
+    BaseEventData *randomEvent() const;
 
-private:
-    void reviewAllEvents();
-
-private:
-//    std::list<EventData> _events;
-    std::vector<EventData> _events;
-    double _totalRate;
 };
 
 #endif // REJECTIONFREESIMULATION_CONTEXT_H

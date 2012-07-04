@@ -6,13 +6,13 @@
 class TreeSimContextFactory : public SimulationContextFactory
 {
 public:
-    TreeSimContextFactory(int treeWidth);
+    TreeSimContextFactory(int levels);
 
     SimulationBaseContext *createContext(AreaData *area) const;
-    void setWidth(int treeWidth);
+    void setWidth(int levels);
 
 private:
-    int _treeWidth;
+    int _levels;
 };
 
 #endif // TREESIMCONTEXTFACTORY_H

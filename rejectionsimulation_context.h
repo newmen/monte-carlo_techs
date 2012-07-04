@@ -1,25 +1,20 @@
 #ifndef REJECTIONSIMULATION_CONTEXT_H
 #define REJECTIONSIMULATION_CONTEXT_H
 
-#include <vector>
-#include "simulationbase_context.h"
-#include "event_data.h"
+#include "eventbasedsimulation_context.h"
 
-class RejectionSimulationContext : public SimulationBaseContext
+class RejectionSimulationContext : public EventBasedSimulationContext
 {
 public:
     RejectionSimulationContext(AreaData *area);
 
-    double doReaction();
+protected:
+    BaseEventData *randomEvent() const;
+    void clearAllEvents();
+    void doWhenEventAddedWithRate(double rate);
 
 private:
-    void reviewAllEvents();
-    int randomEventIndex() const;
-    void doEvent(int index);
-
-private:
-    std::vector<EventData> _events;
-    double _totalRate, _maxRate;
+    double _maxRate;
 };
 
 #endif // REJECTIONSIMULATION_CONTEXT_H

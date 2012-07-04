@@ -1,27 +1,25 @@
 #ifndef SITE_DATA_H
 #define SITE_DATA_H
 
-#include <functional>
-
-#define NEIGHBOURS_NUM 4
+#include <memory>
 
 class SiteData
 {
 public:
-    SiteData(int *cell, int *neighbours[NEIGHBOURS_NUM]);
-    SiteData(const SiteData &anotherSite);
-    ~SiteData();
+    SiteData(int *cell, int x, int y) : _cell(cell), _x(x), _y(y) {}
 
-    int cell() const;
-    void setCell(int value);
+    int x() const { return _x; }
+    int y() const { return _y; }
 
-    void neighboursIterator(std::function<void (int *)> lambda) const;
+    const int *cellPtr() const { return _cell; }
+    int cell() const { return *_cell; }
+    void setCell(int value) { *_cell = value; }
 
 private:
-    void initNeighbours(int *neighbours[NEIGHBOURS_NUM]);
-
     int *_cell;
-    int **_neighbours;
+    int _x, _y;
 };
+
+typedef std::shared_ptr<SiteData> SharedSite;
 
 #endif // SITE_DATA_H

@@ -11,8 +11,8 @@ public:
     PerformanceSaver(const PathBuilder *pathBuilder);
     ~PerformanceSaver();
 
-    void storeName(const char *mcName);
-    void storeValue(const char *fileName, unsigned int size, double value);
+    void storeName(const std::string &mcName);
+    void storeValue(const std::string &fileName, unsigned int size, double value);
 
 private:
     const PathBuilder *_pathBuilder;

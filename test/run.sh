@@ -1,16 +1,16 @@
 #!/bin/sh
 
-min_size=1000
-max_size=2000
-size_step=1000
+min_size=20
+max_size=50
+size_step=10
 repeats=3
 
 test_mc_dir=`pwd`
-#test_mc_bin=${test_mc_dir}/test_mc
-test_mc_bin=${test_mc_dir}/heap_test
+test_mc_bin=${test_mc_dir}/test_mc
+#test_mc_bin=${test_mc_dir}/heap_test
 plots_script=${test_mc_dir}/plots.rb
-#results_dir=${test_mc_dir}/results
-results_dir=${test_mc_dir}/ht_results
+results_dir=${test_mc_dir}/results
+#results_dir=${test_mc_dir}/ht_results
 
 export HEAPCHECK=normal
 
@@ -24,10 +24,10 @@ fi
 
 echo "Executing calculations..."
 
-#${test_mc_bin} ${results_dir} ${max_size} ${max_size} 1 true
+${test_mc_bin} ${results_dir} ${max_size} ${max_size} 1 true
 
 for i in `seq ${min_size} ${size_step} ${max_size}`; do
     ${test_mc_bin} ${results_dir} ${i} ${i} ${repeats}
 done
 
-#ruby ${plots_script} ${results_dir}
+ruby ${plots_script} ${results_dir}

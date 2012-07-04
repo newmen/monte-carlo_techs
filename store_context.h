@@ -2,12 +2,13 @@
 #define STORE_CONTEXT_H
 
 #include <fstream>
+#include <string>
 #include "area_data.h"
 
 class StoreContext
 {
 public:
-    StoreContext(const AreaData *area, const char *fileName, const char *methodName);
+    StoreContext(const AreaData *area, const std::string &fileName, const std::string &methodName);
 
     void store(double dt);
 

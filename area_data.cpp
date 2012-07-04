@@ -3,7 +3,7 @@
 
 AreaData::AreaData(int sizeX, int sizeY) : _sizeX(sizeX), _sizeY(sizeY) {
     int total = _sizeX * _sizeY;
-    _cells = new int[total];
+    _cells = new Cell[total];
     for (int i = 0; i < total; i++) {
 //        _cells[i] = rand() % 3 + 1;
         _cells[i] = 1;
@@ -14,7 +14,7 @@ AreaData::~AreaData() {
     delete [] _cells;
 }
 
-int *AreaData::cell(int x, int y) const {
+Cell *AreaData::cell(int x, int y) const {
     return &_cells[y * _sizeX + x];
 }
 

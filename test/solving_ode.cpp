@@ -7,14 +7,14 @@
 #include "../reaction23_data.h"
 #include "../reaction34_data.h"
 #include "../reaction35_data.h"
-#include "../reaction51mr_data.h"
+#include "../reaction51_data.h"
 
 #ifndef STATES_NUM
 // TODO: нужно как-то выпилить
 #define STATES_NUM 4
 #endif
 
-void solveODE(const char *fileName, double maxTime) {
+void solveODE(const std::string &fileName, double maxTime) {
     std::ofstream out(fileName);
     if (!out) {
         std::cerr << "File " << fileName << " open error!" << std::endl;
@@ -26,7 +26,7 @@ void solveODE(const char *fileName, double maxTime) {
     Reaction23Data r23;
     Reaction34Data r34;
     Reaction35Data r35;
-    Reaction51MRData r51;
+    Reaction51Data r51;
 
     double dt = 1e-3; // bad value
     double tt = 0;

@@ -8,12 +8,12 @@ PerformanceSaver::PerformanceSaver(const PathBuilder *pathBuilder) : _pathBuilde
 PerformanceSaver::~PerformanceSaver() {
     if (_dataNames.empty()) return;
 
-    const char ext[] = "prf";
+    const std::string ext = "prf";
 
     bool filesAlreadyExists = true;
     std::ifstream temp;
     for (auto filePair = _dataValues.cbegin(); filePair != _dataValues.cend(); ++filePair) {
-        std::string fullFilePath = _pathBuilder->buildPath(filePair->first.c_str(), ext);
+        std::string fullFilePath = _pathBuilder->buildPath(filePair->first, ext);
         temp.open(fullFilePath.c_str());
         if (!temp) {
             std::cout << fullFilePath << " does not exists" << std::endl;
@@ -26,7 +26,7 @@ PerformanceSaver::~PerformanceSaver() {
 
     std::ofstream out;
     for (auto filePair = _dataValues.cbegin(); filePair != _dataValues.cend(); ++filePair) {
-        std::string fullFilePath = _pathBuilder->buildPath(filePair->first.c_str(), ext);
+        std::string fullFilePath = _pathBuilder->buildPath(filePair->first, ext);
         out.open(fullFilePath.c_str(), ((filesAlreadyExists) ? std::ios_base::app : std::ios_base::trunc));
         if (!filesAlreadyExists) {
             out << "#";
@@ -45,11 +45,11 @@ PerformanceSaver::~PerformanceSaver() {
     }
 }
 
-void PerformanceSaver::storeName(const char *mcName) {
+void PerformanceSaver::storeName(const std::string &mcName) {
     _dataNames.push_back(mcName);
 }
 
-void PerformanceSaver::storeValue(const char *fileName, unsigned int size, double value) {
+void PerformanceSaver::storeValue(const std::string &fileName, unsigned int size, double value) {
     _dataValues[fileName][size].push_back(value);
 }
 

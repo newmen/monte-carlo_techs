@@ -2,7 +2,7 @@
 #include "store_context.h"
 #include "storing_role.h"
 
-StoreContext::StoreContext(const AreaData *area, const char *fileName, const char *methodName) :
+StoreContext::StoreContext(const AreaData *area, const std::string &fileName, const std::string &methodName) :
     _area(area), _outFile(fileName)
 {
     if (!_outFile) {

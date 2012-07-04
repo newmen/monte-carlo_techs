@@ -17,7 +17,7 @@ private:
 
 template <class AData>
 void DrawingRole<AData>::draw(QPainter *painter, float cellSideLength) const {
-    QPen pen(Qt::black);
+    QPen pen(Qt::gray);
     painter->setPen(pen);
 
     QRect rect(0, 0, cellSideLength, cellSideLength);
@@ -34,7 +34,7 @@ void DrawingRole<AData>::draw(QPainter *painter, float cellSideLength) const {
             color.setRgb(222, 22, 22);
             break;
         case 3:
-            color.setRgb(24, 24, 146);
+            color.setRgb(56, 56, 156);
             break;
         case 4:
             color.setRgb(33, 33, 33);
