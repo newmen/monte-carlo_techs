@@ -11,56 +11,31 @@ int optimalTreeWidth(int size) {
 }
 
 TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area) :
-    PerDataSimulationContext(area),
-    _sitesTree(optimalTreeWidth(area->sizeX() * area->sizeY())),
-    _dimersTree(optimalTreeWidth(area->sizeX() * area->sizeY() * 4))
+    SiteBasedSimulationContext<NodeS>(area),
+    _tree(optimalTreeWidth(area->sizeX() * area->sizeY()))
 {
-    reviewAllEvents();
+    initData();
 }
 
 TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, float levels) :
-    PerDataSimulationContext(area),
-    _sitesTree(calcTreeWidthByK(area->sizeX() * area->sizeY(), levels)),
-    _dimersTree(calcTreeWidthByK(area->sizeX() * area->sizeY() * 4, levels))
+    SiteBasedSimulationContext<NodeS>(area),
+    _tree(calcTreeWidthByK(area->sizeX() * area->sizeY(), levels))
 {
-    reviewAllEvents();
+    initData();
 }
 
 double TreeBasedSimulationContext::doReaction() {
-    double totalRate = _sitesTree.sum() + _dimersTree.sum();
+//    _tree.diagnostic();
+    double totalRate = _tree.sum();
     if (totalRate == 0) return 0;
 
     double r = randomN01() * totalRate;
-    if (r < _sitesTree.sum()) doReactionAndUpdateTree(&_sitesTree, r);
-    else doReactionAndUpdateTree(&_dimersTree, r);
+    NodeS *currentPerCell = _tree.find(&r);
+    currentPerCell->doReaction(r);
 
     return negativLogU() / totalRate;
 }
 
-PerDataSimulationContext::PerSite *TreeBasedSimulationContext::createData(const SharedSite &site) const {
-    return new SiteNode(site); // will be deleted into MCTree
-}
-
-PerDataSimulationContext::PerDimer *TreeBasedSimulationContext::createData(const SharedDimer &dimer) const {
-    return new DimerNode(dimer); // will be deleted into MCTree
-}
-
-void TreeBasedSimulationContext::store(PerSite *perSite) {
-    _sitesTree.add(static_cast<SiteNode *>(perSite));
-}
-
-void TreeBasedSimulationContext::store(PerDimer *perDimer) {
-    _dimersTree.add(static_cast<DimerNode *>(perDimer));
-}
-
-template <class PerData>
-void TreeBasedSimulationContext::doReactionAndUpdateTree(MCTree<PerData> *tree, double r) {
-    auto *node = static_cast<NodeS<PerData> *>(tree->find(&r));
-    if (node == 0) {
-        tree->diagnostic();
-    } else {
-        node->doReaction(r);
-        node->updateRates();
-        updateNeighbours(node);
-    }
+void TreeBasedSimulationContext::storeCell(NodeS *perCell) {
+    _tree.add(perCell); // memory of perCell will be deleted into MCTree
 }

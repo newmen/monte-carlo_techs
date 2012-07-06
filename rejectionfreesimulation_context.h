@@ -9,7 +9,7 @@ public:
     RejectionFreeSimulationContext(AreaData *area);
 
 protected:
-    BaseEventData *randomEvent() const;
+    BaseEvent *randomEvent() const;
 
 };
 

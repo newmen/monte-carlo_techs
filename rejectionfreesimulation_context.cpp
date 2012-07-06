@@ -3,7 +3,7 @@
 RejectionFreeSimulationContext::RejectionFreeSimulationContext(AreaData *area) :
     EventBasedSimulationContext(area) {}
 
-BaseEventData *RejectionFreeSimulationContext::randomEvent() const {
+BaseEvent *RejectionFreeSimulationContext::randomEvent() const {
     double r = randomN01() * totalRate();
     double accRate = 0;
     for (auto p = _events.begin(); p != _events.end(); ++p) {

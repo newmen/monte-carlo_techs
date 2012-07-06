@@ -2,26 +2,25 @@
 //#include <cstdlib>
 
 AreaData::AreaData(int sizeX, int sizeY) : _sizeX(sizeX), _sizeY(sizeY) {
-    int total = _sizeX * _sizeY;
-    _cells = new Cell[total];
-    for (int i = 0; i < total; i++) {
-//        _cells[i] = rand() % 3 + 1;
-        _cells[i] = 1;
+    _cells = new CellData*[size()];
+    int i = 0;
+    for (int y = 0; y < _sizeY; ++y) {
+        for (int x = 0; x < _sizeX; ++x) {
+//        value = rand() % 3 + 1;
+            _cells[i++] = new CellData(1, x, y);
+        }
     }
 }
 
 AreaData::~AreaData() {
+    for (int i = 0; i < size(); ++i) delete _cells[i];
     delete [] _cells;
 }
 
-Cell *AreaData::cell(int x, int y) const {
-    return &_cells[y * _sizeX + x];
+void AreaData::eachCell(std::function<void (CellData *const)> lambda) const {
+    for (int i = 0; i < size(); ++i) lambda(_cells[i]);
 }
 
-void AreaData::coordsIterator(std::function<void (int, int)> lambda) const {
-    for (int y = 0; y < _sizeY; ++y) {
-        for (int x = 0; x < _sizeX; ++x) {
-            lambda(x, y);
-        }
-    }
+CellData *AreaData::cell(int x, int y) const {
+    return _cells[y * _sizeX + x];
 }

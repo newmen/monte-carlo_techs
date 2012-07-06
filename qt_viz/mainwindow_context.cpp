@@ -7,14 +7,16 @@
 #include "../kineticsimulation_context.h"
 #include "../treebasedsimulation_context.h"
 
+//#include <iostream>
+
 MainWindowContext::MainWindowContext() : _area(21, 13) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _simulationContext = new RejectionSimulationContext(&_area);
 //    _simulationContext = new RejectionFreeSimulationContext(&_area);
 //    _simulationContext = new DynamicSimulationContext(&_area);
-//    _simulationContext = new KineticSimulationContext(&_area);
-    _simulationContext = new TreeBasedSimulationContext(&_area);
+    _simulationContext = new KineticSimulationContext(&_area);
+//    _simulationContext = new TreeBasedSimulationContext(&_area);
     _renderArea = new RenderAreaContext(&_area, 15);
 
     _doButton = new QPushButton("Do reaction");
@@ -44,6 +46,7 @@ MainWindowContext::~MainWindowContext() {
 
 void MainWindowContext::doReaction() {
     double dt = _simulationContext->doReaction();
+//    std::cout << dt << std::endl;
     _renderArea->update();
     if (dt == 0.0) _playButton->click();
 }

@@ -1,22 +1,15 @@
 #ifndef DIMER_DATA_H
 #define DIMER_DATA_H
 
-#include <memory>
-#include "site_data.h"
+#include "cell_data.h"
 
-class DimerData
+struct DimerData
 {
-public:
-    DimerData(const SharedSite &first, const SharedSite &second) :
-        _first(first), _second(second) {}
+    CellData *const first;
+    CellData *const second;
 
-    SiteData &first() const { return *_first; }
-    SiteData &second() const { return *_second; }
-
-private:
-    SharedSite _first, _second;
+    DimerData(CellData *const first, CellData *const second) :
+        first(first), second(second) {}
 };
-
-typedef std::shared_ptr<DimerData> SharedDimer;
 
 #endif // DIMER_DATA_H

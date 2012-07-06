@@ -11,19 +11,19 @@ class DimerReactionStabilizingRole :
 {
 public:
     double rate(const DimerData &dimer) const;
-    void doIt(DimerData *dimer) const;
+    void doIt(DimerData *const dimer) const;
 };
 
 template <class RData>
 double DimerReactionStabilizingRole<RData>::rate(const DimerData &dimer) const {
-    return (dimer.first().cell() == this->prevState() && dimer.second().cell() == this->prevState()) ?
+    return (dimer.first->value() == this->prevState() && dimer.second->value() == this->prevState()) ?
                 this->k() : 0;
 }
 
 template <class RData>
-void DimerReactionStabilizingRole<RData>::doIt(DimerData *dimer) const {
-    dimer->first().setCell(this->nextState());
-    dimer->second().setCell(this->nextState());
+void DimerReactionStabilizingRole<RData>::doIt(DimerData *const dimer) const {
+    dimer->first->setValue(this->nextState());
+    dimer->second->setValue(this->nextState());
 }
 
 #endif // DIMERREACTIONSTABILIZING_ROLE_H

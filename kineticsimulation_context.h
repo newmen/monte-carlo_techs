@@ -1,10 +1,10 @@
 #ifndef KINETICSIMULATION_CONTEXT_H
 #define KINETICSIMULATION_CONTEXT_H
 
-#include <vector>
-#include "perdatasimulation_context.h"
+#include "sitebasedsimulation_context.h"
+#include "percell.h"
 
-class KineticSimulationContext : public PerDataSimulationContext
+class KineticSimulationContext : public SiteBasedSimulationContext<PerCell>
 {
 public:
     KineticSimulationContext(AreaData *area);
@@ -13,22 +13,14 @@ public:
     double doReaction();
 
 protected:
-    PerSite *createData(const SharedSite &site) const;
-    PerDimer *createData(const SharedDimer &dimer) const;
-
-    void store(PerSite *site);
-    void store(PerDimer *dimer);
+    void storeCell(PerCell *const perCell);
 
 private:
-    template <class SDData>
-    PerSiteOrDimerData<SDData> *findMin(double *dt, const std::vector<PerSiteOrDimerData<SDData> *> &pers) const;
-
-    template <class PerData>
-    void doRandomReaction(PerData *perData);
+    PerCell *findMin(double *dt) const;
+    void doRandomReaction(PerCell *const perCell);
 
 private:
-    std::vector<PerSite *> _perSites;
-    std::vector<PerDimer *> _perDimers;
+    std::vector<PerCell *> _perCells;
 };
 
 #endif // KINETICSIMULATION_CONTEXT_H

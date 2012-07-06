@@ -3,10 +3,10 @@
 RejectionSimulationContext::RejectionSimulationContext(AreaData *area) :
     EventBasedSimulationContext(area), _maxRate(0) {}
 
-BaseEventData *RejectionSimulationContext::randomEvent() const {
+BaseEvent *RejectionSimulationContext::randomEvent() const {
     double r;
     int n;
-    BaseEventData *selectedEvent;
+    BaseEvent *selectedEvent;
     do {
         r = randomN01() * _events.size();
         n = int(r);

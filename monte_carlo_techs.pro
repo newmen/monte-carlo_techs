@@ -13,21 +13,22 @@ SOURCES += \
     rejectionsimulation_context.cpp \
     rejectionfreesimulation_context.cpp \
     dynamicsimulation_context.cpp \
+    percell.cpp \
+    perdimer.cpp \
     kineticsimulation_context.cpp \
-    treebasedsimulation_context.cpp \
+    mctree.cpp \
     nodebase.cpp \
     noden.cpp \
+    nodes.cpp \
+    treebasedsimulation_context.cpp \
     store_context.cpp \
-    ineighbouring_role.cpp \
-    main.cpp \
-    perdatasimulation_context.cpp
+    main.cpp
 
 HEADERS += \
     area_data.h \
-    site_data.h \
+    cell_data.h \
     dimer_data.h \
-    baseevent_data.h \
-    event_data.h \
+    neighbouring_role.h \
     reaction12_data.h \
     reaction21_data.h \
     reaction23_data.h \
@@ -36,31 +37,31 @@ HEADERS += \
     reaction35_data.h \
     reaction51_data.h \
     reaction_data.h \
+    ireacting_role.h \
+    cellreacting_role.h \
+    dimerreactionexchanging_role.h \
+    dimerreactioncapturing_role.h \
+    dimerreactionstabilizing_role.h \
     simulationbase_context.h \
+    simplesimulation_context.h \
+    baseevent.h \
+    event.h \
     eventbasedsimulation_context.h \
     rejectionsimulation_context.h \
     rejectionfreesimulation_context.h \
     dynamicsimulation_context.h \
-    perdatasimulation_context.h \
+    persite.h \
+    percell.h \
+    perdimer.h \
+    sitebasedsimulation_context.h \
     kineticsimulation_context.h \
-    persiteordimer_data.h \
-    treebasedsimulation_context.h \
     mctree.h \
     nodebase.h \
-    nodes.h \
     noden.h \
+    nodes.h \
+    treebasedsimulation_context.h \
     store_context.h \
-    storing_role.h \
-    simulating_role.h \
-    ineighbouring_role.h \
-    siteneighbouring_role.h \
-    dimerneighbouring_role.h \
-    simplesimulation_context.h \
-    ireacting_role.h \
-    sitereacting_role.h \
-    dimerreactionexchanging_role.h \
-    dimerreactioncapturing_role.h \
-    dimerreactionstabilizing_role.h
+    storing_role.h
 
 OTHER_FILES += \
     .gitignore \

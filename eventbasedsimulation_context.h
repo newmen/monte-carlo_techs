@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "simplesimulation_context.h"
-#include "baseevent_data.h"
+#include "baseevent.h"
 
 class EventBasedSimulationContext : public SimpleSimulationContext
 {
@@ -16,18 +16,18 @@ protected:
     double totalRate() const { return _totalRate; }
 
     void clearAllEvents();
-    void addSiteEvent(const SharedSite &site, const SiteReaction *const reaction);
-    void addDimerEvent(const SharedDimer &dimer, const DimerReaction *const reation);
+    void addCellEvent(CellData *const cell, const CellReaction *const reaction);
+    void addDimerEvent(DimerData *const dimer, const DimerReaction *const reation);
 
-    virtual BaseEventData *randomEvent() const = 0;
+    virtual BaseEvent *randomEvent() const = 0;
     virtual void doWhenEventAddedWithRate(double) {}
 
 private:
-    template <class SDData>
-    void addEvent(const std::shared_ptr<SDData> &siteOrDimer, const IReactingRole<SDData> *const reaction);
+    template <class SData>
+    void addEvent(SData *const site, const IReactingRole<SData> *const reaction);
 
 protected:
-    std::vector<BaseEventData *> _events;
+    std::vector<BaseEvent *> _events;
 
 private:
     double _totalRate;

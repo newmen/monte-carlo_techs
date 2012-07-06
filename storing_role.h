@@ -2,6 +2,7 @@
 #define STORING_ROLE_H
 
 #include <ostream>
+#include "cell_data.h"
 
 #define STATES_NUM 4
 
@@ -17,14 +18,13 @@ void StoringRole<AData>::store(std::ostream &os) const {
     int statesAcc[STATES_NUM];
     for (int i = 0; i < STATES_NUM; ++i) statesAcc[i] = 0;
 
-    this->coordsIterator([this, &statesAcc](int x, int y) {
-        int state = *this->cell(x, y);
+    this->eachCell([this, &statesAcc](CellData *const cell) {
+        int state = cell->value();
         if (state > 1) ++statesAcc[state - 2];
     });
 
-    int totalNumOfCells = this->sizeX() * this->sizeY();
     for (int i = 0; i < STATES_NUM; ++i) {
-        os << "\t" << (float)statesAcc[i] / totalNumOfCells;
+        os << "\t" << (float)statesAcc[i] / this->size();
     }
 }
 

@@ -1,5 +1,5 @@
 #include "eventbasedsimulation_context.h"
-#include "event_data.h"
+#include "event.h"
 
 EventBasedSimulationContext::EventBasedSimulationContext(AreaData *area) :
     SimpleSimulationContext(area), _totalRate(0) {}
@@ -18,21 +18,20 @@ void EventBasedSimulationContext::clearAllEvents() {
     _totalRate = 0;
 }
 
-void EventBasedSimulationContext::addSiteEvent(const SharedSite &site, const SiteReaction *const reaction) {
-    addEvent(site, reaction);
+void EventBasedSimulationContext::addCellEvent(CellData *const cell, const CellReaction *const reaction) {
+    addEvent(cell, reaction);
 }
 
-void EventBasedSimulationContext::addDimerEvent(const SharedDimer &dimer, const DimerReaction *const reaction) {
+void EventBasedSimulationContext::addDimerEvent(DimerData *const dimer, const DimerReaction *const reaction) {
     addEvent(dimer, reaction);
 }
 
-template <class SDData>
-void EventBasedSimulationContext::addEvent(const std::shared_ptr<SDData> &siteOrDimer, const IReactingRole<SDData> *const reaction)
-{
-    double rate = reaction->rate(*siteOrDimer);
+template <class SData>
+void EventBasedSimulationContext::addEvent(SData *const site, const IReactingRole<SData> *const reaction) {
+    double rate = reaction->rate(*site);
     doWhenEventAddedWithRate(rate);
     if (rate > 0) {
         _totalRate += rate;
-        _events.push_back(new EventData<SDData>(siteOrDimer, reaction, rate));
+        _events.push_back(new Event<SData>(site, reaction, rate));
     }
 }

@@ -9,7 +9,7 @@ public:
     RejectionSimulationContext(AreaData *area);
 
 protected:
-    BaseEventData *randomEvent() const;
+    BaseEvent *randomEvent() const;
     void clearAllEvents();
     void doWhenEventAddedWithRate(double rate);
 

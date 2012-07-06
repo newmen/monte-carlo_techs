@@ -4,7 +4,7 @@
 #include <functional>
 #include <vector>
 #include "area_data.h"
-#include "site_data.h"
+#include "cell_data.h"
 #include "dimer_data.h"
 #include "ireacting_role.h"
 
@@ -17,27 +17,25 @@ public:
     virtual double doReaction() = 0;
 
 protected:
-    typedef IReactingRole<SiteData> SiteReaction;
+    typedef IReactingRole<CellData> CellReaction;
     typedef IReactingRole<DimerData> DimerReaction;
 
-    int siteReactionsNum() const;
-    int dimerReactionsNum() const;
+    void eachCell(std::function<void (CellData *const)> lambda) const;
+    void eachDimer(std::function<void (DimerData *const)> lambda) const;
 
-    virtual void reviewAllEvents();
-    virtual void estimateEachReactionForSite(const SharedSite &site) = 0;
-    virtual void estimateEachReactionForDimer(const SharedDimer &dimer) = 0;
-
-    void eachSiteReaction(std::function<void (const SiteReaction *const)> lambda) const;
-    void eachSiteNeighbour(const SiteData &site, std::function<void (const SharedSite &)> lambda) const;
+    void eachCellReaction(std::function<void (const CellReaction *const)> lambda) const;
     void eachDimerReaction(std::function<void (const DimerReaction *const)> lambda) const;
-    void eachDimerNeighbour(const DimerData &dimer, std::function<void (const SharedSite &)> lambda) const;
 
     double randomN01() const;
     double negativLogU() const;
 
 private:
+    void initDimers();
+
+private:
     AreaData *_area;
-    std::vector<const SiteReaction *> _siteReactions;
+    std::vector<DimerData *> _dimers;
+    std::vector<const CellReaction *> _cellReactions;
     std::vector<const DimerReaction *> _dimerReactions;
 };
 

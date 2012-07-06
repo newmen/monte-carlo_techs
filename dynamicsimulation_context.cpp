@@ -15,51 +15,52 @@ double DynamicSimulationContext::doReaction() {
         return size * r / max;
     };
 
-    const SiteReaction *siteReaction = findReaction(&r, &max, _ratesOnSites);
-    if (siteReaction) {
-        auto &sites = _sites[siteReaction];
-        siteReaction->doIt(sites[indexLambda(sites.size())].get());
+    const CellReaction *cellReaction = findReaction(&r, &max, _ratesOnSites);
+    if (cellReaction) {
+        auto &cells = _cells[cellReaction];
+        cellReaction->doIt(cells[indexLambda(cells.size())]);
     } else {
         const DimerReaction *dimerReaction = findReaction(&r, &max, _ratesOnDimers);
         auto &dimers = _dimers[dimerReaction];
-        dimerReaction->doIt(dimers[indexLambda(dimers.size())].get());
+        dimerReaction->doIt(dimers[indexLambda(dimers.size())]);
     }
 
     return negativLogU() / _totalRate;
 }
 
 void DynamicSimulationContext::clearAllEvents() {
-    clearEvents(&_sites, &_ratesOnSites);
+    clearEvents(&_cells, &_ratesOnSites);
     clearEvents(&_dimers, &_ratesOnDimers);
     _totalRate = 0;
 }
 
-void DynamicSimulationContext::addSiteEvent(const SharedSite &site, const SiteReaction *const reaction) {
-    addEvent(&_sites, &_ratesOnSites, site, reaction);
+void DynamicSimulationContext::addCellEvent(CellData *const cell, const CellReaction *const reaction) {
+    addEvent(&_cells, &_ratesOnSites, cell, reaction);
 }
 
-void DynamicSimulationContext::addDimerEvent(const SharedDimer &dimer, const DimerReaction *const reaction) {
+void DynamicSimulationContext::addDimerEvent(DimerData *const dimer, const DimerReaction *const reaction) {
     addEvent(&_dimers, &_ratesOnDimers, dimer, reaction);
 }
 
-template <class SDData>
-void DynamicSimulationContext::addEvent(std::map<const IReactingRole<SDData> *const, std::vector<std::shared_ptr<SDData> > > *dataContainer,
-                                        std::map<const IReactingRole<SDData> *const, double> *rates,
-                                        const std::shared_ptr<SDData> &siteOrDimer,
-                                        const IReactingRole<SDData> *const reaction)
+template <class SData>
+void DynamicSimulationContext::addEvent(std::map<const IReactingRole<SData> *const, std::vector<SData *> > *dataContainer,
+                                        std::map<const IReactingRole<SData> *const, double> *rates,
+                                        SData *const site,
+                                        const IReactingRole<SData> *const reaction)
 {
-    double rate = reaction->rate(*siteOrDimer);
+    double rate = reaction->rate(*site);
     if (rate > 0) {
-        (*dataContainer)[reaction].push_back(siteOrDimer);
+        (*dataContainer)[reaction].push_back(site);
         (*rates)[reaction] += rate;
         _totalRate += rate;
     }
 }
 
-template <class SDData>
-const IReactingRole<SDData> *DynamicSimulationContext::findReaction(double *r, double *max, const std::map<const IReactingRole<SDData> *const, double> &ratesMap) const
+template <class SData>
+const IReactingRole<SData> *DynamicSimulationContext::findReaction(double *r, double *max,
+                                                                    const std::map<const IReactingRole<SData> *const, double> &ratesMap) const
 {
-    const IReactingRole<SDData> *reaction = 0;
+    const IReactingRole<SData> *reaction = 0;
     for (auto p = ratesMap.cbegin(); p != ratesMap.cend(); ++p) {
         *max = p->second;
         if (*r < p->second) {
@@ -72,9 +73,9 @@ const IReactingRole<SDData> *DynamicSimulationContext::findReaction(double *r, d
     return reaction;
 }
 
-template <class SDData>
-void DynamicSimulationContext::clearEvents(std::map<const IReactingRole<SDData> *const, std::vector<std::shared_ptr<SDData> > > *dataContainer,
-                                           std::map<const IReactingRole<SDData> *const, double> *rates) {
+template <class SData>
+void DynamicSimulationContext::clearEvents(std::map<const IReactingRole<SData> *const, std::vector<SData *> > *dataContainer,
+                                           std::map<const IReactingRole<SData> *const, double> *rates) {
     for (auto p = dataContainer->begin(); p != dataContainer->end(); ++p) p->second.clear();
     for (auto p = rates->begin(); p != rates->end(); ++p) p->second = 0;
 }

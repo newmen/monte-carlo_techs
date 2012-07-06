@@ -2,6 +2,7 @@
 #define AREA_DATA_H
 
 #include <functional>
+#include "cell_data.h"
 
 class AreaData
 {
@@ -13,14 +14,12 @@ public:
     int sizeX() const { return _sizeX; }
     int sizeY() const { return _sizeY; }
 
-    Cell *cell(int x, int y) const;
-
-protected:
-    void coordsIterator(std::function<void (int, int)> lambda) const;
+    void eachCell(std::function<void (CellData *const)> lambda) const;
+    CellData *cell(int x, int y) const;
 
 private:
     int _sizeX, _sizeY;
-    Cell *_cells;
+    CellData **_cells;
 };
 
 #endif // AREA_DATA_H

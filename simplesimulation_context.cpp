@@ -5,19 +5,16 @@ SimpleSimulationContext::SimpleSimulationContext(AreaData *area) :
 
 void SimpleSimulationContext::reviewAllEvents() {
     clearAllEvents();
-    SimulationBaseContext::reviewAllEvents();
-}
 
-void SimpleSimulationContext::estimateEachReactionForSite(const SharedSite &site) {
-    eachSiteReaction([this, &site](const SiteReaction *const siteReaction) {
-        addSiteEvent(site, siteReaction);
+    eachCell([this](CellData *const cell) {
+        this->eachCellReaction([this, &cell](const CellReaction *const reaction) {
+            addCellEvent(cell, reaction);
+        });
+    });
+
+    eachDimer([this](DimerData *const dimer) {
+        this->eachDimerReaction([this, &dimer](const DimerReaction *const reaction) {
+            addDimerEvent(dimer, reaction);
+        });
     });
 }
-
-void SimpleSimulationContext::estimateEachReactionForDimer(const SharedDimer &dimer) {
-    eachDimerReaction([this, &dimer](const DimerReaction *const dimerReaction) {
-        addDimerEvent(dimer, dimerReaction);
-    });
-}
-
-

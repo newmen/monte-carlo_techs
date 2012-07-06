@@ -8,12 +8,9 @@ SO = $(NAME).so
 
 LIB_FILES = \
     area_data.cpp \
-    site_data.h \
+    cell_data.h \
     dimer_data.h \
-    baseevent_data.h \
-    event_data.h \
-    persiteordimer_data.h \
-    simulating_role.h \
+    neighbouring_role.h \
     reaction12_data.h \
     reaction21_data.h \
     reaction23_data.h \
@@ -22,27 +19,28 @@ LIB_FILES = \
     reaction35_data.h \
     reaction51_data.h \
     reaction_data.h \
+    ireacting_role.h \
+    cellreacting_role.h \
+    dimerreactionexchanging_role.h \
+    dimerreactioncapturing_role.h \
+    dimerreactionstabilizing_role.h \
     simulationbase_context.cpp \
     simplesimulation_context.cpp \
+    baseevent.h \
+    event.h \
     eventbasedsimulation_context.cpp \
     rejectionsimulation_context.cpp \
     rejectionfreesimulation_context.cpp \
     dynamicsimulation_context.cpp \
-    perdatasimulation_context.cpp \
+    persite.h \
+    percell.cpp \
+    perdimer.cpp \
     kineticsimulation_context.cpp \
-    mctree.h \
+    mctree.cpp \
     nodebase.cpp \
     noden.cpp \
-    nodes.h \
+    nodes.cpp \
     treebasedsimulation_context.cpp \
-    ineighbouring_role.cpp \
-    siteneighbouring_role.h \
-    dimerneighbouring_role.h \
-    ireacting_role.h \
-    sitereacting_role.h \
-    dimerreactionexchanging_role.h \
-    dimerreactioncapturing_role.h \
-    dimerreactionstabilizing_role.h \
     store_context.cpp \
     storing_role.h
 

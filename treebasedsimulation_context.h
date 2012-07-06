@@ -1,21 +1,15 @@
 #ifndef TREEBASEDSIMULATION_CONTEXT_H
 #define TREEBASEDSIMULATION_CONTEXT_H
 
-#include <map>
-#include <set>
+#include "sitebasedsimulation_context.h"
 #include "mctree.h"
 #include "nodes.h"
-#include "perdatasimulation_context.h"
-#include "persiteordimer_data.h"
 
 int calcTreeWidthByK(int size, float levels);
 int optimalTreeWidth(int size);
 
-class TreeBasedSimulationContext : public PerDataSimulationContext
+class TreeBasedSimulationContext : public SiteBasedSimulationContext<NodeS>
 {
-    typedef NodeS<PerSite> SiteNode;
-    typedef NodeS<PerDimer> DimerNode;
-
 public:
     TreeBasedSimulationContext(AreaData *area);
     TreeBasedSimulationContext(AreaData *area, float levels);
@@ -23,19 +17,10 @@ public:
     double doReaction();
 
 protected:
-    PerSite *createData(const SharedSite &site) const;
-    PerDimer *createData(const SharedDimer &dimer) const;
-
-    void store(PerSite *perSite);
-    void store(PerDimer *perDimer);
+    void storeCell(NodeS *perCell);
 
 private:
-    template <class SDData>
-    void doReactionAndUpdateTree(MCTree<SDData> *tree, double r);
-
-private:
-    MCTree<PerSite> _sitesTree;
-    MCTree<PerDimer> _dimersTree;
+    MCTree _tree;
 };
 
 #endif // TREEBASEDSIMULATION_CONTEXT_H

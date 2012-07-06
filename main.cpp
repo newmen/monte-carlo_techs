@@ -7,18 +7,19 @@
 #include "dynamicsimulation_context.h"
 #include "kineticsimulation_context.h"
 #include "treebasedsimulation_context.h"
+#include "store_context.h"
 
 int main() {
     srand(time(0));
 
-    AreaData area(5, 5);
-//    AreaData area(25, 25);
+//    AreaData area(5, 5);
+    AreaData area(12, 12);
 
 //    RejectionSimulationContext sc(&area);
 //    RejectionFreeSimulationContext sc(&area);
 //    DynamicSimulationContext sc(&area);
 //    KineticSimulationContext sc(&area);
-    TreeBasedSimulationContext sc(&area, 5);
+    TreeBasedSimulationContext sc(&area);
     double dt, totalTime = 0;
     do {
         dt = sc.doReaction();

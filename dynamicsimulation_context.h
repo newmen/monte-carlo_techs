@@ -4,14 +4,14 @@
 #include <map>
 #include <vector>
 #include "simplesimulation_context.h"
-#include "site_data.h"
+#include "cell_data.h"
 #include "dimer_data.h"
 
 class DynamicSimulationContext : public SimpleSimulationContext
 {
-    typedef std::map<const SiteReaction *const, std::vector<SharedSite> > SitesMap;
-    typedef std::map<const DimerReaction *const, std::vector<SharedDimer> > DimersMap;
-    typedef std::map<const SiteReaction *const, double> RatesOnSitesMap;
+    typedef std::map<const CellReaction *const, std::vector<CellData *> > CellsMap;
+    typedef std::map<const DimerReaction *const, std::vector<DimerData *> > DimersMap;
+    typedef std::map<const CellReaction *const, double> RatesOnSitesMap;
     typedef std::map<const DimerReaction *const, double> RatesOnDimersMap;
 
 public:
@@ -23,21 +23,21 @@ public:
 protected:
     void clearAllEvents();
 
-    void addSiteEvent(const SharedSite &site, const SiteReaction *const reaction);
-    void addDimerEvent(const SharedDimer &dimer, const DimerReaction *const reaction);
+    void addCellEvent(CellData *const cell, const CellReaction *const reaction);
+    void addDimerEvent(DimerData *const dimer, const DimerReaction *const reaction);
 
 private:
-    template <class SDData>
-    void addEvent(std::map<const IReactingRole<SDData> *const, std::vector<std::shared_ptr<SDData> > > *dataContainer, std::map<const IReactingRole<SDData> *const, double> *rates, const std::shared_ptr<SDData> &siteOrDimer, const IReactingRole<SDData> *const reaction);
+    template <class SData>
+    void addEvent(std::map<const IReactingRole<SData> *const, std::vector<SData *> > *dataContainer, std::map<const IReactingRole<SData> *const, double> *rates, SData *const site, const IReactingRole<SData> *const reaction);
 
-    template <class SDData>
-    const IReactingRole<SDData> *findReaction(double *r, double *max, const std::map<const IReactingRole<SDData> *const, double> &ratesMap) const;
+    template <class SData>
+    const IReactingRole<SData> *findReaction(double *r, double *max, const std::map<const IReactingRole<SData> *const, double> &ratesMap) const;
 
-    template <class SDData>
-    void clearEvents(std::map<const IReactingRole<SDData> *const, std::vector<std::shared_ptr<SDData> > > *dataContainer, std::map<const IReactingRole<SDData> *const, double> *rates);
+    template <class SData>
+    void clearEvents(std::map<const IReactingRole<SData> *const, std::vector<SData *> > *dataContainer, std::map<const IReactingRole<SData> *const, double> *rates);
 
 private:
-    SitesMap _sites;
+    CellsMap _cells;
     DimersMap _dimers;
 
     RatesOnSitesMap _ratesOnSites;

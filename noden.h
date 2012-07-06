@@ -4,19 +4,17 @@
 #include "nodebase.h"
 #include "nodes.h"
 
-#include <iostream>
-
 class NodeN : public NodeBase
 {
 public:
     NodeN(int width, int level);
     ~NodeN();
 
-    void add(INodeS *node);
+    void add(NodeS *node);
     void add(NodeN *node);
     bool isFull() const;
 
-    INodeS *find(double *r) const;
+    NodeS *find(double *r) const;
 
     void diagnoze() const;
 

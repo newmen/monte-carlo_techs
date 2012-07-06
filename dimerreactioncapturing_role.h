@@ -11,22 +11,22 @@ class DimerReactionCapturingRole :
 {
 public:
     double rate(const DimerData &dimer) const;
-    void doIt(DimerData *dimer) const;
+    void doIt(DimerData *const dimer) const;
 };
 
 template <class RData>
 double DimerReactionCapturingRole<RData>::rate(const DimerData &dimer) const {
-    return ((dimer.first().cell() == this->nextState() && dimer.second().cell() == this->prevState()) ||
-            (dimer.first().cell() == this->prevState() && dimer.second().cell() == this->nextState())) ?
+    return ((dimer.first->value() == this->nextState() && dimer.second->value() == this->prevState()) ||
+            (dimer.first->value() == this->prevState() && dimer.second->value() == this->nextState())) ?
                 this->k() : 0;
 }
 
 template <class RData>
-void DimerReactionCapturingRole<RData>::doIt(DimerData *dimer) const {
-    if (dimer->first().cell() == this->prevState()) {
-        dimer->first().setCell(this->nextState());
+void DimerReactionCapturingRole<RData>::doIt(DimerData *const dimer) const {
+    if (dimer->first->value() == this->prevState()) {
+        dimer->first->setValue(this->nextState());
     } else {
-        dimer->second().setCell(this->nextState());
+        dimer->second->setValue(this->nextState());
     }
 }
 
