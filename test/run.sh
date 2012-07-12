@@ -1,7 +1,7 @@
 #!/bin/sh
 
-min_size=20
-max_size=100
+min_size=120
+max_size=200
 size_step=20
 repeats=3
 
@@ -16,7 +16,7 @@ results_dir=${test_mc_dir}/results
 
 if [ -x ${results_dir} ]; then
     echo "Clearing ${results_dir} dir..."
-    rm -f ${results_dir}/*
+    rm -f ${results_dir}/*.png
 else
     mkdir ${results_dir}
     echo "${results_dir} dir was created"

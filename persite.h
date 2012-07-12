@@ -2,10 +2,11 @@
 #define PERSITE_H
 
 #include <map>
+#include "ipersite.h"
 #include "ireacting_role.h"
 
 template <class SData>
-class PerSite
+class PerSite : public IPerSite
 {
     typedef std::map<const IReactingRole<SData> *, double> RatesMap;
 
@@ -13,16 +14,14 @@ public:
     virtual ~PerSite() {}
 
     void addReaction(const IReactingRole<SData> *const reaction);
-    double commonRate() const;
-    virtual void updateRates();
 
-    virtual void doReaction(double r) = 0;
+    double commonRate() const;
+    void doReaction(double r);
+
+    virtual void updateRates();
 
 protected:
     PerSite(SData *const site);
-
-    void incCommonRate(double rate);
-    bool doLocalReaction(double &r);
 
 private:
     SData *_site;
@@ -56,22 +55,16 @@ void PerSite<SData>::updateRates() {
 }
 
 template <class SData>
-void PerSite<SData>::incCommonRate(double rate) {
-    _commonRate += rate;
-}
-
-template <class SData>
-bool PerSite<SData>::doLocalReaction(double &r) {
+void PerSite<SData>::doReaction(double r) {
     for (auto p = _rates.begin(); p != _rates.end(); ++p) {
         if (r < p->second) {
             p->first->doIt(_site);
-            updateRates();
-            return true;
+            break;
         } else {
             r -= p->second;
         }
     }
-    return false;
+    updateRates();
 }
 
 #endif // PERSITE_H

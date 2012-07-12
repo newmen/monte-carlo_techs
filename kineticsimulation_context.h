@@ -3,8 +3,9 @@
 
 #include "sitebasedsimulation_context.h"
 #include "percell.h"
+#include "perdimer.h"
 
-class KineticSimulationContext : public SiteBasedSimulationContext<PerCell>
+class KineticSimulationContext : public SiteBasedSimulationContext<PerCell, PerDimer>
 {
 public:
     KineticSimulationContext(AreaData *area);
@@ -14,13 +15,14 @@ public:
 
 protected:
     void storeCell(PerCell *const perCell);
+    void storeDimer(PerDimer *const perDimer);
 
 private:
-    PerCell *findMin(double *dt) const;
-    void doRandomReaction(PerCell *const perCell);
+    IPerSite *findMin(double *dt) const;
+    void doRandomReaction(IPerSite *const perSite);
 
 private:
-    std::vector<PerCell *> _perCells;
+    std::vector<IPerSite *> _perSites;
 };
 
 #endif // KINETICSIMULATION_CONTEXT_H

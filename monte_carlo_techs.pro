@@ -19,7 +19,6 @@ SOURCES += \
     mctree.cpp \
     nodebase.cpp \
     noden.cpp \
-    nodes.cpp \
     treebasedsimulation_context.cpp \
     store_context.cpp \
     main.cpp
@@ -50,6 +49,7 @@ HEADERS += \
     rejectionsimulation_context.h \
     rejectionfreesimulation_context.h \
     dynamicsimulation_context.h \
+    ipersite.h \
     persite.h \
     percell.h \
     perdimer.h \
@@ -58,6 +58,7 @@ HEADERS += \
     mctree.h \
     nodebase.h \
     noden.h \
+    inodes.h \
     nodes.h \
     treebasedsimulation_context.h \
     store_context.h \

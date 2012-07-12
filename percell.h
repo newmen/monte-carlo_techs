@@ -17,8 +17,6 @@ public:
     virtual void updateRates(const PerDimer *exceptPerDimer);
     virtual void updateLocalCommonRate();
 
-    void doReaction(double r);
-
 private:
     PerDimer *_perDimers[4];
     int _numOfPerDimers;

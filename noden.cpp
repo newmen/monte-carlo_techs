@@ -12,7 +12,7 @@ NodeN::~NodeN() {
     delete [] _childs;
 }
 
-void NodeN::add(NodeS *node) {
+void NodeN::add(INodeS *node) {
     if (level() > 1) {
         if (_numberOfChilds == 0 || last()->isFull()) store(new NodeN(_width, level() - 1));
         last()->add(node);
@@ -33,12 +33,12 @@ bool NodeN::isFull() const {
     return last()->isFull();
 }
 
-NodeS *NodeN::find(double *r) const {
+INodeS *NodeN::find(double *r) const {
     for (int i = 0; i < _numberOfChilds; ++i) {
         double childSum = _childs[i]->sum();
         if (*r < childSum) {
             if (level() == 1) {
-                return static_cast<NodeS *>(_childs[i]);
+                return static_cast<INodeS *>(_childs[i]);
             } else {
                 return static_cast<NodeN *>(_childs[i])->find(r);
             }

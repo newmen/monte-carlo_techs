@@ -8,7 +8,7 @@ MCTree::~MCTree() {
     delete _root;
 }
 
-void MCTree::add(NodeS *node) {
+void MCTree::add(INodeS *node) {
     node->initSum();
     if (_root->isFull()) {
         NodeN *newRoot = new NodeN(_width, _root->level() + 1);
@@ -22,7 +22,7 @@ double MCTree::sum() const {
     return _root->sum();
 }
 
-NodeS *MCTree::find(double *r) const {
+INodeS *MCTree::find(double *r) const {
     return _root->find(r);
 }
 

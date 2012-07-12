@@ -1,71 +1,54 @@
 #ifndef SITEBASEDSIMULATION_CONTEXT_H
 #define SITEBASEDSIMULATION_CONTEXT_H
 
+#include <map>
 #include <vector>
 #include "simulationbase_context.h"
-#include "perdimer.h"
 
-template <class SmartCell>
+template <class SmartCell, class SmartDimer>
 class SiteBasedSimulationContext : public SimulationBaseContext
 {
-public:
-    ~SiteBasedSimulationContext();
-
 protected:
     SiteBasedSimulationContext(AreaData *area);
 
     void initData();
 
     virtual void storeCell(SmartCell *const perCell) = 0;
+    virtual void storeDimer(SmartDimer *const perDimer) = 0;
 
 private:
-    void linkPerSites(SmartCell *const perCell, PerDimer *const perDimer) const;
-
-private:
-    std::vector<PerDimer *> _perDimers;
+    void linkPerSites(SmartCell *const perCell, SmartDimer *const perDimer) const;
 };
 
-template <class SmartCell>
-SiteBasedSimulationContext<SmartCell>::SiteBasedSimulationContext(AreaData *area) :
+template <class SmartCell, class SmartDimer>
+SiteBasedSimulationContext<SmartCell, SmartDimer>::SiteBasedSimulationContext(AreaData *area) :
     SimulationBaseContext(area) {}
 
-template <class SmartCell>
-void SiteBasedSimulationContext<SmartCell>::initData() {
+template <class SmartCell, class SmartDimer>
+void SiteBasedSimulationContext<SmartCell, SmartDimer>::initData() {
     std::map<CellData *const, SmartCell *> cellsToPerCells;
     eachCell([this, &cellsToPerCells](CellData *const cell) {
         SmartCell *perCell = new SmartCell(cell);
         this->eachCellReaction([this, &perCell](const IReactingRole<CellData> *const reaction) {
             perCell->addReaction(reaction);
         });
-        // более оптимально для кинетического алгоритма, вызывать storeCell здесь
-
         cellsToPerCells[cell] = perCell;
+        this->storeCell(perCell);
     });
 
     eachDimer([this, &cellsToPerCells](DimerData *const dimer) {
-        PerDimer *perDimer = new PerDimer(dimer);
+        SmartDimer *perDimer = new SmartDimer(dimer);
         this->eachDimerReaction([this, &perDimer](const IReactingRole<DimerData> *const reaction) {
             perDimer->addReaction(reaction);
         });
-        this->_perDimers.push_back(perDimer);
-
         this->linkPerSites(cellsToPerCells.find(dimer->first)->second, perDimer);
         this->linkPerSites(cellsToPerCells.find(dimer->second)->second, perDimer);
+        this->storeDimer(perDimer);
     });
-
-    // цикл не оптимален для кинетического алгоритма (см. коммент выше)
-    for (auto p = cellsToPerCells.cbegin(); p != cellsToPerCells.cend(); ++p) {
-        storeCell(p->second);
-    }
 }
 
-template <class SmartCell>
-SiteBasedSimulationContext<SmartCell>::~SiteBasedSimulationContext() {
-    for (auto p = _perDimers.begin(); p != _perDimers.end(); ++p) delete *p;
-}
-
-template <class SmartCell>
-void SiteBasedSimulationContext<SmartCell>::linkPerSites(SmartCell *const perCell, PerDimer *const perDimer) const {
+template <class SmartCell, class SmartDimer>
+void SiteBasedSimulationContext<SmartCell, SmartDimer>::linkPerSites(SmartCell *const perCell, SmartDimer *const perDimer) const {
     perCell->addPerDimer(perDimer);
     perDimer->addPerCell(perCell);
 }

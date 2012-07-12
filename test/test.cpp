@@ -141,6 +141,7 @@ int main(int argc, char *argv[]) {
     }
 
     srand(time(0));
+
     tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
     runTest(&tc, "Rejection MC", "rejection");
     tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
@@ -157,14 +158,14 @@ int main(int argc, char *argv[]) {
     runTest(&tc, "Faster Binary MC", "faster_binary");
 
     factory->setWidth(3);
-    runTest(&tc, "Faster Less MC", "faster_less");
-    factory->setWidth(5);
-    runTest(&tc, "Faster More MC", "faster_more");
+    runTest(&tc, "Faster 3 MC", "faster_3");
+    factory->setWidth(4);
+    runTest(&tc, "Faster 4 MC", "faster_4");
     factory->setWidth(6);
-    runTest(&tc, "Faster More 6 MC", "faster_more_6");
+    runTest(&tc, "Faster 6 MC", "faster_6");
 
     tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
-    runTest(&tc, "Faster Optimal MC", "faster_optimal");
+    runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
 
     return 0;
 }

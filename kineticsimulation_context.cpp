@@ -6,12 +6,12 @@ KineticSimulationContext::KineticSimulationContext(AreaData *area) : SiteBasedSi
 }
 
 KineticSimulationContext::~KineticSimulationContext() {
-    for (auto p = _perCells.begin(); p != _perCells.end(); ++p) delete *p;
+    for (auto p = _perSites.begin(); p != _perSites.end(); ++p) delete *p;
 }
 
 double KineticSimulationContext::doReaction() {
     double dt = 0;
-    PerCell *minPerSite = findMin(&dt);
+    IPerSite *minPerSite = findMin(&dt);
 
     if (dt == 0) return 0;
 
@@ -21,12 +21,16 @@ double KineticSimulationContext::doReaction() {
 }
 
 void KineticSimulationContext::storeCell(PerCell *const perCell) {
-    _perCells.push_back(perCell);
+    _perSites.push_back(perCell);
 }
 
-PerCell *KineticSimulationContext::findMin(double *dt) const {
-    PerCell *min = 0;
-    for (auto p = _perCells.cbegin(); p != _perCells.cend(); ++p) {
+void KineticSimulationContext::storeDimer(PerDimer *const perDimer) {
+    _perSites.push_back(perDimer);
+}
+
+IPerSite *KineticSimulationContext::findMin(double *dt) const {
+    IPerSite *min = 0;
+    for (auto p = _perSites.cbegin(); p != _perSites.cend(); ++p) {
         if ((*p)->commonRate() == 0) continue;
 
         double localDt = negativLogU() / (*p)->commonRate();
@@ -38,6 +42,6 @@ PerCell *KineticSimulationContext::findMin(double *dt) const {
     return min;
 }
 
-void KineticSimulationContext::doRandomReaction(PerCell *const perCell) {
-    perCell->doReaction(perCell->commonRate() * randomN01());
+void KineticSimulationContext::doRandomReaction(IPerSite *const perSite) {
+    perSite->doReaction(perSite->commonRate() * randomN01());
 }

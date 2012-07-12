@@ -2,7 +2,7 @@
 #define MCTREE_H
 
 #include "noden.h"
-#include "nodes.h"
+#include "inodes.h"
 
 class MCTree
 {
@@ -10,10 +10,10 @@ public:
     MCTree(int width);
     ~MCTree();
 
-    void add(NodeS *node);
+    void add(INodeS *node);
     double sum() const;
 
-    NodeS *find(double *r) const;
+    INodeS *find(double *r) const;
 
     void diagnostic() const;
 

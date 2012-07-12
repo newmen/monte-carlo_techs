@@ -32,6 +32,7 @@ LIB_FILES = \
     rejectionsimulation_context.cpp \
     rejectionfreesimulation_context.cpp \
     dynamicsimulation_context.cpp \
+    ipersite.h \
     persite.h \
     percell.cpp \
     perdimer.cpp \
@@ -39,7 +40,8 @@ LIB_FILES = \
     mctree.cpp \
     nodebase.cpp \
     noden.cpp \
-    nodes.cpp \
+    inodes.h \
+    nodes.h \
     treebasedsimulation_context.cpp \
     store_context.cpp \
     storing_role.h

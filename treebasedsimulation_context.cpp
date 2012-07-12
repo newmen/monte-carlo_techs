@@ -7,19 +7,17 @@ int calcTreeWidthByK(int size, float levels) {
 }
 
 int optimalTreeWidth(int size) {
-    return calcTreeWidthByK(size, 4);
+    return calcTreeWidthByK(size, 5);
 }
 
 TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area) :
-    SiteBasedSimulationContext<NodeS>(area),
-    _tree(optimalTreeWidth(area->sizeX() * area->sizeY()))
+    SiteBasedSimulationContext(area), _tree(optimalTreeWidth(area->size()))
 {
     initData();
 }
 
 TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, float levels) :
-    SiteBasedSimulationContext<NodeS>(area),
-    _tree(calcTreeWidthByK(area->sizeX() * area->sizeY(), levels))
+    SiteBasedSimulationContext(area), _tree(calcTreeWidthByK(area->size(), levels))
 {
     initData();
 }
@@ -30,12 +28,32 @@ double TreeBasedSimulationContext::doReaction() {
     if (totalRate == 0) return 0;
 
     double r = randomN01() * totalRate;
-    NodeS *currentPerCell = _tree.find(&r);
-    currentPerCell->doReaction(r);
+    INodeS *currentPerCell = _tree.find(&r);
+    currentPerCell->doReactionOnSite(r);
 
     return negativLogU() / totalRate;
 }
 
-void TreeBasedSimulationContext::storeCell(NodeS *perCell) {
-    _tree.add(perCell); // memory of perCell will be deleted into MCTree
+void TreeBasedSimulationContext::initData() {
+    SiteBasedSimulationContext<NodeCell, NodeDimer>::initData();
+    _cacheNodeCells.clear();
+}
+
+void TreeBasedSimulationContext::storeCell(NodeCell *) {
+}
+
+void TreeBasedSimulationContext::storeDimer(NodeDimer *perDimer) {
+    // memory of perSite will be deleted into MCTree
+    _tree.add(perDimer);
+
+    auto addNodeCell = [this](PerCell *const perCell) {
+        NodeCell *const nodeCell = static_cast<NodeCell *const>(perCell);
+        if (_cacheNodeCells.find(nodeCell) == _cacheNodeCells.cend()) {
+            _cacheNodeCells.insert(nodeCell);
+            _tree.add(nodeCell);
+        }
+    };
+
+    addNodeCell(perDimer->first());
+    addNodeCell(perDimer->second());
 }

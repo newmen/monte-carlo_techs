@@ -1,8 +1,6 @@
 #include <cmath>
 #include <cstdlib>
 #include "simulationbase_context.h"
-
-#include <algorithm>
 #include "neighbouring_role.h"
 
 #include "reaction12_data.h"
@@ -47,15 +45,15 @@ void SimulationBaseContext::eachCell(std::function<void (CellData *const)> lambd
 }
 
 void SimulationBaseContext::eachDimer(std::function<void (DimerData *const)> lambda) const {
-    for_each(_dimers.begin(), _dimers.end(), lambda);
+    for (auto p = _dimers.cbegin(); p != _dimers.cend(); ++p) lambda(*p);
 }
 
 void SimulationBaseContext::eachCellReaction(std::function<void (const CellReaction *const)> lambda) const {
-    for_each(_cellReactions.cbegin(), _cellReactions.cend(), lambda);
+    for (auto p = _cellReactions.cbegin(); p != _cellReactions.cend(); ++p) lambda(*p);
 }
 
 void SimulationBaseContext::eachDimerReaction(std::function<void (const DimerReaction *const)> lambda) const {
-    for_each(_dimerReactions.cbegin(), _dimerReactions.cend(), lambda);
+    for (auto p = _dimerReactions.cbegin(); p != _dimerReactions.cend(); ++p) lambda(*p);
 }
 
 double SimulationBaseContext::randomN01() const {

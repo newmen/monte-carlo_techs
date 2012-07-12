@@ -2,7 +2,7 @@
 #define NODEN_H
 
 #include "nodebase.h"
-#include "nodes.h"
+#include "inodes.h"
 
 class NodeN : public NodeBase
 {
@@ -10,11 +10,11 @@ public:
     NodeN(int width, int level);
     ~NodeN();
 
-    void add(NodeS *node);
+    void add(INodeS *node);
     void add(NodeN *node);
     bool isFull() const;
 
-    NodeS *find(double *r) const;
+    INodeS *find(double *r) const;
 
     void diagnoze() const;
 

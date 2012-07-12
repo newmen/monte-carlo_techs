@@ -1,14 +1,14 @@
 #include "perdimer.h"
 #include "percell.h"
 
-PerDimer::PerDimer(DimerData *const dimer) : PerSite<DimerData>(dimer), _numOfPerCells(0) {}
+PerDimer::PerDimer(DimerData *const dimer) : PerSite(dimer), _numOfPerCells(0) {}
 
 void PerDimer::addPerCell(PerCell *const perCell) {
     _perCells[_numOfPerCells++] = perCell;
 }
 
 void PerDimer::doReaction(double r) {
-    doLocalReaction(r);
+    PerSite<DimerData>::doReaction(r);
     for (PerCell *perCell : _perCells) {
         perCell->updateRates(this);
     }
