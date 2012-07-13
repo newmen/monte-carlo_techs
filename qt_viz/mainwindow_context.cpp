@@ -1,6 +1,9 @@
 #include "mainwindow_context.h"
 #include <QVBoxLayout>
 
+#include "../abcdcellreactor_data.h"
+#include "../abcddimerreactor_data.h"
+
 #include "../rejectionsimulation_context.h"
 #include "../rejectionfreesimulation_context.h"
 #include "../dynamicsimulation_context.h"
@@ -12,11 +15,14 @@
 MainWindowContext::MainWindowContext() : _area(21, 13) {
     setWindowTitle("Monte Carlo simulation");
 
-//    _simulationContext = new RejectionSimulationContext(&_area);
-//    _simulationContext = new RejectionFreeSimulationContext(&_area);
-//    _simulationContext = new DynamicSimulationContext(&_area);
-    _simulationContext = new KineticSimulationContext(&_area);
-//    _simulationContext = new TreeBasedSimulationContext(&_area);
+//    _reactor = new ABCDCellReactorData;
+    _reactor = new ABCDDimerReactorData;
+
+//    _simulationContext = new RejectionSimulationContext(&_area, _reactor);
+//    _simulationContext = new RejectionFreeSimulationContext(&_area, _reactor);
+//    _simulationContext = new DynamicSimulationContext(&_area, _reactor);
+    _simulationContext = new KineticSimulationContext(&_area, _reactor);
+//    _simulationContext = new TreeBasedSimulationContext(&_area, _reactor);
     _renderArea = new RenderAreaContext(&_area, 15);
 
     _doButton = new QPushButton("Do reaction");
@@ -38,6 +44,7 @@ MainWindowContext::MainWindowContext() : _area(21, 13) {
 
 MainWindowContext::~MainWindowContext() {
     delete _simulationContext;
+    delete _reactor;
     delete _renderArea;
     delete _doButton;
     delete _playButton;

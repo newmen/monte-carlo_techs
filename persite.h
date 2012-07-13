@@ -3,17 +3,17 @@
 
 #include <map>
 #include "ipersite.h"
-#include "ireacting_role.h"
+#include "reaction_data.h"
 
 template <class SData>
 class PerSite : public IPerSite
 {
-    typedef std::map<const IReactingRole<SData> *, double> RatesMap;
+    typedef std::map<const ReactionData<SData> *, double> RatesMap;
 
 public:
     virtual ~PerSite() {}
 
-    void addReaction(const IReactingRole<SData> *const reaction);
+    void addReaction(const ReactionData<SData> *const reaction);
 
     double commonRate() const;
     void doReaction(double r);
@@ -33,7 +33,7 @@ template <class SData>
 PerSite<SData>::PerSite(SData *const site) : _site(site), _commonRate(0) {}
 
 template <class SData>
-void PerSite<SData>::addReaction(const IReactingRole<SData> *const reaction) {
+void PerSite<SData>::addReaction(const ReactionData<SData> *const reaction) {
     double rate = reaction->rate(*_site);
     _rates[reaction] = rate;
     _commonRate += rate;

@@ -7,6 +7,7 @@
 #include "playbutton.h"
 #include "renderarea_context.h"
 
+#include "../reactorbase_data.h"
 #include "../simulationbase_context.h"
 
 class MainWindowContext : public QWidget
@@ -26,7 +27,7 @@ private slots:
 
 private:
     AreaData _area;
-
+    ReactorBaseData *_reactor;
     SimulationBaseContext *_simulationContext;
     RenderAreaContext *_renderArea;
 

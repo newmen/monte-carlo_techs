@@ -1,7 +1,7 @@
 #include "rejectionfreesimulation_context.h"
 
-RejectionFreeSimulationContext::RejectionFreeSimulationContext(AreaData *area) :
-    EventBasedSimulationContext(area) {}
+RejectionFreeSimulationContext::RejectionFreeSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+    EventBasedSimulationContext(area, reactor) {}
 
 BaseEvent *RejectionFreeSimulationContext::randomEvent() const {
     double r = randomN01() * totalRate();

@@ -9,13 +9,13 @@
 
 class DynamicSimulationContext : public SimpleSimulationContext
 {
-    typedef std::map<const CellReaction *const, std::vector<CellData *> > CellsMap;
-    typedef std::map<const DimerReaction *const, std::vector<DimerData *> > DimersMap;
-    typedef std::map<const CellReaction *const, double> RatesOnSitesMap;
-    typedef std::map<const DimerReaction *const, double> RatesOnDimersMap;
+    typedef std::map<const ReactionData<CellData> *const, std::vector<CellData *> > CellsMap;
+    typedef std::map<const ReactionData<DimerData> *const, std::vector<DimerData *> > DimersMap;
+    typedef std::map<const ReactionData<CellData> *const, double> RatesOnSitesMap;
+    typedef std::map<const ReactionData<DimerData> *const, double> RatesOnDimersMap;
 
 public:
-    DynamicSimulationContext(AreaData *area);
+    DynamicSimulationContext(AreaData *area, const ReactorBaseData *reactor);
 //    ~DynamicSimulationContext();
 
     double doReaction();
@@ -23,18 +23,18 @@ public:
 protected:
     void clearAllEvents();
 
-    void addCellEvent(CellData *const cell, const CellReaction *const reaction);
-    void addDimerEvent(DimerData *const dimer, const DimerReaction *const reaction);
+    void addCellEvent(CellData *const cell, const ReactionData<CellData> *const reaction);
+    void addDimerEvent(DimerData *const dimer, const ReactionData<DimerData> *const reaction);
 
 private:
     template <class SData>
-    void addEvent(std::map<const IReactingRole<SData> *const, std::vector<SData *> > *dataContainer, std::map<const IReactingRole<SData> *const, double> *rates, SData *const site, const IReactingRole<SData> *const reaction);
+    void addEvent(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer, std::map<const ReactionData<SData> *const, double> *rates, SData *const site, const ReactionData<SData> *const reaction);
 
     template <class SData>
-    const IReactingRole<SData> *findReaction(double *r, double *max, const std::map<const IReactingRole<SData> *const, double> &ratesMap) const;
+    const ReactionData<SData> *findReaction(double *r, double *max, const std::map<const ReactionData<SData> *const, double> &ratesMap) const;
 
     template <class SData>
-    void clearEvents(std::map<const IReactingRole<SData> *const, std::vector<SData *> > *dataContainer, std::map<const IReactingRole<SData> *const, double> *rates);
+    void clearEvents(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer, std::map<const ReactionData<SData> *const, double> *rates);
 
 private:
     CellsMap _cells;

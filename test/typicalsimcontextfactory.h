@@ -14,7 +14,7 @@ public:
 
 template <class SimulationContext>
 SimulationBaseContext *TypicalSimContextFactory<SimulationContext>::createContext(AreaData *area) const {
-    return new SimulationContext(area);
+    return new SimulationContext(area, reactor());
 }
 
 #endif // TYPICALSIMCONTEXTFACTORY_H

@@ -3,15 +3,20 @@
 
 #include "../area_data.h"
 #include "../simulationbase_context.h"
+#include "../reactorbase_data.h"
 
 class SimulationContextFactory
 {
 public:
-    virtual ~SimulationContextFactory() {}
+    virtual ~SimulationContextFactory();
     virtual SimulationBaseContext *createContext(AreaData *area) const = 0;
 
 protected:
-    SimulationContextFactory() {}
+    SimulationContextFactory();
+    const ReactorBaseData *reactor() const;
+
+private:
+    const ReactorBaseData *_reactor;
 };
 
 #endif // SIMULATIONCONTEXTFACTORY_H

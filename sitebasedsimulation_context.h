@@ -9,7 +9,7 @@ template <class SmartCell, class SmartDimer>
 class SiteBasedSimulationContext : public SimulationBaseContext
 {
 protected:
-    SiteBasedSimulationContext(AreaData *area);
+    SiteBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor);
 
     void initData();
 
@@ -21,15 +21,15 @@ private:
 };
 
 template <class SmartCell, class SmartDimer>
-SiteBasedSimulationContext<SmartCell, SmartDimer>::SiteBasedSimulationContext(AreaData *area) :
-    SimulationBaseContext(area) {}
+SiteBasedSimulationContext<SmartCell, SmartDimer>::SiteBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+    SimulationBaseContext(area, reactor) {}
 
 template <class SmartCell, class SmartDimer>
 void SiteBasedSimulationContext<SmartCell, SmartDimer>::initData() {
     std::map<CellData *const, SmartCell *> cellsToPerCells;
     eachCell([this, &cellsToPerCells](CellData *const cell) {
         SmartCell *perCell = new SmartCell(cell);
-        this->eachCellReaction([this, &perCell](const IReactingRole<CellData> *const reaction) {
+        this->eachCellReaction([this, &perCell](const ReactionData<CellData> *const reaction) {
             perCell->addReaction(reaction);
         });
         cellsToPerCells[cell] = perCell;
@@ -38,7 +38,7 @@ void SiteBasedSimulationContext<SmartCell, SmartDimer>::initData() {
 
     eachDimer([this, &cellsToPerCells](DimerData *const dimer) {
         SmartDimer *perDimer = new SmartDimer(dimer);
-        this->eachDimerReaction([this, &perDimer](const IReactingRole<DimerData> *const reaction) {
+        this->eachDimerReaction([this, &perDimer](const ReactionData<DimerData> *const reaction) {
             perDimer->addReaction(reaction);
         });
         this->linkPerSites(cellsToPerCells.find(dimer->first)->second, perDimer);

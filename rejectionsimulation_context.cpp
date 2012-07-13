@@ -1,7 +1,7 @@
 #include "rejectionsimulation_context.h"
 
-RejectionSimulationContext::RejectionSimulationContext(AreaData *area) :
-    EventBasedSimulationContext(area), _maxRate(0) {}
+RejectionSimulationContext::RejectionSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+    EventBasedSimulationContext(area, reactor), _maxRate(0) {}
 
 BaseEvent *RejectionSimulationContext::randomEvent() const {
     double r;

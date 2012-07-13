@@ -5,7 +5,7 @@
 TreeSimContextFactory::TreeSimContextFactory(int levels) : _levels(levels) {}
 
 SimulationBaseContext *TreeSimContextFactory::createContext(AreaData *area) const {
-    return new TreeBasedSimulationContext(area, _levels);
+    return new TreeBasedSimulationContext(area, reactor(), _levels);
 }
 
 void TreeSimContextFactory::setWidth(int levels) {

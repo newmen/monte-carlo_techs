@@ -14,7 +14,7 @@ public:
     int sizeX() const { return _sizeX; }
     int sizeY() const { return _sizeY; }
 
-    void eachCell(std::function<void (CellData *const)> lambda) const;
+    void eachCell(const std::function<void (CellData *const)> &lambda) const;
     CellData *cell(int x, int y) const;
 
 private:

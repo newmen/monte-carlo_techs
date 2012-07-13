@@ -19,12 +19,14 @@ SOURCES += \
     performancesaver.cpp \
     pathbuilder.cpp \
     solving_ode.cpp \
-    treesimcontextfactory.cpp
+    treesimcontextfactory.cpp \
+    simulationcontextfactory.cpp
 
 OTHER_FILES += \
     run.sh \
     plots.rb \
-    Makefile
+    Makefile \
+    README.md
 
 unix:!macx:!symbian: LIBS += -L$$PWD/../ -lmonte_carlo
 

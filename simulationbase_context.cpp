@@ -3,40 +3,17 @@
 #include "simulationbase_context.h"
 #include "neighbouring_role.h"
 
-#include "reaction12_data.h"
-#include "reaction21_data.h"
-#include "reaction23_data.h"
-#include "reaction31_data.h"
-#include "reaction34_data.h"
-#include "reaction35_data.h"
-#include "reaction51_data.h"
-#include "cellreacting_role.h"
-#include "dimerreactioncapturing_role.h"
-#include "dimerreactionexchanging_role.h"
-#include "dimerreactionstabilizing_role.h"
-
-SimulationBaseContext::SimulationBaseContext(AreaData *area) : _area(area) {
-    initDimers();
-
-    _cellReactions.push_back(new CellReactingRole<Reaction12Data>);
-    _cellReactions.push_back(new CellReactingRole<Reaction21Data>);
-    _cellReactions.push_back(new CellReactingRole<Reaction23Data>);
-
-    _dimerReactions.push_back(new DimerReactionExchangingRole<Reaction31Data>);
-    _dimerReactions.push_back(new DimerReactionStabilizingRole<Reaction34Data>);
-    _cellReactions.push_back(new CellReactingRole<Reaction35Data>);
-    _dimerReactions.push_back(new DimerReactionCapturingRole<Reaction51Data>);
-
-//    _dimerReactions.push_back(new DimerReactionExchangingRole<Reaction31Data>);
-//    _cellReactions.push_back(new CellReactingRole<Reaction34Data>);
-//    _cellReactions.push_back(new CellReactingRole<Reaction35Data>);
-//    _cellReactions.push_back(new CellReactingRole<Reaction51Data>);
+SimulationBaseContext::SimulationBaseContext(AreaData *area, const ReactorBaseData *reactor) :
+    _area(area), _reactor(reactor)
+{
+    _area->eachCell([this](CellData *const cell) {
+        static_cast<NeighbouringRole<CellData> *>(cell)->uniqPairs(_area, [this, &cell](CellData *const neighbour) {
+            _dimers.push_back(new DimerData(cell, neighbour));
+        });
+    });
 }
 
 SimulationBaseContext::~SimulationBaseContext() {
-    for (auto p = _cellReactions.begin(); p != _cellReactions.end(); ++p) delete *p;
-    for (auto p = _dimerReactions.begin(); p != _dimerReactions.end(); ++p) delete *p;
-
     for (auto p = _dimers.begin(); p != _dimers.end(); ++p) delete *p;
 }
 
@@ -48,12 +25,12 @@ void SimulationBaseContext::eachDimer(std::function<void (DimerData *const)> lam
     for (auto p = _dimers.cbegin(); p != _dimers.cend(); ++p) lambda(*p);
 }
 
-void SimulationBaseContext::eachCellReaction(std::function<void (const CellReaction *const)> lambda) const {
-    for (auto p = _cellReactions.cbegin(); p != _cellReactions.cend(); ++p) lambda(*p);
+void SimulationBaseContext::eachCellReaction(std::function<void (const ReactionData<CellData> *const)> lambda) const {
+    _reactor->eachReaction(lambda);
 }
 
-void SimulationBaseContext::eachDimerReaction(std::function<void (const DimerReaction *const)> lambda) const {
-    for (auto p = _dimerReactions.cbegin(); p != _dimerReactions.cend(); ++p) lambda(*p);
+void SimulationBaseContext::eachDimerReaction(std::function<void (const ReactionData<DimerData> *const)> lambda) const {
+    _reactor->eachReaction(lambda);
 }
 
 double SimulationBaseContext::randomN01() const {
@@ -64,12 +41,4 @@ double SimulationBaseContext::negativLogU() const {
     double u;
     do u = randomN01(); while (u == 0);
     return -log(u);
-}
-
-void SimulationBaseContext::initDimers() {
-    _area->eachCell([this](CellData *const cell) {
-        static_cast<NeighbouringRole<CellData> *>(cell)->uniqPairs(_area, [this, &cell](CellData *const neighbour) {
-            _dimers.push_back(new DimerData(cell, neighbour));
-        });
-    });
 }

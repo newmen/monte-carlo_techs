@@ -11,19 +11,15 @@ LIB_FILES = \
     cell_data.h \
     dimer_data.h \
     neighbouring_role.h \
-    reaction12_data.h \
-    reaction21_data.h \
-    reaction23_data.h \
-    reaction31_data.h \
-    reaction34_data.h \
-    reaction35_data.h \
-    reaction51_data.h \
     reaction_data.h \
-    ireacting_role.h \
-    cellreacting_role.h \
-    dimerreactionexchanging_role.h \
-    dimerreactioncapturing_role.h \
-    dimerreactionstabilizing_role.h \
+    cellreaction_data.cpp \
+    dimerreactionexchange_data.cpp \
+    dimerreactioncapture_data.cpp \
+    dimerreactionstabilization_data.cpp \
+    reactorbase_data.cpp \
+    abcdreactor_data.cpp \
+    abcdcellreactor_data.cpp \
+    abcddimerreactor_data.cpp \
     simulationbase_context.cpp \
     simplesimulation_context.cpp \
     baseevent.h \

@@ -10,14 +10,14 @@ int optimalTreeWidth(int size) {
     return calcTreeWidthByK(size, 5);
 }
 
-TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area) :
-    SiteBasedSimulationContext(area), _tree(optimalTreeWidth(area->size()))
+TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+    SiteBasedSimulationContext(area, reactor), _tree(optimalTreeWidth(area->size()))
 {
     initData();
 }
 
-TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, float levels) :
-    SiteBasedSimulationContext(area), _tree(calcTreeWidthByK(area->size(), levels))
+TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor, float levels) :
+    SiteBasedSimulationContext(area, reactor), _tree(calcTreeWidthByK(area->size(), levels))
 {
     initData();
 }

@@ -1,7 +1,9 @@
 #include <map>
 #include "kineticsimulation_context.h"
 
-KineticSimulationContext::KineticSimulationContext(AreaData *area) : SiteBasedSimulationContext(area) {
+KineticSimulationContext::KineticSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+    SiteBasedSimulationContext(area, reactor)
+{
     initData();
 }
 

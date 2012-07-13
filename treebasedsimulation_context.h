@@ -17,8 +17,8 @@ typedef NodeS<PerDimer> NodeDimer;
 class TreeBasedSimulationContext : public SiteBasedSimulationContext<NodeCell, NodeDimer>
 {
 public:
-    TreeBasedSimulationContext(AreaData *area);
-    TreeBasedSimulationContext(AreaData *area, float levels);
+    TreeBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor);
+    TreeBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor, float levels);
 
     double doReaction();
 

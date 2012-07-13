@@ -7,6 +7,10 @@ QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += \
     area_data.cpp \
+    cellreaction_data.cpp \
+    dimerreactioncapture_data.cpp \
+    dimerreactionexchange_data.cpp \
+    dimerreactionstabilization_data.cpp \
     simulationbase_context.cpp \
     simplesimulation_context.cpp \
     eventbasedsimulation_context.cpp \
@@ -21,26 +25,22 @@ SOURCES += \
     noden.cpp \
     treebasedsimulation_context.cpp \
     store_context.cpp \
-    main.cpp
+    main.cpp \
+    reactorbase_data.cpp \
+    abcddimerreactor_data.cpp \
+    abcdreactor_data.cpp \
+    abcdcellreactor_data.cpp
 
 HEADERS += \
     area_data.h \
     cell_data.h \
     dimer_data.h \
     neighbouring_role.h \
-    reaction12_data.h \
-    reaction21_data.h \
-    reaction23_data.h \
-    reaction31_data.h \
-    reaction34_data.h \
-    reaction35_data.h \
-    reaction51_data.h \
     reaction_data.h \
-    ireacting_role.h \
-    cellreacting_role.h \
-    dimerreactionexchanging_role.h \
-    dimerreactioncapturing_role.h \
-    dimerreactionstabilizing_role.h \
+    cellreaction_data.h \
+    dimerreactioncapture_data.h \
+    dimerreactionexchange_data.h \
+    dimerreactionstabilization_data.h \
     simulationbase_context.h \
     simplesimulation_context.h \
     baseevent.h \
@@ -62,7 +62,11 @@ HEADERS += \
     nodes.h \
     treebasedsimulation_context.h \
     store_context.h \
-    storing_role.h
+    storing_role.h \
+    reactorbase_data.h \
+    abcddimerreactor_data.h \
+    abcdreactor_data.h \
+    abcdcellreactor_data.h
 
 OTHER_FILES += \
     .gitignore \

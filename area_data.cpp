@@ -17,7 +17,7 @@ AreaData::~AreaData() {
     delete [] _cells;
 }
 
-void AreaData::eachCell(std::function<void (CellData *const)> lambda) const {
+void AreaData::eachCell(const std::function<void (CellData *const)> &lambda) const {
     for (int i = 0; i < size(); ++i) lambda(_cells[i]);
 }
 
