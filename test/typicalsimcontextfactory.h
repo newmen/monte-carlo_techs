@@ -7,10 +7,14 @@ template <class SimulationContext>
 class TypicalSimContextFactory : public SimulationContextFactory
 {
 public:
-    TypicalSimContextFactory() {}
+    TypicalSimContextFactory(ReactorBaseData *reactor);
 
     SimulationBaseContext *createContext(AreaData *area) const;
 };
+
+template <class SimulationContext>
+TypicalSimContextFactory<SimulationContext>::TypicalSimContextFactory(ReactorBaseData *reactor) :
+    SimulationContextFactory(reactor) {}
 
 template <class SimulationContext>
 SimulationBaseContext *TypicalSimContextFactory<SimulationContext>::createContext(AreaData *area) const {

@@ -7,17 +7,16 @@ class ReactionData
 public:
     virtual ~ReactionData() {}
 
-    virtual double rate(const SData &site) const = 0;
+    virtual double rate(const SData *site) const = 0;
     virtual void doIt(SData *const site) const = 0;
 
     float k() const { return _k; }
+    int prevState() const { return _prevState; }
+    int nextState() const { return _nextState; }
 
 protected:
     ReactionData(float rateValue, int prevState, int nextState) :
         _k(rateValue), _prevState(prevState), _nextState(nextState) {}
-
-    int prevState() const { return _prevState; }
-    int nextState() const { return _nextState; }
 
 private:
     float _k;

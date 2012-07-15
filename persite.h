@@ -34,7 +34,7 @@ PerSite<SData>::PerSite(SData *const site) : _site(site), _commonRate(0) {}
 
 template <class SData>
 void PerSite<SData>::addReaction(const ReactionData<SData> *const reaction) {
-    double rate = reaction->rate(*_site);
+    double rate = reaction->rate(_site);
     _rates[reaction] = rate;
     _commonRate += rate;
 }
@@ -48,7 +48,7 @@ template <class SData>
 void PerSite<SData>::updateRates() {
     _commonRate = 0;
     for (auto p = _rates.begin(); p != _rates.end(); ++p) {
-        double rate = p->first->rate(*_site);
+        double rate = p->first->rate(_site);
         p->second = rate;
         _commonRate += rate;
     }

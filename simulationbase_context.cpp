@@ -6,19 +6,25 @@
 SimulationBaseContext::SimulationBaseContext(AreaData *area, const ReactorBaseData *reactor) :
     _area(area), _reactor(reactor)
 {
-    _area->eachCell([this](CellData *const cell) {
-        static_cast<NeighbouringRole<CellData> *>(cell)->uniqPairs(_area, [this, &cell](CellData *const neighbour) {
-            _dimers.push_back(new DimerData(cell, neighbour));
-        });
+    _area->eachCell([this](int *const cell, int x, int y) {
+        _cells.push_back(_reactor->createCell(cell, x ,y));
     });
+
+    for (auto p = _cells.begin(); p != _cells.end(); ++p) {
+        CellData *cell = *p;
+        static_cast<NeighbouringRole<CellData> *>(cell)->uniqPairs(_area, [this, &cell](int neighbourIndex) {
+            _dimers.push_back(new DimerData(cell, _cells[neighbourIndex]));
+        });
+    }
 }
 
 SimulationBaseContext::~SimulationBaseContext() {
     for (auto p = _dimers.begin(); p != _dimers.end(); ++p) delete *p;
+    for (auto p = _cells.begin(); p != _cells.end(); ++p) delete *p;
 }
 
 void SimulationBaseContext::eachCell(std::function<void (CellData *const)> lambda) const {
-    _area->eachCell(lambda);
+    for (auto p = _cells.cbegin(); p != _cells.cend(); ++p) lambda(*p);
 }
 
 void SimulationBaseContext::eachDimer(std::function<void (DimerData *const)> lambda) const {

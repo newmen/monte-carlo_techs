@@ -18,9 +18,8 @@ void StoringRole<AData>::store(std::ostream &os) const {
     int statesAcc[STATES_NUM];
     for (int i = 0; i < STATES_NUM; ++i) statesAcc[i] = 0;
 
-    this->eachCell([this, &statesAcc](CellData *const cell) {
-        int state = cell->value();
-        if (state > 1) ++statesAcc[state - 2];
+    this->eachCell([this, &statesAcc](int *const value, int, int) {
+        if (*value > 1) ++statesAcc[*value - 2];
     });
 
     for (int i = 0; i < STATES_NUM; ++i) {

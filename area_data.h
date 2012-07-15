@@ -2,7 +2,6 @@
 #define AREA_DATA_H
 
 #include <functional>
-#include "cell_data.h"
 
 class AreaData
 {
@@ -14,12 +13,14 @@ public:
     int sizeX() const { return _sizeX; }
     int sizeY() const { return _sizeY; }
 
-    void eachCell(const std::function<void (CellData *const)> &lambda) const;
-    CellData *cell(int x, int y) const;
+    int index(int x, int y) const { return y * _sizeX + x; }
+
+    void eachCell(const std::function<void (int *const, int, int)> &lambda) const;
+//    int *cell(int x, int y) const;
 
 private:
     int _sizeX, _sizeY;
-    CellData **_cells;
+    int *_cells;
 };
 
 #endif // AREA_DATA_H

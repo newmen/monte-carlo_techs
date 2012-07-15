@@ -21,12 +21,12 @@ void DrawingRole<AData>::draw(QPainter *painter, float cellSideLength) const {
     painter->setPen(pen);
 
     QRect rect(0, 0, cellSideLength, cellSideLength);
-    eachCell([this, &painter, &rect, cellSideLength](CellData *const cell) {
+    eachCell([this, &painter, &rect, cellSideLength](int *const value, int x, int y) {
         painter->save();
-        painter->translate(this->offset(cellSideLength, cell->x(), cell->y()));
+        painter->translate(this->offset(cellSideLength, x, y));
 
         QColor color;
-        switch (cell->value()) {
+        switch (*value) {
         case 1:
             color.setRgb(248, 248, 248);
             break;

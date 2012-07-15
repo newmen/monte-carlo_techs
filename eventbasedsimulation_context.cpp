@@ -28,7 +28,7 @@ void EventBasedSimulationContext::addDimerEvent(DimerData *const dimer, const Re
 
 template <class SData>
 void EventBasedSimulationContext::addEvent(SData *const site, const ReactionData<SData> *const reaction) {
-    double rate = reaction->rate(*site);
+    double rate = reaction->rate(site);
     doWhenEventAddedWithRate(rate);
     if (rate > 0) {
         _totalRate += rate;

@@ -17,7 +17,7 @@ public:
     void uniqPairs(const AreaData *area, const Lambda &lambda) const;
 
 private:
-    void neighboursIter(int (*neighboursCoords)[2], int neighboursNum, const AreaData *area, std::function<void (CellData *const)> lambda) const;
+    void neighboursIter(int (*neighboursCoords)[2], int neighboursNum, const AreaData *area, std::function<void (int)> lambda) const;
 
     void checkAndUpdateIfNeed(int coords[2], const AreaData *area) const;
     int torus(int curr, int maxSize) const;
@@ -89,12 +89,12 @@ void NeighbouringRole<DimerData>::eachNeighbour(const AreaData *area, const Lamb
 
 template <class SData>
 void NeighbouringRole<SData>::neighboursIter(int (*neighboursCoords)[2], int neighboursNum,
-                                             const AreaData *area, std::function<void (CellData *const)> lambda) const
+                                             const AreaData *area, std::function<void (int)> lambda) const
 {
     for (int i = 0; i < neighboursNum; ++i) {
         int *nc = neighboursCoords[i];
         checkAndUpdateIfNeed(nc, area);
-        lambda(area->cell(nc[0], nc[1]));
+        lambda(area->index(nc[0], nc[1]));
     }
 }
 

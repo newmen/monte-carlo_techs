@@ -6,12 +6,14 @@
 #include "process_mem_usage.h"
 #include "pathbuilder.h"
 #include "performancesaver.h"
-#include "solving_ode.h"
 
 #include "typicalsimcontextfactory.h"
 #include "treesimcontextfactory.h"
 
 #include "../area_data.h"
+#include "../abcdcellreactor_data.h"
+#include "../abcddimerreactor_data.h"
+
 #include "../dynamicsimulation_context.h"
 #include "../kineticsimulation_context.h"
 #include "../rejectionsimulation_context.h"
@@ -134,24 +136,25 @@ int main(int argc, char *argv[]) {
          << "sizeY = " << tc.sizeY << "\n"
          << "repeats = " << tc.repeats << "\n" << endl;
 
+    ABCDCellReactorData reactor;
     if (tc.needGraph) {
         const string originalFileName = tc.pathBuilder.buildPath("original", GRAPH_EXT);
-        solveODE(originalFileName, MAX_TIME);
+        reactor.solve(originalFileName, MAX_TIME);
         tc.pathBuilder.printFileWasSaved(originalFileName);
     }
 
     srand(time(0));
 
-    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
+    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>(&reactor));
     runTest(&tc, "Rejection MC", "rejection");
-    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
+    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>(&reactor));
     runTest(&tc, "Rejection-free MC", "rejection-free");
-    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
+    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>(&reactor));
     runTest(&tc, "Dynamic MC", "dynamic");
-    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
+    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>(&reactor));
     runTest(&tc, "Kinetic MC", "kinetic");
 
-    TreeSimContextFactory *factory = new TreeSimContextFactory(2);
+    TreeSimContextFactory *factory = new TreeSimContextFactory(&reactor, 2);
     tc.changeFactory(factory);
     runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
     factory->setWidth((int)log2(tc.sizeX * tc.sizeY));
@@ -164,7 +167,7 @@ int main(int argc, char *argv[]) {
     factory->setWidth(6);
     runTest(&tc, "Faster 6 MC", "faster_6");
 
-    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
+    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>(&reactor));
     runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
 
     return 0;

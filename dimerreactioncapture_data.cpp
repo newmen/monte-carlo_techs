@@ -3,9 +3,9 @@
 DimerReactionCaptureData::DimerReactionCaptureData(double rateValue, int prevState, int nextState) :
     ReactionData<DimerData>(rateValue, prevState, nextState) {}
 
-double DimerReactionCaptureData::rate(const DimerData &dimer) const {
-    return ((dimer.first->value() == this->nextState() && dimer.second->value() == this->prevState()) ||
-            (dimer.first->value() == this->prevState() && dimer.second->value() == this->nextState())) ?
+double DimerReactionCaptureData::rate(const DimerData *dimer) const {
+    return ((dimer->first->value() == this->nextState() && dimer->second->value() == this->prevState()) ||
+            (dimer->first->value() == this->prevState() && dimer->second->value() == this->nextState())) ?
                 this->k() : 0;
 }
 

@@ -27,9 +27,9 @@ SOURCES += \
     store_context.cpp \
     main.cpp \
     reactorbase_data.cpp \
-    abcddimerreactor_data.cpp \
     abcdreactor_data.cpp \
-    abcdcellreactor_data.cpp
+    abcdcellreactor_data.cpp \
+    abcddimerreactor_data.cpp
 
 HEADERS += \
     area_data.h \
@@ -64,9 +64,9 @@ HEADERS += \
     store_context.h \
     storing_role.h \
     reactorbase_data.h \
-    abcddimerreactor_data.h \
     abcdreactor_data.h \
-    abcdcellreactor_data.h
+    abcdcellreactor_data.h \
+    abcddimerreactor_data.h
 
 OTHER_FILES += \
     .gitignore \

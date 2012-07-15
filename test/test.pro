@@ -18,7 +18,6 @@ SOURCES += \
     process_mem_usage.cpp \
     performancesaver.cpp \
     pathbuilder.cpp \
-    solving_ode.cpp \
     treesimcontextfactory.cpp \
     simulationcontextfactory.cpp
 

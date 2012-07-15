@@ -28,8 +28,9 @@ protected:
 
 private:
     AreaData *_area;
-    std::vector<DimerData *> _dimers;
     const ReactorBaseData *_reactor;
+    std::vector<CellData *> _cells;
+    std::vector<DimerData *> _dimers;
 };
 
 #endif // SIMULATIONBASE_CONTEXT_H

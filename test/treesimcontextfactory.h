@@ -6,7 +6,7 @@
 class TreeSimContextFactory : public SimulationContextFactory
 {
 public:
-    TreeSimContextFactory(int levels);
+    TreeSimContextFactory(ReactorBaseData *reactor, int levels);
 
     SimulationBaseContext *createContext(AreaData *area) const;
     void setWidth(int levels);

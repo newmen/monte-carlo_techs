@@ -2,7 +2,8 @@
 
 #include "../treebasedsimulation_context.h"
 
-TreeSimContextFactory::TreeSimContextFactory(int levels) : _levels(levels) {}
+TreeSimContextFactory::TreeSimContextFactory(ReactorBaseData *reactor, int levels) :
+    SimulationContextFactory(reactor), _levels(levels) {}
 
 SimulationBaseContext *TreeSimContextFactory::createContext(AreaData *area) const {
     return new TreeBasedSimulationContext(area, reactor(), _levels);

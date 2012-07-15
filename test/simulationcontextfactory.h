@@ -8,11 +8,11 @@
 class SimulationContextFactory
 {
 public:
-    virtual ~SimulationContextFactory();
+    virtual ~SimulationContextFactory() {}
     virtual SimulationBaseContext *createContext(AreaData *area) const = 0;
 
 protected:
-    SimulationContextFactory();
+    SimulationContextFactory(ReactorBaseData *reactor);
     const ReactorBaseData *reactor() const;
 
 private:

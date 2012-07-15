@@ -3,8 +3,8 @@
 DimerReactionStabilizationData::DimerReactionStabilizationData(double rateValue, int prevState, int nextState) :
     ReactionData<DimerData>(rateValue, prevState, nextState) {}
 
-double DimerReactionStabilizationData::rate(const DimerData &dimer) const {
-    return (dimer.first->value() == this->prevState() && dimer.second->value() == this->prevState()) ?
+double DimerReactionStabilizationData::rate(const DimerData *dimer) const {
+    return (dimer->first->value() == this->prevState() && dimer->second->value() == this->prevState()) ?
                 this->k() : 0;
 }
 

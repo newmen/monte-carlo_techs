@@ -1,21 +1,20 @@
 #ifndef CELL_DATA_H
 #define CELL_DATA_H
 
-typedef int CellValueType;
-
 class CellData
 {
 public:
-    CellData(CellValueType value, int x, int y) : _value(value), _x(x), _y(y) {}
+    CellData(int *cell, int x, int y) : _cell(cell), _x(x), _y(y) {}
+    virtual ~CellData() {}
 
-    int value() const { return _value; }
-    void setValue(int value) { _value = value; }
+    int value() const { return *_cell; }
+    void setValue(int value) { *_cell = value; }
 
     int x() const { return _x; }
     int y() const { return _y; }
 
 private:
-    CellValueType _value;
+    int *_cell;
     int _x, _y;
 };
 

@@ -48,7 +48,7 @@ void DynamicSimulationContext::addEvent(std::map<const ReactionData<SData> *cons
                                         SData *const site,
                                         const ReactionData<SData> *const reaction)
 {
-    double rate = reaction->rate(*site);
+    double rate = reaction->rate(site);
     if (rate > 0) {
         (*dataContainer)[reaction].push_back(site);
         (*rates)[reaction] += rate;
