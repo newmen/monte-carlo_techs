@@ -2,7 +2,7 @@
 
 min_size=25
 max_size=100
-size_step=75
+size_step=25
 repeats=3
 
 test_mc_dir=`pwd`

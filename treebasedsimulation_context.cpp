@@ -29,7 +29,7 @@ EventInfoData TreeBasedSimulationContext::doReaction() {
 
     double r = randomN01() * totalRate;
     INodeS *currentNode = _tree.find(&r);
-    currentNode->doReactionOnSite(this, r);
+    currentNode->doReaction(this, r);
 
     EventInfoData ei(negativLogU() / totalRate);
     NodeCell *nodeCell = dynamic_cast<NodeCell *>(currentNode);

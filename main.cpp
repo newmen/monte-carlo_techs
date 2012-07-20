@@ -32,12 +32,12 @@ void run() {
         dt = ei.dt();
         totalTime += dt;
 
-        if (counter++ == 10000) {
+        if (counter++ == 100000) {
             std::cout << "Intermediate time: " << totalTime << std::endl;
             counter = 0;
-            break;
+//            break;
         }
-    } while (dt > 0 && totalTime < 1);
+    } while (dt > 0 && totalTime < reactor.maxTime());
 
     std::cout << "Total time: " << totalTime << " sec" << std::endl;
 }

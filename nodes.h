@@ -17,7 +17,7 @@ public:
     NodeS(SData *const site);
 
     void initSum();
-    void doReactionOnSite(const SimulationBaseContext *simulationContext, double r);
+    void doReaction(const SimulationBaseContext *simulationContext, double r);
 
     void updateRates(const SimulationBaseContext *simulationContext);
     void updateRates(const SimulationBaseContext *simulationContext, const PerDimer *exceptPerDimer);
@@ -39,8 +39,8 @@ void NodeS<SmartSite>::initSum() {
 }
 
 template <class SmartSite>
-void NodeS<SmartSite>::doReactionOnSite(const SimulationBaseContext *simulationContext, double r) {
-    this->doReaction(simulationContext, r);
+void NodeS<SmartSite>::doReaction(const SimulationBaseContext *simulationContext, double r) {
+    SmartSite::doReaction(simulationContext, r);
 }
 
 template <class SmartSite>

@@ -8,7 +8,7 @@ class INodeS : public NodeBase
 {
 public:
     virtual void initSum() = 0;
-    virtual void doReactionOnSite(const SimulationBaseContext *simulationContext, double r) = 0;
+    virtual void doReaction(const SimulationBaseContext *simulationContext, double r) = 0;
 
 protected:
     INodeS() : NodeBase(0) {}
