@@ -1,7 +1,7 @@
 #!/bin/sh
 
 min_size=25
-max_size=100
+max_size=200
 size_step=25
 repeats=3
 

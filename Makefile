@@ -10,9 +10,9 @@ LIB_FILES = \
     area_data.cpp \
     cell_data.h \
     dimer_data.h \
-		lateralsite_data.cpp \
-		lateralcell_data.cpp \
-		lateraldimer_data.cpp \
+    lateralsite_data.cpp \
+    lateralcell_data.cpp \
+    lateraldimer_data.cpp \
     neighbouring_role.h \
     reaction_data.h \
     cellreaction_data.cpp \
@@ -28,6 +28,7 @@ LIB_FILES = \
     abcdreactor_context.cpp \
     abcdcellreactor_context.cpp \
     abcddimerreactor_context.cpp \
+    lotkareactor_context.cpp \
     rtreactor_context.cpp \
     nocoreactor_context.cpp \
     simulationbase_context.cpp \
@@ -61,6 +62,9 @@ $(EXEC):
 	$(CXX) $(CXX_CFLAGS) -c $(LIB_FILES)
 	rm -f $@
 	ar cq $@ $(LIBOFILES)
+
+bin:
+	$(CXX) $(CXX_CFLAGS) *.h *.cpp -o monte_carlo-techs -ltcmalloc
 
 lib:
 	$(CXX) $(CXX_CFLAGS) -fPIC -c $(LIB_FILES)

@@ -23,7 +23,7 @@ TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const Rea
 }
 
 EventInfoData TreeBasedSimulationContext::doReaction() {
-    if (!_tree.diagnostic()) return EventInfoData(0);
+//    if (!_tree.diagnostic()) return EventInfoData(0);
 //    _tree.diagnostic();
 
     double totalRate = _tree.sum();

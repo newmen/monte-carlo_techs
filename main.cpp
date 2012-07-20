@@ -7,6 +7,7 @@
 #include "abcdcellreactor_context.h"
 #include "abcddimerreactor_context.h"
 #include "nocoreactor_context.h"
+#include "lotkareactor_context.h"
 
 #include "rejectionsimulation_context.h"
 #include "rejectionfreesimulation_context.h"
@@ -22,7 +23,8 @@ void run() {
 
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
-    NOCOReactorContext reactor;
+//    NOCOReactorContext reactor;
+    LotkaReactorContext reactor;
 
     SimulationContext sc(&area, &reactor);
     double dt, totalTime = 0;
@@ -50,8 +52,8 @@ int main() {
 //    run<RejectionSimulationContext>();
 //    run<RejectionFreeSimulationContext>();
 //    run<DynamicSimulationContext>();
-//    run<KineticSimulationContext>();
-    run<TreeBasedSimulationContext>();
+    run<KineticSimulationContext>();
+//    run<TreeBasedSimulationContext>();
 
     std::cout << "Complete :)" << std::endl;
 

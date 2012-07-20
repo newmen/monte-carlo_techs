@@ -40,7 +40,8 @@ SOURCES += \
     abcddimerreactor_context.cpp \
     rtreactor_context.cpp \
     nocoreactor_context.cpp \
-    eventinfo_data.cpp
+    eventinfo_data.cpp \
+    lotkareactor_context.cpp
 
 HEADERS += \
     area_data.h \
@@ -88,7 +89,8 @@ HEADERS += \
     abcddimerreactor_context.h \
     rtreactor_context.h \
     nocoreactor_context.h \
-    eventinfo_data.h
+    eventinfo_data.h \
+    lotkareactor_context.h
 
 OTHER_FILES += \
     .gitignore \

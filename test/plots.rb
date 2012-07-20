@@ -11,6 +11,7 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
       
       plot.output("#{file_name}.png")
       plot.terminal('png truecolor')
+      plot.size("5,3")
 
       plot.title(title)
       plot.xlabel(xlabel)
@@ -23,7 +24,7 @@ end
 
 def make_mc_gnuplot(file_name, title, &block)
   make_gnuplot(file_name, title, 'Время (сек)', 'Концентрация (%)') do |plot|
-    plot.xrange('[0:50]')
+    plot.xrange('[0:2250]')
     
     block.call(plot)
   end

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QStatusBar>
 #include <QTimer>
 #include "playbutton.h"
 #include "renderarea_context.h"
@@ -27,6 +28,7 @@ private slots:
 
 private:
     void updateCell(const CellData *cell);
+    void updateStatusBar();
 
 private:
     AreaData _area;
@@ -35,6 +37,9 @@ private:
     RenderAreaContext *_renderArea;
     float _cellSideLength;
 
+    double _totalTime;
+
+    QStatusBar *_statusBar;
     QPushButton *_doButton;
     PlayButton *_playButton;
     QTimer *_animationTimer;

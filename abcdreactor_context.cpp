@@ -10,14 +10,6 @@ ABCDReactorContext::ABCDReactorContext() {
     addReaction(new DimerReactionExchangeData(1e2, 3, 1));
 }
 
-CellData *ABCDReactorContext::createCell(int *cell, int x, int y) const {
-    return new CellData(cell, x, y);
-}
-
-DimerData *ABCDReactorContext::createDimer(CellData *first, CellData *second) const {
-    return new DimerData(first, second);
-}
-
 void ABCDReactorContext::solveToOut(std::ostream &out) const {
     double ratesSum = 0;
     int numOfSpecs = 0;

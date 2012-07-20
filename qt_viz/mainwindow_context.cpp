@@ -4,6 +4,7 @@
 #include "../abcdcellreactor_context.h"
 #include "../abcddimerreactor_context.h"
 #include "../nocoreactor_context.h"
+#include "../lotkareactor_context.h"
 
 #include "../rejectionsimulation_context.h"
 #include "../rejectionfreesimulation_context.h"
@@ -11,12 +12,13 @@
 #include "../kineticsimulation_context.h"
 #include "../treebasedsimulation_context.h"
 
-MainWindowContext::MainWindowContext() : _area(25, 25), _cellSideLength(25) {
+MainWindowContext::MainWindowContext() : _area(50, 50), _cellSideLength(10), _totalTime(0) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _reactor = new ABCDCellReactorContext;
 //    _reactor = new ABCDDimerReactorContext;
-    _reactor = new NOCOReactorContext;
+//    _reactor = new NOCOReactorContext;
+    _reactor = new LotkaReactorContext;
 
 //    _simulationContext = new RejectionSimulationContext(&_area, _reactor);
 //    _simulationContext = new RejectionFreeSimulationContext(&_area, _reactor);
@@ -32,14 +34,19 @@ MainWindowContext::MainWindowContext() : _area(25, 25), _cellSideLength(25) {
     connect(_playButton, SIGNAL(timerStart()), this, SLOT(playAnimation()));
     connect(_playButton, SIGNAL(timerStop()), this, SLOT(stopAnimation()));
 
+    _statusBar = new QStatusBar(this);
+
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(_renderArea);
     layout->addWidget(_doButton);
     layout->addWidget(_playButton);
+    layout->addWidget(_statusBar);
     setLayout(layout);
 
     _animationTimer = new QTimer(this);
     connect(_animationTimer, SIGNAL(timeout()), this, SLOT(doReaction()));
+
+    updateStatusBar();
 }
 
 MainWindowContext::~MainWindowContext() {
@@ -54,7 +61,10 @@ MainWindowContext::~MainWindowContext() {
 void MainWindowContext::doReaction() {
     EventInfoData ei = _simulationContext->doReaction();
 
-    if (ei.dt() == 0) {
+    double dt = ei.dt();
+    _totalTime += dt;
+    updateStatusBar();
+    if (dt == 0) {
         if (_playButton->started()) _playButton->click();
     } else if (ei.cell() != 0) {
         updateCell(ei.cell());
@@ -65,7 +75,7 @@ void MainWindowContext::doReaction() {
 }
 
 void MainWindowContext::playAnimation() {
-    _animationTimer->start(5);
+    _animationTimer->start(0);
 }
 
 void MainWindowContext::stopAnimation() {
@@ -74,4 +84,12 @@ void MainWindowContext::stopAnimation() {
 
 void MainWindowContext::updateCell(const CellData *cell) {
     _renderArea->update(cell->x() * _cellSideLength, cell->y() * _cellSideLength, _cellSideLength, _cellSideLength);
+}
+
+void MainWindowContext::updateStatusBar() {
+    QString totalTimeText;
+    totalTimeText.setNum(_totalTime);
+    totalTimeText.prepend("Total time: ");
+    totalTimeText.append(" sec");
+    _statusBar->showMessage(totalTimeText);
 }

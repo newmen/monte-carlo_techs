@@ -14,6 +14,7 @@
 #include "../abcdcellreactor_context.h"
 #include "../abcddimerreactor_context.h"
 #include "../nocoreactor_context.h"
+#include "../lotkareactor_context.h"
 
 #include "../dynamicsimulation_context.h"
 #include "../kineticsimulation_context.h"
@@ -86,10 +87,14 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         }
 
         totalTime = 0;
+        int counter = 0;
         while (totalTime < tc->reactor->maxTime()) {
             EventInfoData ei = simulationContext->doReaction();
             dt = ei.dt();
-            if (tc->needGraph) storeContext->store(dt);
+            if (tc->needGraph && counter++ > 100) {
+                storeContext->store(dt);
+                counter = 0;
+            }
             if (dt == 0.0) break;
 
             totalTime += dt;
@@ -131,7 +136,8 @@ int main(int argc, char *argv[]) {
     }
 
 //    ABCDCellReactorContext reactor;
-    NOCOReactorContext reactor;
+//    NOCOReactorContext reactor;
+    LotkaReactorContext reactor;
     TestConfig tc(&reactor, argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
                   (argc == 6 && strcmp(argv[5], "true") == 0));
 
@@ -154,8 +160,8 @@ int main(int argc, char *argv[]) {
 //    runTest(&tc, "Rejection-free MC", "rejection-free");
 //    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
 //    runTest(&tc, "Dynamic MC", "dynamic");
-//    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
-//    runTest(&tc, "Kinetic MC", "kinetic");
+    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
+    runTest(&tc, "Kinetic MC", "kinetic");
 
 //    TreeSimContextFactory *factory = new TreeSimContextFactory(&reactor, 2);
 //    tc.changeFactory(factory);
@@ -170,8 +176,8 @@ int main(int argc, char *argv[]) {
 //    factory->setWidth(6);
 //    runTest(&tc, "Faster 6 MC", "faster_6");
 
-    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
-    runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
+//    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
+//    runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
 
     return 0;
 }

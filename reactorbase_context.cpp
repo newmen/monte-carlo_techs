@@ -7,6 +7,14 @@ ReactorBaseContext::~ReactorBaseContext() {
     for (auto p = _dimerReactions.begin(); p != _dimerReactions.end(); ++p) delete *p;
 }
 
+CellData *ReactorBaseContext::createCell(int *cell, int x, int y) const {
+    return new CellData(cell, x, y);
+}
+
+DimerData *ReactorBaseContext::createDimer(CellData *first, CellData *second) const {
+    return new DimerData(first, second);
+}
+
 void ReactorBaseContext::solve(const std::string &fileName) const {
     std::ofstream out(fileName);
     if (!out) {
