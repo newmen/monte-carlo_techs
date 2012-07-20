@@ -1,5 +1,5 @@
-#include "treebasedsimulation_context.h"
 #include <cmath>
+#include "treebasedsimulation_context.h"
 
 int calcTreeWidthByK(int size, float levels) {
     double floatWidth = pow(size, (double)1 / levels);
@@ -23,12 +23,18 @@ TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const Rea
 }
 
 EventInfoData TreeBasedSimulationContext::doReaction() {
+    if (!_tree.diagnostic()) return EventInfoData(0);
 //    _tree.diagnostic();
+
     double totalRate = _tree.sum();
     if (totalRate == 0) return EventInfoData(0);
 
     double r = randomN01() * totalRate;
     INodeS *currentNode = _tree.find(&r);
+    if (currentNode == 0) {
+        _tree.diagnostic();
+        return EventInfoData(0);
+    }
     currentNode->doReaction(this, r);
 
     EventInfoData ei(negativLogU() / totalRate);

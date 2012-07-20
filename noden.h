@@ -16,7 +16,7 @@ public:
 
     INodeS *find(double *r) const;
 
-    void diagnoze() const;
+    bool diagnoze() const;
 
 private:
     void store(NodeBase *node);

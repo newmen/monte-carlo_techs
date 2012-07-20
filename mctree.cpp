@@ -26,7 +26,7 @@ INodeS *MCTree::find(double *r) const {
     return _root->find(r);
 }
 
-void MCTree::diagnostic() const {
-    _root->diagnoze();
+bool MCTree::diagnostic() const {
+    return _root->diagnoze();
 }
 

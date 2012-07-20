@@ -15,7 +15,7 @@ public:
 
     INodeS *find(double *r) const;
 
-    void diagnostic() const;
+    bool diagnostic() const;
 
 private:
     int _width;

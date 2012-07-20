@@ -12,12 +12,14 @@ public:
 
     void accSum(double sum);
 
-    virtual void diagnoze() const = 0;
+    virtual bool diagnoze() const = 0;
 
 protected:
     NodeBase(int level);
 
     NodeBase *parent() const { return _parent; }
+
+    bool lessThanEps(double ds) const;
 
     double _sum;
 

@@ -23,7 +23,7 @@ public:
     void updateRates(const SimulationBaseContext *simulationContext, const PerDimer *exceptPerDimer);
     void updateLocalCommonRate(const SimulationBaseContext *simulationContext, int otherSideIndex);
 
-    void diagnoze() const;
+    bool diagnoze() const;
 
 private:
     void updateSum();
@@ -70,11 +70,13 @@ void NodeS<SmartSite>::updateSum() {
 }
 
 template <class SmartSite>
-void NodeS<SmartSite>::diagnoze() const {
-    if (sum() != this->commonRate()) {
+bool NodeS<SmartSite>::diagnoze() const {
+    if (!lessThanEps(sum() - this->commonRate())) {
         std::cerr << "Trouble on S" << level() << " level!\n"
                   << "diff: " << sum() << " % " << this->commonRate() << std::endl;
+        return false;
     }
+    return true;
 }
 
 #endif // NODES_H

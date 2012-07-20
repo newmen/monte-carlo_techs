@@ -49,18 +49,23 @@ INodeS *NodeN::find(double *r) const {
     return 0; // should not happen
 }
 
-void NodeN::diagnoze() const {
+bool NodeN::diagnoze() const {
+    static int n = 0;
+    ++n;
+
     double childsSum  = 0;
     for (int i = 0; i < _numberOfChilds; ++i) {
-        _childs[i]->diagnoze();
+        if (!_childs[i]->diagnoze()) return false;
 
         childsSum += _childs[i]->sum();
     }
 
-    if (sum() != childsSum) {
-        std::cerr << "Trouble on N" << level() << " level!\n"
+    if (!lessThanEps(sum() - childsSum)) {
+        std::cerr << n << ". Trouble on N" << level() << " level!\n"
                   << "diff: " << sum() << " % " << childsSum << std::endl;
+        return false;
     }
+    return true;
 }
 
 void NodeN::store(NodeBase *node) {
