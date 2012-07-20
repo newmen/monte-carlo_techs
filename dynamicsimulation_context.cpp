@@ -1,13 +1,13 @@
 #include "dynamicsimulation_context.h"
 
-DynamicSimulationContext::DynamicSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+DynamicSimulationContext::DynamicSimulationContext(AreaData *area, const ReactorBaseContext *reactor) :
     SimpleSimulationContext(area, reactor), _totalRate(0) {}
 
 //DynamicSimulationContext::~DynamicSimulationContext() {}
 
-double DynamicSimulationContext::doReaction() {
+EventInfoData DynamicSimulationContext::doReaction() {
     reviewAllEvents();
-    if (_totalRate == 0) return 0;
+    if (_totalRate == 0) return EventInfoData(0);
 
     double max = 0;
     double r = randomN01() * _totalRate;
@@ -15,17 +15,22 @@ double DynamicSimulationContext::doReaction() {
         return size * r / max;
     };
 
+    EventInfoData ei(negativLogU() / _totalRate);
     const ReactionData<CellData> *cellReaction = findReaction(&r, &max, _ratesOnSites);
     if (cellReaction) {
         auto &cells = _cells[cellReaction];
-        cellReaction->doIt(cells[indexLambda(cells.size())]);
+        CellData *cell = cells[indexLambda(cells.size())];
+        cellReaction->doIt(cell);
+        ei.set(cell);
     } else {
         const ReactionData<DimerData> *dimerReaction = findReaction(&r, &max, _ratesOnDimers);
         auto &dimers = _dimers[dimerReaction];
-        dimerReaction->doIt(dimers[indexLambda(dimers.size())]);
+        DimerData *dimer = dimers[indexLambda(dimers.size())];
+        dimerReaction->doIt(dimer);
+        ei.set(dimer);
     }
 
-    return negativLogU() / _totalRate;
+    return ei;
 }
 
 void DynamicSimulationContext::clearAllEvents() {

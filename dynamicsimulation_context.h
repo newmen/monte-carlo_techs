@@ -15,10 +15,10 @@ class DynamicSimulationContext : public SimpleSimulationContext
     typedef std::map<const ReactionData<DimerData> *const, double> RatesOnDimersMap;
 
 public:
-    DynamicSimulationContext(AreaData *area, const ReactorBaseData *reactor);
+    DynamicSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
 //    ~DynamicSimulationContext();
 
-    double doReaction();
+    EventInfoData doReaction();
 
 protected:
     void clearAllEvents();

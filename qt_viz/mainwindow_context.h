@@ -7,7 +7,7 @@
 #include "playbutton.h"
 #include "renderarea_context.h"
 
-#include "../reactorbase_data.h"
+#include "../reactorbase_context.h"
 #include "../simulationbase_context.h"
 
 class MainWindowContext : public QWidget
@@ -26,10 +26,14 @@ private slots:
     void stopAnimation();
 
 private:
+    void updateCell(const CellData *cell);
+
+private:
     AreaData _area;
-    ReactorBaseData *_reactor;
+    ReactorBaseContext *_reactor;
     SimulationBaseContext *_simulationContext;
     RenderAreaContext *_renderArea;
+    float _cellSideLength;
 
     QPushButton *_doButton;
     PlayButton *_playButton;

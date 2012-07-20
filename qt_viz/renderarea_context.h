@@ -12,7 +12,7 @@ public:
     explicit RenderAreaContext(const AreaData *area, float cellSideLength);
 
 protected:
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *event);
     
 private:
     const AreaData *_area;

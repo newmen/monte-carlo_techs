@@ -13,8 +13,13 @@ public:
         BaseEvent(rate), _site(site), _reaction(reaction) {}
 
     void doIt() { _reaction->doIt(_site); }
+    EventInfoData info(double dt) const {
+        EventInfoData ei(dt);
+        ei.set(_site);
+        return ei;
+    }
 
-//    SData *site() const { return _site.get(); }
+    SData *site() const { return _site; }
 //    ReactionData<SData> *reaction() const { return _reaction; }
 
 private:

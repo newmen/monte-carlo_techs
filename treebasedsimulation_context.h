@@ -17,15 +17,15 @@ typedef NodeS<PerDimer> NodeDimer;
 class TreeBasedSimulationContext : public SiteBasedSimulationContext<NodeCell, NodeDimer>
 {
 public:
-    TreeBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor);
-    TreeBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor, float levels);
+    TreeBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
+    TreeBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor, float levels);
 
-    double doReaction();
+    EventInfoData doReaction();
 
 protected:
     void initData();
 
-    void storeCell(NodeCell *);
+    void storeCell(NodeCell *) {}
     void storeDimer(NodeDimer *perDimer);
 
 private:

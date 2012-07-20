@@ -15,8 +15,10 @@ public:
     int nextState() const { return _nextState; }
 
 protected:
-    ReactionData(float rateValue, int prevState, int nextState) :
-        _k(rateValue), _prevState(prevState), _nextState(nextState) {}
+    ReactionData(float k, int prevState, int nextState) :
+        _k(k), _prevState(prevState), _nextState(nextState) {}
+
+    virtual double rateValue(const SData *) const { return _k; }
 
 private:
     float _k;

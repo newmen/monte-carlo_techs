@@ -1,18 +1,20 @@
 #include "perdimer.h"
 #include "percell.h"
 
-PerDimer::PerDimer(DimerData *const dimer) : PerSite(dimer), _numOfPerCells(0) {}
-
-void PerDimer::addPerCell(PerCell *const perCell) {
-    _perCells[_numOfPerCells++] = perCell;
+PerDimer::PerDimer(DimerData *const dimer) : PerSite(dimer) {
+    _perCells[0] = _perCells[1] = 0;
 }
 
-void PerDimer::doReaction(double r) {
-    PerSite<DimerData>::doReaction(r);
-    for (PerCell *perCell : _perCells) {
-        perCell->updateRates(this);
-    }
+void PerDimer::addPerCell(PerCell *const perCell) {
+    PerCell **p = (_perCells[0] != 0) ? &_perCells[1] : &_perCells[0];
+    *p = perCell;
+}
 
+void PerDimer::doReaction(const SimulationBaseContext *simulationContext, double r) {
+    PerSite<DimerData>::doReaction(simulationContext, r);
+    for (PerCell *perCell : _perCells) {
+        perCell->updateRates(simulationContext, this);
+    }
 }
 
 PerCell *PerDimer::first() const {

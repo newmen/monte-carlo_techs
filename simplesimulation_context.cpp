@@ -1,6 +1,6 @@
 #include "simplesimulation_context.h"
 
-SimpleSimulationContext::SimpleSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+SimpleSimulationContext::SimpleSimulationContext(AreaData *area, const ReactorBaseContext *reactor) :
     SimulationBaseContext(area, reactor) {}
 
 void SimpleSimulationContext::reviewAllEvents() {

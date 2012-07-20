@@ -27,8 +27,8 @@ template <>
 template <typename Lambda>
 void NeighbouringRole<CellData>::uniqPairs(const AreaData *area, const Lambda &lambda) const {
     int neighboursCoords[][2] = {
-        { this->x(), this->y() - 1 },
-        { this->x() + 1, this->y() }
+        { this->x() + 1, this->y() },
+        { this->x(), this->y() + 1 }
     };
 
     neighboursIter(neighboursCoords, 2, area, lambda);
@@ -37,7 +37,7 @@ void NeighbouringRole<CellData>::uniqPairs(const AreaData *area, const Lambda &l
 template <>
 template <typename Lambda>
 void NeighbouringRole<CellData>::eachNeighbour(const AreaData *area, const Lambda &lambda) const {
-    // the first pair of coordinates is the same as in uniqPairs method
+    // the middle pair of coordinates is the same as in uniqPairs method
     int neighboursCoords[][2] = {
         { this->x(), this->y() - 1 },
         { this->x() + 1, this->y() },

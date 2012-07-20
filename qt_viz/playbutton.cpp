@@ -6,6 +6,10 @@ PlayButton::PlayButton(const QString& startText, const QString& stopText, QWidge
     connect(this, SIGNAL(clicked()), this, SLOT(changeState()));
 }
 
+bool PlayButton::started() const {
+    return _started;
+}
+
 void PlayButton::changeState() {
     _started = !_started;
     setText(_started ? _stopText : _startText);

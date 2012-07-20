@@ -7,7 +7,7 @@
 class DimerReactionCaptureData : public ReactionData<DimerData>
 {
 public:
-    DimerReactionCaptureData(double rateValue, int prevState, int nextState);
+    DimerReactionCaptureData(double k, int prevState, int nextState);
 
     double rate(const DimerData *dimer) const;
     void doIt(DimerData *const dimer) const;

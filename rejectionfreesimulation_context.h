@@ -6,7 +6,7 @@
 class RejectionFreeSimulationContext : public EventBasedSimulationContext
 {
 public:
-    RejectionFreeSimulationContext(AreaData *area, const ReactorBaseData *reactor);
+    RejectionFreeSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
 
 protected:
     BaseEvent *randomEvent() const;

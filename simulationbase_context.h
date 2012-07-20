@@ -3,18 +3,22 @@
 
 #include <functional>
 #include <vector>
-#include "reactorbase_data.h"
+#include "reactorbase_context.h"
 #include "area_data.h"
 #include "cell_data.h"
 #include "dimer_data.h"
+#include "eventinfo_data.h"
 
 class SimulationBaseContext
 {
 public:
-    SimulationBaseContext(AreaData *area, const ReactorBaseData *reactor);
+    SimulationBaseContext(AreaData *area, const ReactorBaseContext *reactor);
     virtual ~SimulationBaseContext();
 
-    virtual double doReaction() = 0;
+    virtual EventInfoData doReaction() = 0;
+
+    template <class SData>
+    void reinitSite(SData *site) const;
 
 protected:
     void eachCell(std::function<void (CellData *const)> lambda) const;
@@ -27,8 +31,12 @@ protected:
     double negativLogU() const;
 
 private:
+    template <class SData>
+    void eachSite(const std::vector<SData *> &sites, const std::function<void (SData *const)> &lambda) const;
+
+private:
     AreaData *_area;
-    const ReactorBaseData *_reactor;
+    const ReactorBaseContext *_reactor;
     std::vector<CellData *> _cells;
     std::vector<DimerData *> _dimers;
 };

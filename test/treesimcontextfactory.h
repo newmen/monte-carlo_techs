@@ -6,9 +6,9 @@
 class TreeSimContextFactory : public SimulationContextFactory
 {
 public:
-    TreeSimContextFactory(ReactorBaseData *reactor, int levels);
+    TreeSimContextFactory(int levels);
 
-    SimulationBaseContext *createContext(AreaData *area) const;
+    SimulationBaseContext *createContext(AreaData *area, const ReactorBaseContext *reactor) const;
     void setWidth(int levels);
 
 private:

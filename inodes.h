@@ -1,13 +1,14 @@
 #ifndef INODES_H
 #define INODES_H
 
+#include "simulationbase_context.h"
 #include "nodebase.h"
 
 class INodeS : public NodeBase
 {
 public:
     virtual void initSum() = 0;
-    virtual void doReactionOnSite(double r) = 0;
+    virtual void doReactionOnSite(const SimulationBaseContext *simulationContext, double r) = 0;
 
 protected:
     INodeS() : NodeBase(0) {}

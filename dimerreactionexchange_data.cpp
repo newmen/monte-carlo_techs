@@ -1,20 +1,20 @@
 #include "dimerreactionexchange_data.h"
 
-DimerReactionExchangeData::DimerReactionExchangeData(double rateValue, int prevState, int nextState) :
-    ReactionData<DimerData>(rateValue, prevState, nextState) {}
+DimerReactionExchangeData::DimerReactionExchangeData(double k, int prevState, int nextState) :
+    ReactionData<DimerData>(k, prevState, nextState) {}
 
 double DimerReactionExchangeData::rate(const DimerData *dimer) const {
-    return ((dimer->first->value() == this->nextState() && dimer->second->value() == this->prevState()) ||
-            (dimer->first->value() == this->prevState() && dimer->second->value() == this->nextState())) ?
-                this->k() : 0;
+    return ((dimer->first->value() == nextState() && dimer->second->value() == prevState()) ||
+            (dimer->first->value() == prevState() && dimer->second->value() == nextState())) ?
+                rateValue(dimer) : 0;
 }
 
 void DimerReactionExchangeData::doIt(DimerData *const dimer) const {
-    if (dimer->first->value() == this->nextState()) {
-        dimer->first->setValue(this->prevState());
-        dimer->second->setValue(this->nextState());
+    if (dimer->first->value() == nextState()) {
+        dimer->first->setValue(prevState());
+        dimer->second->setValue(nextState());
     } else {
-        dimer->first->setValue(this->nextState());
-        dimer->second->setValue(this->prevState());
+        dimer->first->setValue(nextState());
+        dimer->second->setValue(prevState());
     }
 }

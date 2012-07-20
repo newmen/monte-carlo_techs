@@ -1,15 +1,18 @@
 #include "eventbasedsimulation_context.h"
 #include "event.h"
 
-EventBasedSimulationContext::EventBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+EventBasedSimulationContext::EventBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor) :
     SimpleSimulationContext(area, reactor), _totalRate(0) {}
 
-double EventBasedSimulationContext::doReaction() {
+EventInfoData EventBasedSimulationContext::doReaction() {
     reviewAllEvents();
-    if (_totalRate == 0) return 0;
-    randomEvent()->doIt();
 
-    return negativLogU() / _totalRate;
+    if (_totalRate == 0) return EventInfoData(0);
+
+    BaseEvent *event = randomEvent();
+    event->doIt();
+
+    return event->info(negativLogU() / _totalRate);
 }
 
 void EventBasedSimulationContext::clearAllEvents() {

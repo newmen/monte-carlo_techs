@@ -1,6 +1,8 @@
 #ifndef BASEEVENT_H
 #define BASEEVENT_H
 
+#include "eventinfo_data.h"
+
 class BaseEvent
 {
 public:
@@ -8,6 +10,7 @@ public:
     virtual ~BaseEvent() {}
 
     virtual void doIt() = 0;
+    virtual EventInfoData info(double dt) const = 0;
     double rate() const { return _rate; }
 
 private:

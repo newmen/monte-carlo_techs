@@ -10,28 +10,33 @@ int optimalTreeWidth(int size) {
     return calcTreeWidthByK(size, 5);
 }
 
-TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor) :
     SiteBasedSimulationContext(area, reactor), _tree(optimalTreeWidth(area->size()))
 {
     initData();
 }
 
-TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor, float levels) :
+TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor, float levels) :
     SiteBasedSimulationContext(area, reactor), _tree(calcTreeWidthByK(area->size(), levels))
 {
     initData();
 }
 
-double TreeBasedSimulationContext::doReaction() {
+EventInfoData TreeBasedSimulationContext::doReaction() {
 //    _tree.diagnostic();
     double totalRate = _tree.sum();
-    if (totalRate == 0) return 0;
+    if (totalRate == 0) return EventInfoData(0);
 
     double r = randomN01() * totalRate;
-    INodeS *currentPerCell = _tree.find(&r);
-    currentPerCell->doReactionOnSite(r);
+    INodeS *currentNode = _tree.find(&r);
+    currentNode->doReactionOnSite(this, r);
 
-    return negativLogU() / totalRate;
+    EventInfoData ei(negativLogU() / totalRate);
+    NodeCell *nodeCell = dynamic_cast<NodeCell *>(currentNode);
+    if (nodeCell) ei.set(nodeCell->site());
+    else ei.set(dynamic_cast<NodeDimer *>(currentNode)->site());
+
+    return ei;
 }
 
 void TreeBasedSimulationContext::initData() {
@@ -39,11 +44,8 @@ void TreeBasedSimulationContext::initData() {
     _cacheNodeCells.clear();
 }
 
-void TreeBasedSimulationContext::storeCell(NodeCell *) {
-}
-
 void TreeBasedSimulationContext::storeDimer(NodeDimer *perDimer) {
-    // memory of perSite will be deleted into MCTree
+    // memory of each perSite will be deleted into MCTree
     _tree.add(perDimer);
 
     auto addNodeCell = [this](PerCell *const perCell) {

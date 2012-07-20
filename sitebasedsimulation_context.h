@@ -9,7 +9,7 @@ template <class SmartCell, class SmartDimer>
 class SiteBasedSimulationContext : public SimulationBaseContext
 {
 protected:
-    SiteBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor);
+    SiteBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
 
     void initData();
 
@@ -21,7 +21,7 @@ private:
 };
 
 template <class SmartCell, class SmartDimer>
-SiteBasedSimulationContext<SmartCell, SmartDimer>::SiteBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+SiteBasedSimulationContext<SmartCell, SmartDimer>::SiteBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor) :
     SimulationBaseContext(area, reactor) {}
 
 template <class SmartCell, class SmartDimer>
@@ -49,8 +49,8 @@ void SiteBasedSimulationContext<SmartCell, SmartDimer>::initData() {
 
 template <class SmartCell, class SmartDimer>
 void SiteBasedSimulationContext<SmartCell, SmartDimer>::linkPerSites(SmartCell *const perCell, SmartDimer *const perDimer) const {
-    perCell->addPerDimer(perDimer);
     perDimer->addPerCell(perCell);
+    perCell->addPerDimer(perDimer);
 }
 
 #endif // SITEBASEDSIMULATION_CONTEXT_H

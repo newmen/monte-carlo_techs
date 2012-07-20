@@ -1,7 +1,7 @@
 #include <map>
 #include "kineticsimulation_context.h"
 
-KineticSimulationContext::KineticSimulationContext(AreaData *area, const ReactorBaseData *reactor) :
+KineticSimulationContext::KineticSimulationContext(AreaData *area, const ReactorBaseContext *reactor) :
     SiteBasedSimulationContext(area, reactor)
 {
     initData();
@@ -11,15 +11,20 @@ KineticSimulationContext::~KineticSimulationContext() {
     for (auto p = _perSites.begin(); p != _perSites.end(); ++p) delete *p;
 }
 
-double KineticSimulationContext::doReaction() {
+EventInfoData KineticSimulationContext::doReaction() {
     double dt = 0;
     IPerSite *minPerSite = findMin(&dt);
 
-    if (dt == 0) return 0;
+    if (dt == 0) return EventInfoData(0);
 
     doRandomReaction(minPerSite);
 
-    return dt;
+    EventInfoData ei(dt);
+    PerCell *perCell = dynamic_cast<PerCell *>(minPerSite);
+    if (perCell) ei.set(perCell->site());
+    else ei.set(dynamic_cast<PerDimer *>(minPerSite)->site());
+
+    return ei;
 }
 
 void KineticSimulationContext::storeCell(PerCell *const perCell) {
@@ -45,5 +50,5 @@ IPerSite *KineticSimulationContext::findMin(double *dt) const {
 }
 
 void KineticSimulationContext::doRandomReaction(IPerSite *const perSite) {
-    perSite->doReaction(perSite->commonRate() * randomN01());
+    perSite->doReaction(this, perSite->commonRate() * randomN01());
 }

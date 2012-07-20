@@ -8,10 +8,10 @@
 class EventBasedSimulationContext : public SimpleSimulationContext
 {
 public:
-    double doReaction();
+    EventInfoData doReaction();
 
 protected:
-    EventBasedSimulationContext(AreaData *area, const ReactorBaseData *reactor);
+    EventBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
 
     double totalRate() const { return _totalRate; }
 

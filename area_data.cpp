@@ -1,13 +1,13 @@
 #include "area_data.h"
-//#include <cstdlib>
+#include <cstdlib>
 
 AreaData::AreaData(int sizeX, int sizeY) : _sizeX(sizeX), _sizeY(sizeY) {
     _cells = new int[size()];
     int i = 0;
     for (int y = 0; y < _sizeY; ++y) {
         for (int x = 0; x < _sizeX; ++x) {
-//        value = rand() % 3 + 1;
-            _cells[i++] = 1;
+            int value = (rand() % 10 < 8) ? 1 : ((rand() % 2 == 0) ? 2 : 3);
+            _cells[i++] = value;
         }
     }
 }

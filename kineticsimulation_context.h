@@ -8,10 +8,10 @@
 class KineticSimulationContext : public SiteBasedSimulationContext<PerCell, PerDimer>
 {
 public:
-    KineticSimulationContext(AreaData *area, const ReactorBaseData *reactor);
+    KineticSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
     ~KineticSimulationContext();
 
-    double doReaction();
+    EventInfoData doReaction();
 
 protected:
     void storeCell(PerCell *const perCell);

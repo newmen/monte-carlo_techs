@@ -8,12 +8,13 @@
 class StoreContext
 {
 public:
-    StoreContext(const AreaData *area, const std::string &fileName, const std::string &methodName);
+    StoreContext(const AreaData *area, int numOfSpecs, const std::string &fileName, const std::string &methodName);
 
     void store(double dt);
 
 private:
     const AreaData *_area;
+    const int _numOfSpecs;
     std::ofstream _outFile;
     double _totalTime;
 };

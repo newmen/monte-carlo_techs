@@ -18,8 +18,7 @@ SOURCES += \
     process_mem_usage.cpp \
     performancesaver.cpp \
     pathbuilder.cpp \
-    treesimcontextfactory.cpp \
-    simulationcontextfactory.cpp
+    treesimcontextfactory.cpp
 
 OTHER_FILES += \
     run.sh \

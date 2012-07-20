@@ -3,13 +3,15 @@
 
 #include "cell_data.h"
 
-struct DimerData
+class DimerData
 {
+public:
+    DimerData(CellData *const first, CellData *const second) : first(first), second(second) {}
+    virtual ~DimerData() {}
+
+public:
     CellData *const first;
     CellData *const second;
-
-    DimerData(CellData *const first, CellData *const second) :
-        first(first), second(second) {}
 };
 
 #endif // DIMER_DATA_H

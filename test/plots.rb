@@ -23,7 +23,7 @@ end
 
 def make_mc_gnuplot(file_name, title, &block)
   make_gnuplot(file_name, title, 'Время (сек)', 'Концентрация (%)') do |plot|
-    plot.xrange('[0:1]')
+    # plot.xrange('[0:1]')
     
     block.call(plot)
   end
@@ -61,7 +61,9 @@ end
 
 def draw_mc_graph(original, mc, file_name)
   make_mc_gnuplot(file_name, mc[2]) do |plot|
-    plot.data = original_data(original) + make_mc_data(mc, 'linespoints') do |name, ds|
+    org_data = []
+    org_data += original_data(original) if original
+    plot.data = org_data + make_mc_data(mc, 'linespoints') do |name, ds|
       ds.title = "MC #{name}"
     end
   end
@@ -96,7 +98,7 @@ end
 def read_mc_file(file_name)
   name = ''
   arr_x = []
-  arrs_y = {A: [], B: [], C: [], D: []}
+  arrs_y = {}
 
   print "Reading #{file_name}..."
   File.open(file_name) do |f|
@@ -105,13 +107,19 @@ def read_mc_file(file_name)
         line.chomp!
         name = line[2...line.length]
       else
-        t, ca, cb, cc, cd = line.split("\t").map { |v| v.to_f }
+        values = line.split("\t").map { |v| v.to_f }
+        arr_x << values.shift
 
-        arr_x << t
-        arrs_y[:A] << ca
-        arrs_y[:B] << cb
-        arrs_y[:C] << cc
-        arrs_y[:D] << cd
+        if (arrs_y.empty?)
+          ('A'..'Z').to_a[0...(values.size)].each do |char|
+            arrs_y[char.to_sym] = []
+          end
+        end
+
+        arrs_y.each do |_, arr|
+          arr << values.shift
+        end
+
       end
     end
   end
@@ -172,16 +180,18 @@ end
 
 def read_and_draw_mc_plots
   original_file = "original.#{EXT_MC}"
-  return unless File.exist?(original_file)
-  original = read_mc_file(original_file)
+  if File.exist?(original_file) && File.size(original_file) > 0
+    original = read_mc_file(original_file)
+    draw_original(original)
+  else
+    original = nil
+  end
 
   mc_files = Dir["*.#{EXT_MC}"] - [original_file]
   mc_files.each do |file_name|
     mc = read_mc_file(file_name)
     draw_mc_graph(original, mc, File.basename(file_name, ".#{EXT_MC}"))
   end
-
-  draw_original(original)
 end
 
 def read_and_draw_perf_plots

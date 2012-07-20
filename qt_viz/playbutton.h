@@ -9,6 +9,8 @@ class PlayButton : public QPushButton
 public:
     explicit PlayButton(const QString& startText, const QString& stopText, QWidget *parent = 0);
 
+    bool started() const;
+
 signals:
     void timerStart();
     void timerStop();

@@ -6,7 +6,7 @@
 class SimpleSimulationContext : public SimulationBaseContext
 {
 protected:
-    SimpleSimulationContext(AreaData *area, const ReactorBaseData *reactor);
+    SimpleSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
 
     virtual void clearAllEvents() = 0;
 

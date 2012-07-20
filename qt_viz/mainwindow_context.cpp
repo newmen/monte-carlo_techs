@@ -1,8 +1,9 @@
-#include "mainwindow_context.h"
 #include <QVBoxLayout>
+#include "mainwindow_context.h"
 
-#include "../abcdcellreactor_data.h"
-#include "../abcddimerreactor_data.h"
+#include "../abcdcellreactor_context.h"
+#include "../abcddimerreactor_context.h"
+#include "../nocoreactor_context.h"
 
 #include "../rejectionsimulation_context.h"
 #include "../rejectionfreesimulation_context.h"
@@ -10,20 +11,19 @@
 #include "../kineticsimulation_context.h"
 #include "../treebasedsimulation_context.h"
 
-//#include <iostream>
-
-MainWindowContext::MainWindowContext() : _area(21, 13) {
+MainWindowContext::MainWindowContext() : _area(5, 5), _cellSideLength(50) {
     setWindowTitle("Monte Carlo simulation");
 
-//    _reactor = new ABCDCellReactorData;
-    _reactor = new ABCDDimerReactorData;
+//    _reactor = new ABCDCellReactorContext;
+//    _reactor = new ABCDDimerReactorContext;
+    _reactor = new NOCOReactorContext;
 
 //    _simulationContext = new RejectionSimulationContext(&_area, _reactor);
 //    _simulationContext = new RejectionFreeSimulationContext(&_area, _reactor);
 //    _simulationContext = new DynamicSimulationContext(&_area, _reactor);
-    _simulationContext = new KineticSimulationContext(&_area, _reactor);
-//    _simulationContext = new TreeBasedSimulationContext(&_area, _reactor);
-    _renderArea = new RenderAreaContext(&_area, 15);
+//    _simulationContext = new KineticSimulationContext(&_area, _reactor);
+    _simulationContext = new TreeBasedSimulationContext(&_area, _reactor);
+    _renderArea = new RenderAreaContext(&_area, _cellSideLength);
 
     _doButton = new QPushButton("Do reaction");
     connect(_doButton, SIGNAL(clicked()), this, SLOT(doReaction()));
@@ -52,16 +52,26 @@ MainWindowContext::~MainWindowContext() {
 }
 
 void MainWindowContext::doReaction() {
-    double dt = _simulationContext->doReaction();
-//    std::cout << dt << std::endl;
-    _renderArea->update();
-    if (dt == 0.0) _playButton->click();
+    EventInfoData ei = _simulationContext->doReaction();
+
+    if (ei.dt() == 0.0) {
+        if (_playButton->started()) _playButton->click();
+    } else if (ei.cell() != 0) {
+        updateCell(ei.cell());
+    } else {
+        updateCell(ei.dimer()->first);
+        updateCell(ei.dimer()->second);
+    }
 }
 
 void MainWindowContext::playAnimation() {
-    _animationTimer->start(25);
+    _animationTimer->start(5);
 }
 
 void MainWindowContext::stopAnimation() {
     _animationTimer->stop();
+}
+
+void MainWindowContext::updateCell(const CellData *cell) {
+    _renderArea->update(cell->x() * _cellSideLength, cell->y() * _cellSideLength, _cellSideLength, _cellSideLength);
 }

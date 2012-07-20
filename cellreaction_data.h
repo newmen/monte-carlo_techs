@@ -7,7 +7,7 @@
 class CellReactionData : public ReactionData<CellData>
 {
 public:
-    CellReactionData(double rateValue, int prevState, int nextState);
+    CellReactionData(double k, int prevState, int nextState);
 
     double rate(const CellData *site) const;
     void doIt(CellData *const site) const;

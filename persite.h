@@ -16,9 +16,11 @@ public:
     void addReaction(const ReactionData<SData> *const reaction);
 
     double commonRate() const;
-    void doReaction(double r);
+    void doReaction(const SimulationBaseContext *simulationContext, double r);
 
-    virtual void updateRates();
+    virtual void updateRates(const SimulationBaseContext *simulationContext);
+
+    SData *site() const;
 
 protected:
     PerSite(SData *const site);
@@ -45,7 +47,8 @@ double PerSite<SData>::commonRate() const {
 }
 
 template <class SData>
-void PerSite<SData>::updateRates() {
+void PerSite<SData>::updateRates(const SimulationBaseContext *simulationContext) {
+    simulationContext->reinitSite(_site);
     _commonRate = 0;
     for (auto p = _rates.begin(); p != _rates.end(); ++p) {
         double rate = p->first->rate(_site);
@@ -55,7 +58,12 @@ void PerSite<SData>::updateRates() {
 }
 
 template <class SData>
-void PerSite<SData>::doReaction(double r) {
+SData *PerSite<SData>::site() const {
+    return _site;
+}
+
+template <class SData>
+void PerSite<SData>::doReaction(const SimulationBaseContext *simulationContext, double r) {
     for (auto p = _rates.begin(); p != _rates.end(); ++p) {
         if (r < p->second) {
             p->first->doIt(_site);
@@ -64,7 +72,7 @@ void PerSite<SData>::doReaction(double r) {
             r -= p->second;
         }
     }
-    updateRates();
+    updateRates(simulationContext);
 }
 
 #endif // PERSITE_H

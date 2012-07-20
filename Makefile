@@ -10,16 +10,26 @@ LIB_FILES = \
     area_data.cpp \
     cell_data.h \
     dimer_data.h \
+		lateralsite_data.cpp \
+		lateralcell_data.cpp \
+		lateraldimer_data.cpp \
     neighbouring_role.h \
     reaction_data.h \
     cellreaction_data.cpp \
     dimerreactionexchange_data.cpp \
     dimerreactioncapture_data.cpp \
     dimerreactionstabilization_data.cpp \
-    reactorbase_data.cpp \
-    abcdreactor_data.cpp \
-    abcdcellreactor_data.cpp \
-    abcddimerreactor_data.cpp \
+    dimerreactiondualstabilization_data.cpp \
+    reactionactivation_data.cpp \
+    lateralreaction_data.cpp \
+    celllateralreaction_data.cpp \
+    dimerlateralreactionexplosion_data.cpp \
+    reactorbase_context.cpp \
+    abcdreactor_context.cpp \
+    abcdcellreactor_context.cpp \
+    abcddimerreactor_context.cpp \
+    rtreactor_context.cpp \
+    nocoreactor_context.cpp \
     simulationbase_context.cpp \
     simplesimulation_context.cpp \
     baseevent.h \
@@ -40,7 +50,8 @@ LIB_FILES = \
     nodes.h \
     treebasedsimulation_context.cpp \
     store_context.cpp \
-    storing_role.h
+    storing_role.h \
+    eventinfo_data.cpp
 
 LIBOFILES = $(LIB_FILES:%.cpp=%.o)
 

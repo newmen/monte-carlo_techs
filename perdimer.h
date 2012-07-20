@@ -13,14 +13,13 @@ public:
 
     void addPerCell(PerCell *const perCell);
 
-    void doReaction(double r);
+    void doReaction(const SimulationBaseContext *simulationContext, double r);
 
     PerCell *first() const;
     PerCell *second() const;
 
 private:
     PerCell *_perCells[2];
-    int _numOfPerCells;
 };
 
 #endif // PERDIMER_H

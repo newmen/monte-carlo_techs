@@ -17,11 +17,11 @@ public:
     NodeS(SData *const site);
 
     void initSum();
-    void doReactionOnSite(double r);
+    void doReactionOnSite(const SimulationBaseContext *simulationContext, double r);
 
-    void updateRates();
-    void updateRates(const PerDimer *exceptPerDimer);
-    void updateLocalCommonRate();
+    void updateRates(const SimulationBaseContext *simulationContext);
+    void updateRates(const SimulationBaseContext *simulationContext, const PerDimer *exceptPerDimer);
+    void updateLocalCommonRate(const SimulationBaseContext *simulationContext, int otherSideIndex);
 
     void diagnoze() const;
 
@@ -39,27 +39,27 @@ void NodeS<SmartSite>::initSum() {
 }
 
 template <class SmartSite>
-void NodeS<SmartSite>::doReactionOnSite(double r) {
-    this->doReaction(r);
+void NodeS<SmartSite>::doReactionOnSite(const SimulationBaseContext *simulationContext, double r) {
+    this->doReaction(simulationContext, r);
 }
 
 template <class SmartSite>
-void NodeS<SmartSite>::updateRates() {
-    SmartSite::updateRates();
+void NodeS<SmartSite>::updateRates(const SimulationBaseContext *simulationContext) {
+    SmartSite::updateRates(simulationContext);
     updateSum();
 }
 
 // this method only for PerSite instance
 template <class SmartSite>
-void NodeS<SmartSite>::updateRates(const PerDimer *exceptPerDimer) {
-    SmartSite::updateRates(exceptPerDimer);
+void NodeS<SmartSite>::updateRates(const SimulationBaseContext *simulationContext, const PerDimer *exceptPerDimer) {
+    SmartSite::updateRates(simulationContext, exceptPerDimer);
     updateSum();
 }
 
 // this method only for PerSite instance
 template <class SmartSite>
-void NodeS<SmartSite>::updateLocalCommonRate() {
-    SmartSite::updateLocalCommonRate();
+void NodeS<SmartSite>::updateLocalCommonRate(const SimulationBaseContext *simulationContext, int otherSideIndex) {
+    SmartSite::updateLocalCommonRate(simulationContext, otherSideIndex);
     updateSum();
 }
 

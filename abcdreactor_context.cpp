@@ -1,25 +1,24 @@
-#include <fstream>
-#include <iostream>
-#include "abcdreactor_data.h"
+#include <ostream>
+#include "abcdreactor_context.h"
 #include "cellreaction_data.h"
+#include "dimerreactionexchange_data.h"
 
-ABCDReactorData::ABCDReactorData() {
+ABCDReactorContext::ABCDReactorContext() {
     addReaction(new CellReactionData(144, 1, 2));
     addReaction(new CellReactionData(34, 2, 1));
     addReaction(new CellReactionData(55, 2, 3));
+    addReaction(new DimerReactionExchangeData(1e2, 3, 1));
 }
 
-CellData *ABCDReactorData::createCell(int *cell, int x, int y) const {
+CellData *ABCDReactorContext::createCell(int *cell, int x, int y) const {
     return new CellData(cell, x, y);
 }
 
-void ABCDReactorData::solve(const std::string &fileName, double maxTime) const {
-    std::ofstream out(fileName);
-    if (!out) {
-        std::cerr << "File " << fileName << " open error!" << std::endl;
-        return;
-    }
+DimerData *ABCDReactorContext::createDimer(CellData *first, CellData *second) const {
+    return new DimerData(first, second);
+}
 
+void ABCDReactorContext::solveToOut(std::ostream &out) const {
     double ratesSum = 0;
     int numOfSpecs = 0;
     std::function<void (const ReactionData<CellData> *const)> lambda =
@@ -36,7 +35,7 @@ void ABCDReactorData::solve(const std::string &fileName, double maxTime) const {
     for (int i = 0; i < numOfSpecs; ++i) concs[i] = 0;
     double *csNext = new double[numOfSpecs];
 
-    while (currentTime < maxTime) {
+    while (currentTime < maxTime()) {
         double csSum = 0;
         for (int i = 0; i < numOfSpecs; ++i) csSum += concs[i];
 

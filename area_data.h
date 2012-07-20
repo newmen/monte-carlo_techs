@@ -14,7 +14,7 @@ public:
     int sizeY() const { return _sizeY; }
 
     int index(int x, int y) const { return y * _sizeX + x; }
-
+    int value(int index) const { return _cells[index]; }
     void eachCell(const std::function<void (int *const, int, int)> &lambda) const;
 //    int *cell(int x, int y) const;
 

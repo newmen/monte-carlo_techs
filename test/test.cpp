@@ -11,8 +11,9 @@
 #include "treesimcontextfactory.h"
 
 #include "../area_data.h"
-#include "../abcdcellreactor_data.h"
-#include "../abcddimerreactor_data.h"
+#include "../abcdcellreactor_context.h"
+#include "../abcddimerreactor_context.h"
+#include "../nocoreactor_context.h"
 
 #include "../dynamicsimulation_context.h"
 #include "../kineticsimulation_context.h"
@@ -21,7 +22,6 @@
 #include "../treebasedsimulation_context.h"
 #include "../store_context.h"
 
-#define MAX_TIME 2.0
 #define GRAPH_EXT "mcr"
 
 using namespace std;
@@ -30,12 +30,13 @@ struct TestConfig {
     const PathBuilder pathBuilder;
     PerformanceSaver perfSaver;
     SimulationContextFactory *simFactory;
+    const ReactorBaseContext *reactor;
     const int sizeX, sizeY;
     const int repeats;
     const bool needGraph;
 
-    TestConfig(const string &resultDir, int sizeX, int sizeY, int repeats, bool needGraph) :
-        pathBuilder(resultDir), perfSaver(&pathBuilder), simFactory(0),
+    TestConfig(ReactorBaseContext *reactor, const string &resultDir, int sizeX, int sizeY, int repeats, bool needGraph) :
+        pathBuilder(resultDir), perfSaver(&pathBuilder), simFactory(0), reactor(reactor),
         sizeX(sizeX), sizeY(sizeY), repeats(repeats),
         needGraph(needGraph) {}
 
@@ -79,14 +80,15 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         freeUpMemory();
 
         area = new AreaData(tc->sizeX, tc->sizeY);
-        simulationContext = tc->simFactory->createContext(area);
+        simulationContext = tc->simFactory->createContext(area, tc->reactor);
         if (tc->needGraph) {
-            storeContext = new StoreContext(area, fullFilePath, name);
+            storeContext = new StoreContext(area, tc->reactor->numOfSpecs(), fullFilePath, name);
         }
 
         totalTime = 0;
-        while (totalTime < MAX_TIME) {
-            dt = simulationContext->doReaction();
+        while (totalTime < tc->reactor->maxTime()) {
+            EventInfoData ei = simulationContext->doReaction();
+            dt = ei.dt();
             if (tc->needGraph) storeContext->store(dt);
             if (dt == 0.0) break;
 
@@ -128,7 +130,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    TestConfig tc(argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
+//    ABCDCellReactorContext reactor;
+    NOCOReactorContext reactor;
+    TestConfig tc(&reactor, argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
                   (argc == 6 && strcmp(argv[5], "true") == 0));
 
     cout << "Running with:\n"
@@ -136,38 +140,37 @@ int main(int argc, char *argv[]) {
          << "sizeY = " << tc.sizeY << "\n"
          << "repeats = " << tc.repeats << "\n" << endl;
 
-    ABCDCellReactorData reactor;
     if (tc.needGraph) {
         const string originalFileName = tc.pathBuilder.buildPath("original", GRAPH_EXT);
-        reactor.solve(originalFileName, MAX_TIME);
+        reactor.solve(originalFileName);
         tc.pathBuilder.printFileWasSaved(originalFileName);
     }
 
     srand(time(0));
 
-    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>(&reactor));
-    runTest(&tc, "Rejection MC", "rejection");
-    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>(&reactor));
-    runTest(&tc, "Rejection-free MC", "rejection-free");
-    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>(&reactor));
-    runTest(&tc, "Dynamic MC", "dynamic");
-    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>(&reactor));
-    runTest(&tc, "Kinetic MC", "kinetic");
+//    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
+//    runTest(&tc, "Rejection MC", "rejection");
+//    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
+//    runTest(&tc, "Rejection-free MC", "rejection-free");
+//    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
+//    runTest(&tc, "Dynamic MC", "dynamic");
+//    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
+//    runTest(&tc, "Kinetic MC", "kinetic");
 
-    TreeSimContextFactory *factory = new TreeSimContextFactory(&reactor, 2);
-    tc.changeFactory(factory);
-    runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
-    factory->setWidth((int)log2(tc.sizeX * tc.sizeY));
-    runTest(&tc, "Faster Binary MC", "faster_binary");
+//    TreeSimContextFactory *factory = new TreeSimContextFactory(&reactor, 2);
+//    tc.changeFactory(factory);
+//    runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
+//    factory->setWidth((int)log2(tc.sizeX * tc.sizeY));
+//    runTest(&tc, "Faster Binary MC", "faster_binary");
 
-    factory->setWidth(3);
-    runTest(&tc, "Faster 3 MC", "faster_3");
-    factory->setWidth(4);
-    runTest(&tc, "Faster 4 MC", "faster_4");
-    factory->setWidth(6);
-    runTest(&tc, "Faster 6 MC", "faster_6");
+//    factory->setWidth(3);
+//    runTest(&tc, "Faster 3 MC", "faster_3");
+//    factory->setWidth(4);
+//    runTest(&tc, "Faster 4 MC", "faster_4");
+//    factory->setWidth(6);
+//    runTest(&tc, "Faster 6 MC", "faster_6");
 
-    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>(&reactor));
+    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
     runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
 
     return 0;
