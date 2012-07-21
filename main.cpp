@@ -23,8 +23,8 @@ void run() {
 
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
-//    NOCOReactorContext reactor;
-    LotkaReactorContext reactor;
+    NOCOReactorContext reactor;
+//    LotkaReactorContext reactor;
 
     SimulationContext sc(&area, &reactor);
     double dt, totalTime = 0;
@@ -52,8 +52,8 @@ int main() {
 //    run<RejectionSimulationContext>();
 //    run<RejectionFreeSimulationContext>();
 //    run<DynamicSimulationContext>();
-    run<KineticSimulationContext>();
-//    run<TreeBasedSimulationContext>();
+//    run<KineticSimulationContext>();
+    run<TreeBasedSimulationContext>();
 
     std::cout << "Complete :)" << std::endl;
 

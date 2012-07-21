@@ -62,7 +62,7 @@ bool NodeN::diagnoze() const {
 
     if (!lessThanEps(sum() - childsSum)) {
         std::cerr << n << ". Trouble on N" << level() << " level!\n"
-                  << "diff: " << sum() << " % " << childsSum << std::endl;
+                  << "diff: " << sum() - childsSum << std::endl;
         return false;
     }
     return true;

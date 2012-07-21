@@ -65,6 +65,7 @@ void NodeS<SmartSite>::updateLocalCommonRate(const SimulationBaseContext *simula
 
 template <class SmartSite>
 void NodeS<SmartSite>::updateSum() {
+    if (this->commonRate() - _sum == 0) return;
     if (parent()) parent()->accSum(this->commonRate() - _sum);
     _sum = this->commonRate();
 }
@@ -73,7 +74,7 @@ template <class SmartSite>
 bool NodeS<SmartSite>::diagnoze() const {
     if (!lessThanEps(sum() - this->commonRate())) {
         std::cerr << "Trouble on S" << level() << " level!\n"
-                  << "diff: " << sum() << " % " << this->commonRate() << std::endl;
+                  << "diff: " << sum() - this->commonRate() << std::endl;
         return false;
     }
     return true;

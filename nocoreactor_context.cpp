@@ -8,7 +8,7 @@
 #include "dimerreactionexchange_data.h"
 #include "neighbouring_role.h"
 
-NOCOReactorContext::NOCOReactorContext() : RTReactorContext(406) {
+NOCOReactorContext::NOCOReactorContext() : RTReactorContext(404) {
     double pNO = 3.7e-6;
     double pCO = 3e-6;
     addReaction(new CellReactionData(1.93e5 * pNO, 1, 2));
@@ -46,7 +46,7 @@ void NOCOReactorContext::solveToOut(std::ostream &out) const {
 template <class SData, class LData>
 void NOCOReactorContext::reinitSite(SData *site, const AreaData *area) const {
     LData *lateralSite = static_cast<LData *>(site);
-    lateralSite->resetNumsOfSpec(numOfSpecs());
+    lateralSite->resetNumsOfSpecs(numOfSpecs());
     static_cast<NeighbouringRole<SData> *>(site)->eachNeighbour(area, [this, &area, &lateralSite](int neighbourIndex) {
         int value = area->value(neighbourIndex);
         if (value > 1) lateralSite->incNumOfSpec(value - 2);

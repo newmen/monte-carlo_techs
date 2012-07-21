@@ -6,15 +6,15 @@ class LateralSiteData
 public:
     ~LateralSiteData();
 
-    void resetNumsOfSpec(int numOfSpecs);
-    void incNumOfSpec(int index) { ++_spec[index]; }
-    int numOfSpec(int index) const { return _spec[index]; }
+    void resetNumsOfSpecs(int numOfSpecs);
+    void incNumOfSpec(int index) { ++_numsOfSpecs[index]; }
+    int numOfSpec(int index) const { return _numsOfSpecs[index]; }
 
 protected:
     LateralSiteData(int numOfSpecs);
 
 private:
-    int *_spec;
+    int *_numsOfSpecs;
 };
 
 #endif // LATERALSITE_DATA_H

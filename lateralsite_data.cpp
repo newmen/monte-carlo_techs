@@ -1,13 +1,13 @@
 #include "lateralsite_data.h"
 
 LateralSiteData::LateralSiteData(int numOfSpecs) {
-    _spec = new int[numOfSpecs];
+    _numsOfSpecs = new int[numOfSpecs];
 }
 
 LateralSiteData::~LateralSiteData() {
-    delete [] _spec;
+    delete [] _numsOfSpecs;
 }
 
-void LateralSiteData::resetNumsOfSpec(int numOfSpecs) {
-    for (int i = 0; i < numOfSpecs; ++i) _spec[i] = 0;
+void LateralSiteData::resetNumsOfSpecs(int numOfSpecs) {
+    for (int i = 0; i < numOfSpecs; ++i) _numsOfSpecs[i] = 0;
 }
