@@ -12,7 +12,7 @@
 #include "../kineticsimulation_context.h"
 #include "../treebasedsimulation_context.h"
 
-MainWindowContext::MainWindowContext() : _area(200, 200), _cellSideLength(4), _totalTime(0) {
+MainWindowContext::MainWindowContext() : _area(300, 300), _cellSideLength(3), _totalTime(0) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _reactor = new ABCDCellReactorContext;
