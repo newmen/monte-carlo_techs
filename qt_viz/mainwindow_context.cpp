@@ -12,7 +12,7 @@
 #include "../kineticsimulation_context.h"
 #include "../treebasedsimulation_context.h"
 
-MainWindowContext::MainWindowContext() : _area(50, 50), _cellSideLength(10), _totalTime(0) {
+MainWindowContext::MainWindowContext() : _area(200, 200), _cellSideLength(4), _totalTime(0) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _reactor = new ABCDCellReactorContext;
@@ -23,9 +23,9 @@ MainWindowContext::MainWindowContext() : _area(50, 50), _cellSideLength(10), _to
 //    _simulationContext = new RejectionSimulationContext(&_area, _reactor);
 //    _simulationContext = new RejectionFreeSimulationContext(&_area, _reactor);
 //    _simulationContext = new DynamicSimulationContext(&_area, _reactor);
-    _simulationContext = new KineticSimulationContext(&_area, _reactor);
-//    _simulationContext = new TreeBasedSimulationContext(&_area, _reactor);
-    _renderArea = new RenderAreaContext(&_area, _cellSideLength);
+//    _simulationContext = new KineticSimulationContext(&_area, _reactor);
+    _simulationContext = new TreeBasedSimulationContext(&_area, _reactor);
+    _renderArea = new RenderAreaContext(&_area, _cellSideLength, false);
 
     _doButton = new QPushButton("Do reaction");
     connect(_doButton, SIGNAL(clicked()), this, SLOT(doReaction()));

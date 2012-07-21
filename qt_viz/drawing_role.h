@@ -13,14 +13,12 @@ public:
     void redrawRegion(QPainter *painter, const QRect &rect, float cellSideLength) const;
 
 private:
-    void prepare(QPainter *painter) const;
     void drawCell(QPainter *painter, int cellValue, int x, int y, float cellSideLength) const;
     QPointF offset(float cellSideLength, int x, int y) const;
 };
 
 template <class AData>
 void DrawingRole<AData>::draw(QPainter *painter, float cellSideLength) const {
-    prepare(painter);
     this->eachCell([this, &painter, cellSideLength](int *const value, int x, int y) {
         this->drawCell(painter, *value, x, y, cellSideLength);
     });
@@ -28,8 +26,6 @@ void DrawingRole<AData>::draw(QPainter *painter, float cellSideLength) const {
 
 template <class AData>
 void DrawingRole<AData>::redrawRegion(QPainter *painter, const QRect &rect, float cellSideLength) const {
-    prepare(painter);
-
     int x = rect.left() / cellSideLength;
     int y = rect.top() / cellSideLength;
     auto drawLambda = [this, &painter, &x, &y, cellSideLength]() {
@@ -45,12 +41,6 @@ void DrawingRole<AData>::redrawRegion(QPainter *painter, const QRect &rect, floa
     else return;
 
     drawLambda();
-}
-
-template <class AData>
-void DrawingRole<AData>::prepare(QPainter *painter) const {
-    QPen pen(Qt::gray);
-    painter->setPen(pen);
 }
 
 template <class AData>

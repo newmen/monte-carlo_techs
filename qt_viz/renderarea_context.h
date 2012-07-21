@@ -9,7 +9,7 @@ class RenderAreaContext : public QWidget
 {
     Q_OBJECT
 public:
-    explicit RenderAreaContext(const AreaData *area, float cellSideLength);
+    explicit RenderAreaContext(const AreaData *area, float cellSideLength, bool needBorder);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -17,6 +17,7 @@ protected:
 private:
     const AreaData *_area;
     const float _cellSideLength;
+    bool _needBorder;
 };
 
 #endif // RENDERAREA_CONTEXT_H
