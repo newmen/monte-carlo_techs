@@ -29,6 +29,7 @@ LIB_FILES = \
     abcdcellreactor_context.cpp \
     abcddimerreactor_context.cpp \
     lotkareactor_context.cpp \
+    lotkathreereactor_context.cpp \
     rtreactor_context.cpp \
     nocoreactor_context.cpp \
     simulationbase_context.cpp \

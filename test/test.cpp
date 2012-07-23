@@ -87,16 +87,18 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         }
 
         totalTime = 0;
-        int counter = 0;
+        double counter = 0;
+        double storeLimit = tc->reactor->maxTime() * 2e-4;
         while (totalTime < tc->reactor->maxTime()) {
             EventInfoData ei = simulationContext->doReaction();
             dt = ei.dt();
-            if (tc->needGraph && counter++ > 100) {
-                storeContext->store(dt);
+            if (tc->needGraph && counter > storeLimit) {
+                storeContext->store(totalTime);
                 counter = 0;
             }
             if (dt == 0.0) break;
 
+            counter += dt;
             totalTime += dt;
             ++iterations;
         }
@@ -160,8 +162,8 @@ int main(int argc, char *argv[]) {
 //    runTest(&tc, "Rejection-free MC", "rejection-free");
 //    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
 //    runTest(&tc, "Dynamic MC", "dynamic");
-    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
-    runTest(&tc, "Kinetic MC", "kinetic");
+//    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
+//    runTest(&tc, "Kinetic MC", "kinetic");
 
 //    TreeSimContextFactory *factory = new TreeSimContextFactory(&reactor, 2);
 //    tc.changeFactory(factory);
@@ -176,8 +178,8 @@ int main(int argc, char *argv[]) {
 //    factory->setWidth(6);
 //    runTest(&tc, "Faster 6 MC", "faster_6");
 
-//    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
-//    runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
+    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
+    runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
 
     return 0;
 }

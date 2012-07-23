@@ -10,13 +10,12 @@ class StoreContext
 public:
     StoreContext(const AreaData *area, int numOfSpecs, const std::string &fileName, const std::string &methodName);
 
-    void store(double dt);
+    void store(double currentTime);
 
 private:
     const AreaData *_area;
     const int _numOfSpecs;
     std::ofstream _outFile;
-    double _totalTime;
 };
 
 #endif // STORE_CONTEXT_H

@@ -5,6 +5,7 @@
 #include "../abcddimerreactor_context.h"
 #include "../nocoreactor_context.h"
 #include "../lotkareactor_context.h"
+#include "../lotkathreereactor_context.h"
 
 #include "../rejectionsimulation_context.h"
 #include "../rejectionfreesimulation_context.h"
@@ -12,20 +13,21 @@
 #include "../kineticsimulation_context.h"
 #include "../treebasedsimulation_context.h"
 
-MainWindowContext::MainWindowContext() : _area(50, 50), _cellSideLength(10), _totalTime(0) {
+MainWindowContext::MainWindowContext() : _area(250, 250), _cellSideLength(2), _totalTime(0) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _reactor = new ABCDCellReactorContext;
 //    _reactor = new ABCDDimerReactorContext;
 //    _reactor = new NOCOReactorContext;
     _reactor = new LotkaReactorContext;
+//    _reactor = new LotkaThreeReactorContext;
 
 //    _simulationContext = new RejectionSimulationContext(&_area, _reactor);
 //    _simulationContext = new RejectionFreeSimulationContext(&_area, _reactor);
 //    _simulationContext = new DynamicSimulationContext(&_area, _reactor);
-    _simulationContext = new KineticSimulationContext(&_area, _reactor);
-//    _simulationContext = new TreeBasedSimulationContext(&_area, _reactor);
-    _renderArea = new RenderAreaContext(&_area, _cellSideLength);
+//    _simulationContext = new KineticSimulationContext(&_area, _reactor);
+    _simulationContext = new TreeBasedSimulationContext(&_area, _reactor);
+    _renderArea = new RenderAreaContext(&_area, _cellSideLength, false);
 
     _doButton = new QPushButton("Do reaction");
     connect(_doButton, SIGNAL(clicked()), this, SLOT(doReaction()));
