@@ -11,7 +11,7 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
       
       plot.output("#{file_name}.png")
       plot.terminal('png truecolor')
-      plot.size("5,3")
+#      plot.size("5,3")
 
       plot.title(title)
       plot.xlabel(xlabel)

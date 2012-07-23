@@ -13,10 +13,8 @@ StoreContext::StoreContext(const AreaData *area, int numOfSpecs, const std::stri
     }
 }
 
-void StoreContext::store(double dt) {
-    _totalTime += dt;
-
-    _outFile << _totalTime;
+void StoreContext::store(double currentTime) {
+    _outFile << currentTime;
     static_cast<const StoringRole<AreaData> *>(_area)->store(_outFile, _numOfSpecs);
     _outFile << std::endl;
 }

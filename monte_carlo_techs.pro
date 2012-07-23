@@ -1,7 +1,7 @@
 #TEMPLATE = lib
 TEMPLATE = app
 CONFIG += console
-#CONFIG -= qt
+CONFIG -= qt
 
 QMAKE_CXXFLAGS += -std=c++0x
 
@@ -41,7 +41,8 @@ SOURCES += \
     rtreactor_context.cpp \
     nocoreactor_context.cpp \
     eventinfo_data.cpp \
-    lotkareactor_context.cpp
+    lotkareactor_context.cpp \
+    lotkathreereactor_context.cpp
 
 HEADERS += \
     area_data.h \
@@ -90,7 +91,8 @@ HEADERS += \
     rtreactor_context.h \
     nocoreactor_context.h \
     eventinfo_data.h \
-    lotkareactor_context.h
+    lotkareactor_context.h \
+    lotkathreereactor_context.h
 
 OTHER_FILES += \
     .gitignore \
