@@ -8,7 +8,7 @@ void NodeBase::accSum(long double sum) {
 }
 
 bool NodeBase::lessThanEps(long double ds) const {
-    if (ds == 0) return true;
-    if (ds < 0) ds *= -1;
+    if (ds == 0.0) return true;
+    if (ds < 0.0) ds *= -1;
     return ds < 1e-12;
 }

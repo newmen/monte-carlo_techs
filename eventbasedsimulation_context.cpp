@@ -7,7 +7,7 @@ EventBasedSimulationContext::EventBasedSimulationContext(AreaData *area, const R
 EventInfoData EventBasedSimulationContext::doReaction() {
     reviewAllEvents();
 
-    if (_totalRate == 0) return EventInfoData(0);
+    if (_totalRate == 0.0) return EventInfoData(0);
 
     BaseEvent *event = randomEvent();
     event->doIt();
@@ -33,7 +33,7 @@ template <class SData>
 void EventBasedSimulationContext::addEvent(SData *const site, const ReactionData<SData> *const reaction) {
     long double rate = reaction->rate(site);
     doWhenEventAddedWithRate(rate);
-    if (rate > 0) {
+    if (rate > 0.0) {
         _totalRate += rate;
         _events.push_back(new Event<SData>(site, reaction, rate));
     }

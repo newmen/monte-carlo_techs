@@ -46,7 +46,7 @@ INodeS *NodeN::find(long double *r) const {
             *r -= childSum;
         }
     }
-    return 0; // happen when need reCount
+    return 0; // happens when need reCount
 }
 
 void NodeN::reCount() {

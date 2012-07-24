@@ -66,7 +66,7 @@ void MainWindowContext::doReaction() {
     long double dt = ei.dt();
     _totalTime += dt;
     updateStatusBar();
-    if (dt == 0) {
+    if (dt == 0.0) {
         if (_playButton->started()) _playButton->click();
     } else if (ei.cell() != 0) {
         updateCell(ei.cell());

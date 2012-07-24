@@ -27,7 +27,7 @@ EventInfoData TreeBasedSimulationContext::doReaction() {
 
     while (true) {
         long double totalRate = _tree.sum();
-        if (totalRate == 0) break;
+        if (totalRate == 0.0) break;
 
         long double r = randomN01() * totalRate;
         INodeS *currentNode = _tree.find(&r);

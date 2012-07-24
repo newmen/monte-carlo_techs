@@ -87,7 +87,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         }
 
         totalTime = 0;
-        long double counter = 0;
+        long double counter = 0.0;
         long double storeLimit = tc->reactor->maxTime() * 2e-4;
         while (totalTime < tc->reactor->maxTime()) {
             EventInfoData ei = simulationContext->doReaction();

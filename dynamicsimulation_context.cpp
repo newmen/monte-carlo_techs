@@ -7,7 +7,7 @@ DynamicSimulationContext::DynamicSimulationContext(AreaData *area, const Reactor
 
 EventInfoData DynamicSimulationContext::doReaction() {
     reviewAllEvents();
-    if (_totalRate == 0) return EventInfoData(0);
+    if (_totalRate == 0.0) return EventInfoData(0);
 
     long double max = 0;
     long double r = randomN01() * _totalRate;

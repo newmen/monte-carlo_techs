@@ -55,7 +55,7 @@ long double SimulationBaseContext::randomN01() const {
 
 long double SimulationBaseContext::negativLogU() const {
     long double u;
-    do u = randomN01(); while (u == 0);
+    do u = randomN01(); while (u == 0.0);
     return -log(u);
 }
 

@@ -71,7 +71,7 @@ void NodeS<SmartSite>::reCount() {
 
 template <class SmartSite>
 void NodeS<SmartSite>::updateSum() {
-    if (this->commonRate() - _sum == 0) return;
+    if (this->commonRate() - _sum == 0.0) return;
     if (parent()) parent()->accSum(this->commonRate() - _sum);
     _sum = this->commonRate();
 }
