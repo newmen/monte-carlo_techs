@@ -4,8 +4,8 @@ RejectionFreeSimulationContext::RejectionFreeSimulationContext(AreaData *area, c
     EventBasedSimulationContext(area, reactor) {}
 
 BaseEvent *RejectionFreeSimulationContext::randomEvent() const {
-    double r = randomN01() * totalRate();
-    double accRate = 0;
+    long double r = randomN01() * totalRate();
+    long double accRate = 0;
     for (auto p = _events.begin(); p != _events.end(); ++p) {
         accRate += (*p)->rate();
         if (r < accRate) return *p;

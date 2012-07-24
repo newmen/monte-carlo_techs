@@ -11,10 +11,10 @@ public:
 protected:
     BaseEvent *randomEvent() const;
     void clearAllEvents();
-    void doWhenEventAddedWithRate(double rate);
+    void doWhenEventAddedWithRate(long double rate);
 
 private:
-    double _maxRate;
+    long double _maxRate;
 };
 
 #endif // REJECTIONSIMULATION_CONTEXT_H

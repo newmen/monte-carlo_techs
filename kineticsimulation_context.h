@@ -18,7 +18,7 @@ protected:
     void storeDimer(PerDimer *const perDimer);
 
 private:
-    IPerSite *findMin(double *dt) const;
+    IPerSite *findMin(long double *dt) const;
     void doRandomReaction(IPerSite *const perSite);
 
 private:

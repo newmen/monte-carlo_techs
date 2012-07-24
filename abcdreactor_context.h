@@ -10,7 +10,7 @@ public:
     ABCDReactorContext();
 
     int numOfSpecs() const { return 4; }
-    double maxTime() const { return 2.0; }
+    long double maxTime() const { return 2.0; }
 
 protected:
     void solveToOut(std::ostream &out) const;

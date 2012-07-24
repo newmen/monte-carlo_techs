@@ -11,8 +11,8 @@ class DynamicSimulationContext : public SimpleSimulationContext
 {
     typedef std::map<const ReactionData<CellData> *const, std::vector<CellData *> > CellsMap;
     typedef std::map<const ReactionData<DimerData> *const, std::vector<DimerData *> > DimersMap;
-    typedef std::map<const ReactionData<CellData> *const, double> RatesOnSitesMap;
-    typedef std::map<const ReactionData<DimerData> *const, double> RatesOnDimersMap;
+    typedef std::map<const ReactionData<CellData> *const, long double> RatesOnSitesMap;
+    typedef std::map<const ReactionData<DimerData> *const, long double> RatesOnDimersMap;
 
 public:
     DynamicSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
@@ -28,13 +28,13 @@ protected:
 
 private:
     template <class SData>
-    void addEvent(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer, std::map<const ReactionData<SData> *const, double> *rates, SData *const site, const ReactionData<SData> *const reaction);
+    void addEvent(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer, std::map<const ReactionData<SData> *const, long double> *rates, SData *const site, const ReactionData<SData> *const reaction);
 
     template <class SData>
-    const ReactionData<SData> *findReaction(double *r, double *max, const std::map<const ReactionData<SData> *const, double> &ratesMap) const;
+    const ReactionData<SData> *findReaction(long double *r, long double *max, const std::map<const ReactionData<SData> *const, long double> &ratesMap) const;
 
     template <class SData>
-    void clearEvents(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer, std::map<const ReactionData<SData> *const, double> *rates);
+    void clearEvents(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer, std::map<const ReactionData<SData> *const, long double> *rates);
 
 private:
     CellsMap _cells;
@@ -43,7 +43,7 @@ private:
     RatesOnSitesMap _ratesOnSites;
     RatesOnDimersMap _ratesOnDimers;
 
-    double _totalRate;
+    long double _totalRate;
 };
 
 #endif // DYNAMICSIMULATION_CONTEXT_H

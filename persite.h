@@ -8,15 +8,15 @@
 template <class SData>
 class PerSite : public IPerSite
 {
-    typedef std::map<const ReactionData<SData> *, double> RatesMap;
+    typedef std::map<const ReactionData<SData> *, long double> RatesMap;
 
 public:
     virtual ~PerSite() {}
 
     void addReaction(const ReactionData<SData> *const reaction);
 
-    double commonRate() const;
-    void doReaction(const SimulationBaseContext *simulationContext, double r);
+    long double commonRate() const;
+    void doReaction(const SimulationBaseContext *simulationContext, long double r);
 
     virtual void updateRates(const SimulationBaseContext *simulationContext);
 
@@ -28,7 +28,7 @@ protected:
 private:
     SData *_site;
     RatesMap _rates;
-    double _commonRate;
+    long double _commonRate;
 };
 
 template <class SData>
@@ -36,13 +36,13 @@ PerSite<SData>::PerSite(SData *const site) : _site(site), _commonRate(0) {}
 
 template <class SData>
 void PerSite<SData>::addReaction(const ReactionData<SData> *const reaction) {
-    double rate = reaction->rate(_site);
+    long double rate = reaction->rate(_site);
     _rates[reaction] = rate;
     _commonRate += rate;
 }
 
 template <class SData>
-double PerSite<SData>::commonRate() const {
+long double PerSite<SData>::commonRate() const {
     return _commonRate;
 }
 
@@ -51,7 +51,7 @@ void PerSite<SData>::updateRates(const SimulationBaseContext *simulationContext)
     simulationContext->reinitSite(_site);
     _commonRate = 0;
     for (auto p = _rates.begin(); p != _rates.end(); ++p) {
-        double rate = p->first->rate(_site);
+        long double rate = p->first->rate(_site);
         p->second = rate;
         _commonRate += rate;
     }
@@ -63,7 +63,7 @@ SData *PerSite<SData>::site() const {
 }
 
 template <class SData>
-void PerSite<SData>::doReaction(const SimulationBaseContext *simulationContext, double r) {
+void PerSite<SData>::doReaction(const SimulationBaseContext *simulationContext, long double r) {
     for (auto p = _rates.begin(); p != _rates.end(); ++p) {
         if (r < p->second) {
             p->first->doIt(_site);

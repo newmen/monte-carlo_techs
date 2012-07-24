@@ -8,8 +8,8 @@ class IPerSite
 public:
     virtual ~IPerSite() {}
 
-    virtual double commonRate() const = 0;
-    virtual void doReaction(const SimulationBaseContext *simulationContext, double r) = 0;
+    virtual long double commonRate() const = 0;
+    virtual void doReaction(const SimulationBaseContext *simulationContext, long double r) = 0;
 
 protected:
     IPerSite() {}

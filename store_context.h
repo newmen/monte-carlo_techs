@@ -10,7 +10,7 @@ class StoreContext
 public:
     StoreContext(const AreaData *area, int numOfSpecs, const std::string &fileName, const std::string &methodName);
 
-    void store(double currentTime);
+    void store(long double currentTime);
 
 private:
     const AreaData *_area;

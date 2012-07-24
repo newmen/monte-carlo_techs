@@ -12,7 +12,7 @@ KineticSimulationContext::~KineticSimulationContext() {
 }
 
 EventInfoData KineticSimulationContext::doReaction() {
-    double dt = 0;
+    long double dt = 0;
     IPerSite *minPerSite = findMin(&dt);
 
     if (dt == 0) return EventInfoData(0);
@@ -35,12 +35,12 @@ void KineticSimulationContext::storeDimer(PerDimer *const perDimer) {
     _perSites.push_back(perDimer);
 }
 
-IPerSite *KineticSimulationContext::findMin(double *dt) const {
+IPerSite *KineticSimulationContext::findMin(long double *dt) const {
     IPerSite *min = 0;
     for (auto p = _perSites.cbegin(); p != _perSites.cend(); ++p) {
         if ((*p)->commonRate() == 0) continue;
 
-        double localDt = negativLogU() / (*p)->commonRate();
+        long double localDt = negativLogU() / (*p)->commonRate();
         if (*dt == 0 || localDt < *dt) {
             *dt = localDt;
             min = *p;

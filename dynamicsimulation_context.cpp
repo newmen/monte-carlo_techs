@@ -9,8 +9,8 @@ EventInfoData DynamicSimulationContext::doReaction() {
     reviewAllEvents();
     if (_totalRate == 0) return EventInfoData(0);
 
-    double max = 0;
-    double r = randomN01() * _totalRate;
+    long double max = 0;
+    long double r = randomN01() * _totalRate;
     auto indexLambda = [&r, &max](unsigned int size) -> int {
         return size * r / max;
     };
@@ -49,11 +49,11 @@ void DynamicSimulationContext::addDimerEvent(DimerData *const dimer, const React
 
 template <class SData>
 void DynamicSimulationContext::addEvent(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer,
-                                        std::map<const ReactionData<SData> *const, double> *rates,
+                                        std::map<const ReactionData<SData> *const, long double> *rates,
                                         SData *const site,
                                         const ReactionData<SData> *const reaction)
 {
-    double rate = reaction->rate(site);
+    long double rate = reaction->rate(site);
     if (rate > 0) {
         (*dataContainer)[reaction].push_back(site);
         (*rates)[reaction] += rate;
@@ -62,8 +62,8 @@ void DynamicSimulationContext::addEvent(std::map<const ReactionData<SData> *cons
 }
 
 template <class SData>
-const ReactionData<SData> *DynamicSimulationContext::findReaction(double *r, double *max,
-                                                                    const std::map<const ReactionData<SData> *const, double> &ratesMap) const
+const ReactionData<SData> *DynamicSimulationContext::findReaction(long double *r, long double *max,
+                                                                  const std::map<const ReactionData<SData> *const, long double> &ratesMap) const
 {
     const ReactionData<SData> *reaction = 0;
     for (auto p = ratesMap.cbegin(); p != ratesMap.cend(); ++p) {
@@ -80,7 +80,7 @@ const ReactionData<SData> *DynamicSimulationContext::findReaction(double *r, dou
 
 template <class SData>
 void DynamicSimulationContext::clearEvents(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer,
-                                           std::map<const ReactionData<SData> *const, double> *rates) {
+                                           std::map<const ReactionData<SData> *const, long double> *rates) {
     for (auto p = dataContainer->begin(); p != dataContainer->end(); ++p) p->second.clear();
     for (auto p = rates->begin(); p != rates->end(); ++p) p->second = 0;
 }

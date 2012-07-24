@@ -37,7 +37,7 @@ private:
     RenderAreaContext *_renderArea;
     float _cellSideLength;
 
-    double _totalTime;
+    long double _totalTime;
 
     QStatusBar *_statusBar;
     QPushButton *_doButton;

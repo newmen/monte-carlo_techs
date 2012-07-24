@@ -11,7 +11,7 @@ ABCDReactorContext::ABCDReactorContext() {
 }
 
 void ABCDReactorContext::solveToOut(std::ostream &out) const {
-    double ratesSum = 0;
+    long double ratesSum = 0;
     int numOfSpecs = 0;
     std::function<void (const ReactionData<CellData> *const)> lambda =
             [&numOfSpecs, &ratesSum](const ReactionData<CellData> *const reaction)
@@ -21,18 +21,18 @@ void ABCDReactorContext::solveToOut(std::ostream &out) const {
     };
     eachReaction(lambda);
 
-    double currentTime = 0;
-    double dt = ratesSum / 5e5;
-    double *concs = new double[numOfSpecs];
+    long double currentTime = 0;
+    long double dt = ratesSum / 5e5;
+    long double *concs = new long double[numOfSpecs];
     for (int i = 0; i < numOfSpecs; ++i) concs[i] = 0;
-    double *csNext = new double[numOfSpecs];
+    long double *csNext = new long double[numOfSpecs];
 
     while (currentTime < maxTime()) {
-        double csSum = 0;
+        long double csSum = 0;
         for (int i = 0; i < numOfSpecs; ++i) csSum += concs[i];
 
         for (int i = 0; i < numOfSpecs; ++i) {
-            double dc = 0;
+            long double dc = 0;
             std::function<void (const ReactionData<CellData> *const)> lambda =
                     [numOfSpecs, concs, csSum, i, &dc](const ReactionData<CellData> *const reaction)
             {

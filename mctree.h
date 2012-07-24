@@ -11,10 +11,11 @@ public:
     ~MCTree();
 
     void add(INodeS *node);
-    double sum() const;
+    long double sum() const;
 
-    INodeS *find(double *r) const;
+    INodeS *find(long double *r) const;
 
+    void reCount();
     bool diagnostic() const;
 
 private:

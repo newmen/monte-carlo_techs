@@ -9,11 +9,11 @@ template <class SData>
 class Event : public BaseEvent
 {
 public:
-    Event(SData *const site, const ReactionData<SData> *reaction, double rate) :
+    Event(SData *const site, const ReactionData<SData> *reaction, long double rate) :
         BaseEvent(rate), _site(site), _reaction(reaction) {}
 
     void doIt() { _reaction->doIt(_site); }
-    EventInfoData info(double dt) const {
+    EventInfoData info(long double dt) const {
         EventInfoData ei(dt);
         ei.set(_site);
         return ei;

@@ -27,8 +27,8 @@ protected:
     void eachCellReaction(std::function<void (const ReactionData<CellData> *const)> lambda) const;
     void eachDimerReaction(std::function<void (const ReactionData<DimerData> *const)> lambda) const;
 
-    double randomN01() const;
-    double negativLogU() const;
+    long double randomN01() const;
+    long double negativLogU() const;
 
 private:
     template <class SData>

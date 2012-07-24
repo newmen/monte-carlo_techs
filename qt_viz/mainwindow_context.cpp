@@ -63,7 +63,7 @@ MainWindowContext::~MainWindowContext() {
 void MainWindowContext::doReaction() {
     EventInfoData ei = _simulationContext->doReaction();
 
-    double dt = ei.dt();
+    long double dt = ei.dt();
     _totalTime += dt;
     updateStatusBar();
     if (dt == 0) {

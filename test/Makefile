@@ -1,6 +1,6 @@
 GCC_PATH = /opt/gcc47
 CXX = $(GCC_PATH)/bin/g++
-CXX_CFLAGS = -Wall -O3 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64
+CXX_CFLAGS = -Wall -O2 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64
 LIBS = ../*.o
 NAME = test_mc
 HEAP_NAME = heap_test

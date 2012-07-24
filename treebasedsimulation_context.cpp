@@ -24,25 +24,27 @@ TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const Rea
 
 EventInfoData TreeBasedSimulationContext::doReaction() {
 //    if (!_tree.diagnostic()) return EventInfoData(0);
-//    _tree.diagnostic();
 
-    double totalRate = _tree.sum();
-    if (totalRate == 0) return EventInfoData(0);
+    while (true) {
+        long double totalRate = _tree.sum();
+        if (totalRate == 0) break;
 
-    double r = randomN01() * totalRate;
-    INodeS *currentNode = _tree.find(&r);
-    if (currentNode == 0) {
-        _tree.diagnostic();
-        return EventInfoData(0);
+        long double r = randomN01() * totalRate;
+        INodeS *currentNode = _tree.find(&r);
+        if (currentNode == 0) {
+            _tree.reCount();
+            continue;
+        }
+        currentNode->doReaction(this, r);
+
+        EventInfoData ei(negativLogU() / totalRate);
+        NodeCell *nodeCell = dynamic_cast<NodeCell *>(currentNode);
+        if (nodeCell) ei.set(nodeCell->site());
+        else ei.set(dynamic_cast<NodeDimer *>(currentNode)->site());
+
+        return ei;
     }
-    currentNode->doReaction(this, r);
-
-    EventInfoData ei(negativLogU() / totalRate);
-    NodeCell *nodeCell = dynamic_cast<NodeCell *>(currentNode);
-    if (nodeCell) ei.set(nodeCell->site());
-    else ei.set(dynamic_cast<NodeDimer *>(currentNode)->site());
-
-    return ei;
+    return EventInfoData(0);
 }
 
 void TreeBasedSimulationContext::initData() {

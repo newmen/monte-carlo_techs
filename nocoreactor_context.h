@@ -9,7 +9,7 @@ public:
     NOCOReactorContext();
 
     int numOfSpecs() const { return 2; }
-    double maxTime() const { return 50.0; }
+    long double maxTime() const { return 50.0; }
 
     CellData *createCell(int *cell, int x, int y) const;
     DimerData *createDimer(CellData *first, CellData *second) const;

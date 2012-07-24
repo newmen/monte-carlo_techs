@@ -13,7 +13,7 @@ StoreContext::StoreContext(const AreaData *area, int numOfSpecs, const std::stri
     }
 }
 
-void StoreContext::store(double currentTime) {
+void StoreContext::store(long double currentTime) {
     _outFile << currentTime;
     static_cast<const StoringRole<AreaData> *>(_area)->store(_outFile, _numOfSpecs);
     _outFile << std::endl;

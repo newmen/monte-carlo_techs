@@ -7,17 +7,17 @@
 class EventInfoData
 {
 public:
-    EventInfoData(double dt) : _dt(dt), _cell(0), _dimer(0) {}
+    EventInfoData(long double dt) : _dt(dt), _cell(0), _dimer(0) {}
 
     template <class SData>
     void set(SData *site);
 
-    double dt() const { return _dt; }
+    long double dt() const { return _dt; }
     const CellData *cell() const { return _cell; }
     const DimerData *dimer() const { return _dimer; }
 
 private:
-    double _dt;
+    long double _dt;
     CellData *_cell;
     DimerData *_dimer;
 };

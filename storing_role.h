@@ -21,7 +21,7 @@ void StoringRole<AData>::store(std::ostream &os, int numOfSpecs) const {
     });
 
     for (int i = 0; i < numOfSpecs; ++i) {
-        os << "\t" << (float)statesAcc[i] / this->size();
+        os << "\t" << (double)statesAcc[i] / this->size();
     }
 }
 

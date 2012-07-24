@@ -9,7 +9,7 @@ public:
     LotkaReactorContext();
 
     int numOfSpecs() const { return 2; }
-    double maxTime() const { return 5000; }
+    long double maxTime() const { return 5000; }
 
 protected:
     void solveToOut(std::ostream &out) const;

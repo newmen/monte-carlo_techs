@@ -6,13 +6,13 @@
 class ReactionActivationData
 {
 protected:
-    ReactionActivationData(const RTReactorContext *reactor, double Ea);
+    ReactionActivationData(const RTReactorContext *reactor, long double Ea);
 
-    double expFactor(double additionalEnergy = 0) const;
+    long double expFactor(long double additionalEnergy = 0) const;
 
 private:
     const RTReactorContext *_reactor;
-    double _Ea;
+    long double _Ea;
 };
 
 #endif // REACTIONACTIVATION_DATA_H

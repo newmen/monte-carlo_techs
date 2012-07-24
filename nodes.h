@@ -17,12 +17,13 @@ public:
     NodeS(SData *const site);
 
     void initSum();
-    void doReaction(const SimulationBaseContext *simulationContext, double r);
+    void doReaction(const SimulationBaseContext *simulationContext, long double r);
 
     void updateRates(const SimulationBaseContext *simulationContext);
     void updateRates(const SimulationBaseContext *simulationContext, const PerDimer *exceptPerDimer);
     void updateLocalCommonRate(const SimulationBaseContext *simulationContext, int otherSideIndex);
 
+    void reCount();
     bool diagnoze() const;
 
 private:
@@ -39,7 +40,7 @@ void NodeS<SmartSite>::initSum() {
 }
 
 template <class SmartSite>
-void NodeS<SmartSite>::doReaction(const SimulationBaseContext *simulationContext, double r) {
+void NodeS<SmartSite>::doReaction(const SimulationBaseContext *simulationContext, long double r) {
     SmartSite::doReaction(simulationContext, r);
 }
 
@@ -61,6 +62,11 @@ template <class SmartSite>
 void NodeS<SmartSite>::updateLocalCommonRate(const SimulationBaseContext *simulationContext, int otherSideIndex) {
     SmartSite::updateLocalCommonRate(simulationContext, otherSideIndex);
     updateSum();
+}
+
+template <class SmartSite>
+void NodeS<SmartSite>::reCount() {
+    initSum();
 }
 
 template <class SmartSite>

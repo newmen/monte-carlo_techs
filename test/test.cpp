@@ -75,7 +75,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
     };
     double startTime = currTime();
 
-    double totalTime, dt;
+    long double totalTime, dt;
     unsigned long long iterations = 0;
     for (int i = 0; i < tc->repeats; ++i) {
         freeUpMemory();
@@ -87,8 +87,8 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         }
 
         totalTime = 0;
-        double counter = 0;
-        double storeLimit = tc->reactor->maxTime() * 2e-4;
+        long double counter = 0;
+        long double storeLimit = tc->reactor->maxTime() * 2e-4;
         while (totalTime < tc->reactor->maxTime()) {
             EventInfoData ei = simulationContext->doReaction();
             dt = ei.dt();
@@ -96,7 +96,10 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
                 storeContext->store(totalTime);
                 counter = 0;
             }
-            if (dt == 0.0) break;
+            if (dt == 0.0) {
+                std::cout << "Stacionar" << std::endl;
+                break;
+            }
 
             counter += dt;
             totalTime += dt;

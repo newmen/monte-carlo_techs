@@ -13,14 +13,14 @@ public:
 protected:
     EventBasedSimulationContext(AreaData *area, const ReactorBaseContext *reactor);
 
-    double totalRate() const { return _totalRate; }
+    long double totalRate() const { return _totalRate; }
 
     void clearAllEvents();
     void addCellEvent(CellData *const cell, const ReactionData<CellData> *const reaction);
     void addDimerEvent(DimerData *const dimer, const ReactionData<DimerData> *const reation);
 
     virtual BaseEvent *randomEvent() const = 0;
-    virtual void doWhenEventAddedWithRate(double) {}
+    virtual void doWhenEventAddedWithRate(long double) {}
 
 private:
     template <class SData>
@@ -30,7 +30,7 @@ protected:
     std::vector<BaseEvent *> _events;
 
 private:
-    double _totalRate;
+    long double _totalRate;
 };
 
 #endif // EVENTBASEDSIMULATION_CONTEXT_H

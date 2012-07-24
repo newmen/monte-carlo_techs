@@ -4,7 +4,7 @@ RejectionSimulationContext::RejectionSimulationContext(AreaData *area, const Rea
     EventBasedSimulationContext(area, reactor), _maxRate(0) {}
 
 BaseEvent *RejectionSimulationContext::randomEvent() const {
-    double r;
+    long double r;
     int n;
     BaseEvent *selectedEvent;
     do {
@@ -20,7 +20,7 @@ void RejectionSimulationContext::clearAllEvents() {
     _maxRate = 0;
 }
 
-void RejectionSimulationContext::doWhenEventAddedWithRate(double rate) {
+void RejectionSimulationContext::doWhenEventAddedWithRate(long double rate) {
     if (rate > _maxRate) _maxRate = rate;
 }
 

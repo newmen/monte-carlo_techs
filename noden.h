@@ -14,8 +14,9 @@ public:
     void add(NodeN *node);
     bool isFull() const;
 
-    INodeS *find(double *r) const;
+    INodeS *find(long double *r) const;
 
+    void reCount();
     bool diagnoze() const;
 
 private:

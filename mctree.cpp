@@ -18,12 +18,16 @@ void MCTree::add(INodeS *node) {
     _root->add(node);
 }
 
-double MCTree::sum() const {
+long double MCTree::sum() const {
     return _root->sum();
 }
 
-INodeS *MCTree::find(double *r) const {
+INodeS *MCTree::find(long double *r) const {
     return _root->find(r);
+}
+
+void MCTree::reCount() {
+    _root->reCount();
 }
 
 bool MCTree::diagnostic() const {

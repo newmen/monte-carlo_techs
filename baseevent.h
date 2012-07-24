@@ -6,15 +6,15 @@
 class BaseEvent
 {
 public:
-    BaseEvent(double rate) : _rate(rate) {}
+    BaseEvent(long double rate) : _rate(rate) {}
     virtual ~BaseEvent() {}
 
     virtual void doIt() = 0;
-    virtual EventInfoData info(double dt) const = 0;
-    double rate() const { return _rate; }
+    virtual EventInfoData info(long double dt) const = 0;
+    long double rate() const { return _rate; }
 
 private:
-    double _rate;
+    long double _rate;
 };
 
 #endif // BASEEVENT_H

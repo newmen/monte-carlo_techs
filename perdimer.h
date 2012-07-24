@@ -13,7 +13,7 @@ public:
 
     void addPerCell(PerCell *const perCell);
 
-    void doReaction(const SimulationBaseContext *simulationContext, double r);
+    void doReaction(const SimulationBaseContext *simulationContext, long double r);
 
     PerCell *first() const;
     PerCell *second() const;

@@ -15,7 +15,7 @@ public:
     virtual ~ReactorBaseContext();
 
     virtual int numOfSpecs() const = 0;
-    virtual double maxTime() const = 0;
+    virtual long double maxTime() const = 0;
 
     virtual CellData *createCell(int *cell, int x, int y) const;
     virtual DimerData *createDimer(CellData *first, CellData *second) const;

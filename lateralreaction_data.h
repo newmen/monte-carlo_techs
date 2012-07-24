@@ -10,13 +10,13 @@ public:
     ~LateralReactionData();
 
 protected:
-    LateralReactionData(const RTReactorContext *reactor, double Ea, double epss[], int numOfSpecs);
+    LateralReactionData(const RTReactorContext *reactor, long double Ea, long double epss[], int numOfSpecs);
 
-    double expFactor(const LateralSiteData *site) const;
+    long double expFactor(const LateralSiteData *site) const;
 
 private:
     int _numOfSpecs;
-    double *_epss;
+    long double *_epss;
 };
 
 #endif // LATERALREACTION_DATA_H

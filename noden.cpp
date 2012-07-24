@@ -33,9 +33,9 @@ bool NodeN::isFull() const {
     return last()->isFull();
 }
 
-INodeS *NodeN::find(double *r) const {
+INodeS *NodeN::find(long double *r) const {
     for (int i = 0; i < _numberOfChilds; ++i) {
-        double childSum = _childs[i]->sum();
+        long double childSum = _childs[i]->sum();
         if (*r < childSum) {
             if (level() == 1) {
                 return static_cast<INodeS *>(_childs[i]);
@@ -46,14 +46,22 @@ INodeS *NodeN::find(double *r) const {
             *r -= childSum;
         }
     }
-    return 0; // should not happen
+    return 0; // happen when need reCount
+}
+
+void NodeN::reCount() {
+    _sum = 0;
+    for (int i = 0; i < _numberOfChilds; ++i) {
+        _childs[i]->reCount();
+        _sum += _childs[i]->sum();
+    }
 }
 
 bool NodeN::diagnoze() const {
     static int n = 0;
     ++n;
 
-    double childsSum  = 0;
+    long double childsSum  = 0;
     for (int i = 0; i < _numberOfChilds; ++i) {
         if (!_childs[i]->diagnoze()) return false;
 

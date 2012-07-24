@@ -49,12 +49,12 @@ void SimulationBaseContext::eachDimerReaction(std::function<void (const Reaction
     _reactor->eachReaction(lambda);
 }
 
-double SimulationBaseContext::randomN01() const {
-    return (double)rand() / RAND_MAX;
+long double SimulationBaseContext::randomN01() const {
+    return (long double)rand() / RAND_MAX;
 }
 
-double SimulationBaseContext::negativLogU() const {
-    double u;
+long double SimulationBaseContext::negativLogU() const {
+    long double u;
     do u = randomN01(); while (u == 0);
     return -log(u);
 }

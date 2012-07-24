@@ -18,8 +18,8 @@
 
 template <class SimulationContext>
 void run() {
-//    AreaData area(5, 5);
-    AreaData area(13, 13);
+    AreaData area(100, 100);
+//    AreaData area(13, 13);
 
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
@@ -27,21 +27,28 @@ void run() {
 //    LotkaReactorContext reactor;
 
     SimulationContext sc(&area, &reactor);
-    double dt, totalTime = 0;
-    int counter = 0;
+    long double dt, totalTime = 0;
+    int counter = 0, iterations = 0;
     do {
         EventInfoData ei = sc.doReaction();
         dt = ei.dt();
         totalTime += dt;
 
+        if (dt > reactor.maxTime()) {
+            std::cout << "Overtime! " << dt << " sec. "
+                      << "It is a " << ((ei.cell() == 0) ? "dimer" : "cell") << " reaction" << std::endl;
+        }
+
+        iterations++;
         if (counter++ == 100000) {
-            std::cout << "Intermediate time: " << totalTime << std::endl;
+            std::cout << "Intermediate time: " << totalTime << " sec" << std::endl;
             counter = 0;
 //            break;
         }
     } while (dt > 0 && totalTime < reactor.maxTime());
 
     std::cout << "Total time: " << totalTime << " sec" << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
 }
 
 int main() {
