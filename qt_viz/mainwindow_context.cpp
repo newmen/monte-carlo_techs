@@ -1,4 +1,4 @@
-#include <QVBoxLayout>
+#include <QtGui>
 #include "mainwindow_context.h"
 
 #include "../abcdcellreactor_context.h"
@@ -13,7 +13,7 @@
 #include "../kineticsimulation_context.h"
 #include "../treebasedsimulation_context.h"
 
-MainWindowContext::MainWindowContext() : _area(250, 250), _cellSideLength(2), _totalTime(0) {
+MainWindowContext::MainWindowContext() : _area(50, 50), _cellSideLength(5), _totalTime(0) {
     setWindowTitle("Monte Carlo simulation");
 
 //    _reactor = new ABCDCellReactorContext;
@@ -36,13 +36,22 @@ MainWindowContext::MainWindowContext() : _area(250, 250), _cellSideLength(2), _t
     connect(_playButton, SIGNAL(timerStart()), this, SLOT(playAnimation()));
     connect(_playButton, SIGNAL(timerStop()), this, SLOT(stopAnimation()));
 
-    _statusBar = new QStatusBar(this);
+    _totalTimeTextLabel = new QLabel("Total time: ");
+    _totalTimeValueLabel = new QLabel("0.0");
+    _timeDimLabel = new QLabel(" sec");
+
+    QHBoxLayout *totalTimeLayout = new QHBoxLayout;
+    totalTimeLayout->addWidget(_totalTimeTextLabel);
+    totalTimeLayout->addWidget(_totalTimeValueLabel);
+    totalTimeLayout->addWidget(_timeDimLabel);
+    QGroupBox *totalTimeGroup = new QGroupBox;
+    totalTimeGroup->setLayout(totalTimeLayout);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(_renderArea);
     layout->addWidget(_doButton);
     layout->addWidget(_playButton);
-    layout->addWidget(_statusBar);
+    layout->addWidget(totalTimeGroup);
     setLayout(layout);
 
     _animationTimer = new QTimer(this);
@@ -90,8 +99,6 @@ void MainWindowContext::updateCell(const CellData *cell) {
 
 void MainWindowContext::updateStatusBar() {
     QString totalTimeText;
-    totalTimeText.setNum(_totalTime);
-    totalTimeText.prepend("Total time: ");
-    totalTimeText.append(" sec");
-    _statusBar->showMessage(totalTimeText);
+    totalTimeText.setNum((double)_totalTime);
+    _totalTimeValueLabel->setText(totalTimeText);
 }

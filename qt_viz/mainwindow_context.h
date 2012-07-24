@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include <QStatusBar>
+#include <QLabel>
 #include <QTimer>
 #include "playbutton.h"
 #include "renderarea_context.h"
@@ -37,12 +37,14 @@ private:
     RenderAreaContext *_renderArea;
     float _cellSideLength;
 
-    long double _totalTime;
-
-    QStatusBar *_statusBar;
     QPushButton *_doButton;
     PlayButton *_playButton;
     QTimer *_animationTimer;
+
+    long double _totalTime;
+    QLabel *_totalTimeTextLabel;
+    QLabel *_totalTimeValueLabel;
+    QLabel *_timeDimLabel;
 };
 
 #endif // MAINWINDOW_CONTEXT_H
