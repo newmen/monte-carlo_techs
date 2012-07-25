@@ -22,10 +22,16 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
   end
 end
 
-def make_mc_gnuplot(file_name, title, &block)
+def make_mc_time_gnuplot(file_name, title, &block)
   make_gnuplot(file_name, title, 'Время (сек)', 'Концентрация (%)') do |plot|
 #    plot.xrange('[0:50]')
     
+    block.call(plot)
+  end
+end
+
+def make_mc_concentrations_gnuplot(file_name, title, a_title, b_title, &block)
+  make_gnuplot(file_name, title, "Концентрация #{a_title} [%]", "Концентрация #{b_title} [%]") do |plot|
     block.call(plot)
   end
 end
@@ -36,7 +42,7 @@ def make_perf_gnuplot(file_name, title, ylabel, &block)
   end
 end
 
-def make_mc_data(data, ds_with, &block)
+def make_mc_time_data(data, ds_with, &block)
   data[1].map do |name, arr_y|
     percent_arr_y = arr_y.map { |x| x * 100 }
     Gnuplot::DataSet.new([data[0], percent_arr_y]) do |ds|
@@ -47,24 +53,66 @@ def make_mc_data(data, ds_with, &block)
   end
 end
 
-def original_data(original)
-  make_mc_data(original, 'lines') do |name, ds|
+def make_mc_concentrations_data(a_data, b_data, ds_with, &block)
+  Gnuplot::DataSet.new([a_data, b_data]) do |ds|
+    ds.with = ds_with
+    block.call(ds)
+  end
+end
+
+def original_time_data(original)
+  make_mc_time_data(original, 'lines') do |name, ds|
     ds.linewidth = 2
     ds.title = "Original #{name}"
   end
 end
 
-def draw_original(original)
-  make_mc_gnuplot('original', 'ОДУ') do |plot|
-    plot.data = original_data(original)
+def original_concentrations_data(a_data, b_data)
+  make_mc_concentrations_data(a_data, b_data, 'lines') do |ds|
+    ds.linewidth = 2
+    ds.title = "Original time"
   end
 end
 
-def draw_mc_graph(original, mc, file_name)
-  make_mc_gnuplot(file_name, mc[2]) do |plot|
+def mc_concentrations_data(a_data, b_data)
+  make_mc_concentrations_data(a_data, b_data, 'linespoints') do |ds|
+    ds.title = "MC time"
+  end
+end
+
+def draw_original_time(original)
+  make_mc_time_gnuplot('original', 'ОДУ') do |plot|
+    plot.data = original_time_data(original)
+  end
+end
+
+def draw_concentrations_graphs(filename, original, mc)
+  original_data = original[1].combination(2).to_a if original
+  mc_data = mc[1].to_a.combination(2).to_a
+
+  data = original ? original_data : mc_data
+  data.each_with_index do |data, i|
+    a_data, b_data = data
+    mc_a_data, mc_b_data = mc_data if original
+    a, b = a_data[0], b_data[0]
+    make_mc_concentrations_gnuplot("#{filename}_#{a}_#{b}", "#{data[2]} #{a}/#{b}", a, b) do |plot|
+      org_data = []
+      if original
+        org_data << original_concentrations_data(a_data[1], b_data[1])
+        org_data << mc_concentrations_data(mc_a_data[1], mc_b_data[1])
+      else
+        org_data << mc_concentrations_data(a_data[1], b_data[1])
+      end
+      plot.data = org_data
+    end
+  end
+end
+
+def draw_mc_time_graph(original, mc, file_name)
+  make_mc_time_gnuplot(file_name, mc[2]) do |plot|
     org_data = []
-    org_data += original_data(original) if original
-    plot.data = org_data + make_mc_data(mc, 'linespoints') do |name, ds|
+    org_data += original_time_data(original) if original
+    plot.data = org_data + make_mc_time_data(mc, 'linespoints') do |name, ds|
       ds.title = "MC #{name}"
     end
   end
@@ -183,7 +231,8 @@ def read_and_draw_mc_plots
   original_file = "original.#{EXT_MC}"
   if File.exist?(original_file) && File.size(original_file) > 0
     original = read_mc_file(original_file)
-    draw_original(original)
+    draw_original_time(original)
+    draw_concentrations_graphs('original', original)
   else
     original = nil
   end
@@ -191,7 +240,9 @@ def read_and_draw_mc_plots
   mc_files = Dir["*.#{EXT_MC}"] - [original_file]
   mc_files.each do |file_name|
     mc = read_mc_file(file_name)
-    draw_mc_graph(original, mc, File.basename(file_name, ".#{EXT_MC}"))
+    base_filename = File.basename(file_name, ".#{EXT_MC}")
+    draw_mc_time_graph(original, mc, base_filename)
+    draw_concentrations_graphs(base_filename, original, mc)
   end
 end
 
