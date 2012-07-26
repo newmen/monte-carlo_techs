@@ -104,7 +104,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
             totalTime += dt;
             ++iterations;
         }
-        if (counter == 0) storeContext->store(totalTime); // last value
+        if (counter != 0) storeContext->store(totalTime); // last value
     }
 
     double stopTime = currTime();

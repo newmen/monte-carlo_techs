@@ -9,7 +9,7 @@ class DimerLateralReactionExplosionData :
         private LateralReactionData
 {
 public:
-    DimerLateralReactionExplosionData(int firstPrevState, int secondPrevState, int nextState, const RTReactorContext *reactor, long double k, long double Ea, long double epss[], int numOfSpecs);
+    DimerLateralReactionExplosionData(int firstPrevState, int secondPrevState, int nextState, const RTReactorContext *reactor, long double k, long double Ea, long double epss[]);
 
 protected:
     long double rateValue(const DimerData *dimer) const;

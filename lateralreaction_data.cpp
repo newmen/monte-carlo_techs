@@ -1,7 +1,7 @@
 #include "lateralreaction_data.h"
 
-LateralReactionData::LateralReactionData(const RTReactorContext *reactor, long double Ea, long double epss[], int numOfSpecs) :
-    ReactionActivationData(reactor, Ea), _numOfSpecs(numOfSpecs)
+LateralReactionData::LateralReactionData(const RTReactorContext *reactor, long double Ea, long double epss[]) :
+    ReactionActivationData(reactor, Ea), _numOfSpecs(reactor->numOfSpecs())
 {
     _epss = new long double[_numOfSpecs];
     for (int i = 0; i < _numOfSpecs; ++i) _epss[i] = epss[i];

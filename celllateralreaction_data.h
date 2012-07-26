@@ -9,7 +9,7 @@ class CellLateralReactionData :
         private LateralReactionData
 {
 public:
-    CellLateralReactionData(int prevState, int nextState, const RTReactorContext *reactor, long double k, long double Ea, long double epss[], int numOfSpecs);
+    CellLateralReactionData(int prevState, int nextState, const RTReactorContext *reactor, long double k, long double Ea, long double epss[]);
 
 protected:
     long double rateValue(const CellData *cell) const;

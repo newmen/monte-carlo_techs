@@ -12,16 +12,16 @@ NOCOReactorContext::NOCOReactorContext() : RTReactorContext(404) {
     double pNO = 3.7e-6;
     double pCO = 3e-6;
     addReaction(new CellReactionData(1.93e5 * pNO, 1, 2));
-    addReaction(new DimerReactionExchangeData(50, 2, 1));
+    addReaction(new DimerReactionExchangeData(1e4, 2, 1));
     addReaction(new CellReactionData(1.93e5 * pCO, 1, 3));
-    addReaction(new DimerReactionExchangeData(50, 3, 1));
+    addReaction(new DimerReactionExchangeData(1e4, 3, 1));
 
     long double eps3[] = {-2e3, -0.8e3};
-    addReaction(new DimerLateralReactionExplosionData(2, 3, 1, this, 2e15 / 4, 24.5e3, eps3, numOfSpecs()));
+    addReaction(new DimerLateralReactionExplosionData(2, 3, 1, this, 2e15 / 4, 24.5e3, eps3));
     long double eps4[] = {1.8e3, 2.2e3};
-    addReaction(new CellLateralReactionData(2, 1, this, 2e15, 37e3, eps4, numOfSpecs()));
+    addReaction(new CellLateralReactionData(2, 1, this, 2e15, 37e3, eps4));
     long double eps5[] = {2.2e3, 1e3};
-    addReaction(new CellLateralReactionData(3, 1, this, 1e15, 37.5e3, eps5, numOfSpecs()));
+    addReaction(new CellLateralReactionData(3, 1, this, 1e15, 37.5e3, eps5));
 }
 
 CellData *NOCOReactorContext::createCell(int *cell, int x, int y) const {
