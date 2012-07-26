@@ -6,9 +6,9 @@ AreaData::AreaData(int sizeX, int sizeY) : _sizeX(sizeX), _sizeY(sizeY) {
     int i = 0;
     for (int y = 0; y < _sizeY; ++y) {
         for (int x = 0; x < _sizeX; ++x) {
-//            int value = (rand() % 10 < 8) ? 1 : ((rand() % 2 == 0) ? 2 : 3);
+            int value = (rand() % 10 < 8) ? 1 : ((rand() % 2 == 0) ? 2 : 3);
 //            int value = (rand() % 10 < 7) ? 1 : ((rand() % 3 == 0) ? 2 : ((rand() % 2 == 0) ? 3 : 4));
-            int value = 1;
+//            int value = 1;
             _cells[i++] = value;
         }
     }
