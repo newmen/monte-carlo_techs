@@ -10,6 +10,7 @@ public:
 
     int numOfSpecs() const { return 3; }
     long double maxTime() const { return 5000; }
+    long double timeStep() const { return 1; }
 
 protected:
     void solveToOut(std::ostream &out) const;

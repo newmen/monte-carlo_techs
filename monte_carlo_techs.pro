@@ -96,4 +96,5 @@ HEADERS += \
 
 OTHER_FILES += \
     .gitignore \
-    README.md
+    README.md \
+    classes_tree.png

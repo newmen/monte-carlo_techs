@@ -23,14 +23,11 @@ public:
     EventInfoData doReaction();
 
 protected:
-    void initData();
-
     void storeCell(NodeCell *) {}
-    void storeDimer(NodeDimer *perDimer);
+    void storeDimer(NodeDimer *nodeDimer);
 
 private:
     MCTree _tree;
-    std::set<NodeCell *> _cacheNodeCells;
 };
 
 #endif // TREEBASEDSIMULATION_CONTEXT_H

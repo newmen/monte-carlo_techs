@@ -47,23 +47,13 @@ EventInfoData TreeBasedSimulationContext::doReaction() {
     return EventInfoData(0);
 }
 
-void TreeBasedSimulationContext::initData() {
-    SiteBasedSimulationContext<NodeCell, NodeDimer>::initData();
-    _cacheNodeCells.clear();
-}
+void TreeBasedSimulationContext::storeDimer(NodeDimer *nodeDimer) {
+    static int n = 0;
 
-void TreeBasedSimulationContext::storeDimer(NodeDimer *perDimer) {
     // memory of each perSite will be deleted into MCTree
-    _tree.add(perDimer);
-
-    auto addNodeCell = [this](PerCell *const perCell) {
-        NodeCell *const nodeCell = static_cast<NodeCell *const>(perCell);
-        if (_cacheNodeCells.find(nodeCell) == _cacheNodeCells.cend()) {
-            _cacheNodeCells.insert(nodeCell);
-            _tree.add(nodeCell);
-        }
-    };
-
-    addNodeCell(perDimer->first());
-    addNodeCell(perDimer->second());
+    _tree.add(nodeDimer);
+    if (n++ % 2 == 0) {
+        NodeCell *const nodeCell = static_cast<NodeCell *const>(nodeDimer->first());
+        _tree.add(nodeCell);
+    }
 }

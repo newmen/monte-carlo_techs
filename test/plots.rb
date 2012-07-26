@@ -60,17 +60,20 @@ def make_mc_concentrations_data(a_data, b_data, ds_with, &block)
   end
 end
 
+def configure_original(ds, name)
+  ds.linewidth = 2
+  ds.title = "Original #{name}"
+end
+
 def original_time_data(original)
   make_mc_time_data(original, 'lines') do |name, ds|
-    ds.linewidth = 2
-    ds.title = "Original #{name}"
+    configure_original(ds, name)
   end
 end
 
 def original_concentrations_data(a_data, b_data)
   make_mc_concentrations_data(a_data, b_data, 'lines') do |ds|
-    ds.linewidth = 2
-    ds.title = "Original time"
+    configure_original(ds, 'time')
   end
 end
 
@@ -87,19 +90,20 @@ def draw_original_time(original)
 end
 
 def draw_concentrations_graphs(filename, original, mc)
-  original_data = original[1].combination(2).to_a if original
-  mc_data = mc[1].to_a.combination(2).to_a
+  original_data = original[1].to_a.combination(2).to_a if original
+  mc_data = mc[1].to_a.combination(2).to_a if mc
 
-  data = original ? original_data : mc_data
-  data.each_with_index do |data, i|
+  name = mc ? mc[2] : original[2]
+  current_data = original ? original_data : mc_data
+  current_data.each_with_index do |data, i|
     a_data, b_data = data
-    mc_a_data, mc_b_data = mc_data if original
+    mc_a_data, mc_b_data = mc_data[i] if original && mc
     a, b = a_data[0], b_data[0]
-    make_mc_concentrations_gnuplot("#{filename}_#{a}_#{b}", "#{data[2]} #{a}/#{b}", a, b) do |plot|
+    make_mc_concentrations_gnuplot("#{filename}_#{a}_#{b}", "#{name} #{a}/#{b}", a, b) do |plot|
       org_data = []
       if original
         org_data << original_concentrations_data(a_data[1], b_data[1])
-        org_data << mc_concentrations_data(mc_a_data[1], mc_b_data[1])
+        org_data << mc_concentrations_data(mc_a_data[1], mc_b_data[1]) if mc
       else
         org_data << mc_concentrations_data(a_data[1], b_data[1])
       end
@@ -232,7 +236,7 @@ def read_and_draw_mc_plots
   if File.exist?(original_file) && File.size(original_file) > 0
     original = read_mc_file(original_file)
     draw_original_time(original)
-    draw_concentrations_graphs('original', original)
+    draw_concentrations_graphs('original', original, nil)
   else
     original = nil
   end

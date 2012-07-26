@@ -10,6 +10,7 @@ public:
 
     int numOfSpecs() const { return 2; }
     long double maxTime() const { return 50.0; }
+    long double timeStep() const { return 0.25; }
 
     CellData *createCell(int *cell, int x, int y) const;
     DimerData *createDimer(CellData *first, CellData *second) const;

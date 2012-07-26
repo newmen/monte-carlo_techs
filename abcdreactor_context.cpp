@@ -12,29 +12,27 @@ ABCDReactorContext::ABCDReactorContext() {
 
 void ABCDReactorContext::solveToOut(std::ostream &out) const {
     long double ratesSum = 0;
-    int numOfSpecs = 0;
     std::function<void (const ReactionData<CellData> *const)> lambda =
-            [&numOfSpecs, &ratesSum](const ReactionData<CellData> *const reaction)
+            [&ratesSum](const ReactionData<CellData> *const reaction)
     {
-        if (reaction->prevState() > 1) ++numOfSpecs;
         ratesSum += reaction->k();
     };
     eachReaction(lambda);
 
     long double currentTime = 0;
     long double dt = ratesSum / 5e5;
-    long double *concs = new long double[numOfSpecs];
-    for (int i = 0; i < numOfSpecs; ++i) concs[i] = 0;
-    long double *csNext = new long double[numOfSpecs];
+    long double *concs = new long double[numOfSpecs()];
+    for (int i = 0; i < numOfSpecs(); ++i) concs[i] = 0;
+    long double *csNext = new long double[numOfSpecs()];
 
     while (currentTime < maxTime()) {
         long double csSum = 0;
-        for (int i = 0; i < numOfSpecs; ++i) csSum += concs[i];
+        for (int i = 0; i < numOfSpecs(); ++i) csSum += concs[i];
 
-        for (int i = 0; i < numOfSpecs; ++i) {
+        for (int i = 0; i < numOfSpecs(); ++i) {
             long double dc = 0;
             std::function<void (const ReactionData<CellData> *const)> lambda =
-                    [numOfSpecs, concs, csSum, i, &dc](const ReactionData<CellData> *const reaction)
+                    [concs, csSum, i, &dc](const ReactionData<CellData> *const reaction)
             {
                 int nextIndex = reaction->nextState() - 2;
                 int prevIndex = reaction->prevState() - 2;
@@ -52,11 +50,11 @@ void ABCDReactorContext::solveToOut(std::ostream &out) const {
             csNext[i] = concs[i] + dt * dc;
         }
 
-        for (int i = 0; i < numOfSpecs; ++i) concs[i] = csNext[i];
+        for (int i = 0; i < numOfSpecs(); ++i) concs[i] = csNext[i];
         currentTime += dt;
 
         out << currentTime;
-        for (int i = 0; i < numOfSpecs; ++i) out << "\t" << concs[i];
+        for (int i = 0; i < numOfSpecs(); ++i) out << "\t" << concs[i];
         out << std::endl;
     }
 

@@ -3,12 +3,11 @@
 #include <sstream>
 #include <iostream>
 
-PathBuilder::PathBuilder(const std::string &resultDir) : _resultDir(resultDir) {
-}
+PathBuilder::PathBuilder(const std::string &resultDir) : _resultDir(resultDir) {}
 
 const std::string PathBuilder::buildPath(const std::string &fileName, const std::string &ext) const {
     std::stringstream ss;
-    ss << "results/" << fileName << "." << ext;
+    ss << _resultDir << "/" << fileName << "." << ext;
     return ss.str();
 }
 

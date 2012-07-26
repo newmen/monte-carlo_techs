@@ -16,6 +16,7 @@ public:
 
     virtual int numOfSpecs() const = 0;
     virtual long double maxTime() const = 0;
+    virtual long double timeStep() const = 0;
 
     virtual CellData *createCell(int *cell, int x, int y) const;
     virtual DimerData *createDimer(CellData *first, CellData *second) const;

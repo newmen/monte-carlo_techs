@@ -6,14 +6,16 @@ SimpleSimulationContext::SimpleSimulationContext(AreaData *area, const ReactorBa
 void SimpleSimulationContext::reviewAllEvents() {
     clearAllEvents();
 
-    // TODO: rejection-free может работать неправильно, из-за того, что сначала добавляются одноузельные события, а затем двухузельные
-    eachCell([this](CellData *const cell) {
-        this->eachCellReaction([this, &cell](const ReactionData<CellData> *const reaction) {
-            addCellEvent(cell, reaction);
-        });
-    });
+    int n = 0;
+    eachDimer([this, &n](DimerData *const dimer) {
+        if (n++ % 2 == 0) {
+            CellData *const cell = dimer->first;
+            reinitSite(cell);
+            this->eachCellReaction([this, &cell](const ReactionData<CellData> *const reaction) {
+                addCellEvent(cell, reaction);
+            });
+        }
 
-    eachDimer([this](DimerData *const dimer) {
         this->eachDimerReaction([this, &dimer](const ReactionData<DimerData> *const reaction) {
             addDimerEvent(dimer, reaction);
         });
