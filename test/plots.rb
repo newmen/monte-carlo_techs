@@ -45,8 +45,7 @@ end
 
 def make_mc_time_data(data, ds_with, &block)
   data[1].map do |name, arr_y|
-    percent_arr_y = arr_y.map { |x| x * 100 }
-    Gnuplot::DataSet.new([data[0], percent_arr_y]) do |ds|
+    Gnuplot::DataSet.new([data[0], arr_y]) do |ds|
       ds.with = ds_with
 
       block.call(name, ds)
