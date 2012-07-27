@@ -1,6 +1,8 @@
 #include <cmath>
 #include "treebasedsimulation_context.h"
 
+#include <iostream>
+
 int calcTreeWidthByK(int size, float levels) {
     double floatWidth = pow(size, (double)1 / levels);
     return ((int)(floatWidth * size) == size * (int)(floatWidth)) ? (int)floatWidth : (int)floatWidth + 1;
@@ -25,9 +27,19 @@ TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const Rea
 EventInfoData TreeBasedSimulationContext::doReaction() {
 //    if (!_tree.diagnostic()) return EventInfoData(0);
 
+    bool isRealyOver = false;
     while (true) {
         long double totalRate = _tree.sum();
-        if (totalRate == 0.0) break;
+        if (totalRate == 0.0) {
+            if (isRealyOver) break;
+            else {
+                std::cout << "ONE TIME! -> _tree.reCount()" << std::endl;
+                isRealyOver = true;
+                _tree.reCount();
+                continue;
+            }
+        }
+        isRealyOver = false;
 
         long double r = randomN01() * totalRate;
         INodeS *currentNode = _tree.find(&r);
