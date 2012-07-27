@@ -5,10 +5,16 @@ max_size=200
 size_step=25
 repeats=3
 
+name=$1
+if [ "$name" == "" ]; then
+    echo "run: $0 NAME_OF_CALC"
+    exit
+fi
+
 test_mc_dir=`pwd`
 test_mc_bin=${test_mc_dir}/test_mc
 plots_script=${test_mc_dir}/plots.rb
-results_dir=${test_mc_dir}/results
+results_dir=${test_mc_dir}/results_${name}
 
 if [ -x ${results_dir} ]; then
     echo "Clearing ${results_dir} dir..."
