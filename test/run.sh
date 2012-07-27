@@ -26,4 +26,4 @@ ${test_mc_bin} ${results_dir} ${max_size} ${max_size} 1 true
 #    ${test_mc_bin} ${results_dir} ${i} ${i} ${repeats}
 #done
 
-ruby ${plots_script} ${results_dir}
+ruby ${plots_script} -d ${results_dir}

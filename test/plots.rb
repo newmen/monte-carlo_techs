@@ -1,5 +1,6 @@
 # coding: utf-8
 
+require 'docopt'
 require 'gnuplot'
 
 EXT_MC = 'mcr'
@@ -256,16 +257,37 @@ def read_and_draw_perf_plots
   end
 end
 
-def main
-  result_dir = ARGV[0]
-  if result_dir
-    Dir.chdir(result_dir)
+def draw_into_dir(result_dir, recursively = false)
+  puts "Entering into #{File.expand_path(result_dir)}"
+  Dir.chdir(result_dir)
 
-    read_and_draw_mc_plots
-    read_and_draw_perf_plots
+  read_and_draw_mc_plots
+  read_and_draw_perf_plots
+
+  return unless recursively
+
+  Dir['*/'].each do |dir|
+    draw_into_dir(dir, true)
+    Dir.chdir('..')
+  end
+end
+
+def main
+  doc = <<HEREHELP
+Usage: ruby #{__FILE__} [options]
+
+  -h, --help         Show this
+  -d DIR, --dir=DIR  Directory with results [default: results]
+  -r, --recursively  Recursive searching a result files
+HEREHELP
+
+  options = Docopt(doc)
+  result_dir = options[:dir]
+  if result_dir
+    draw_into_dir(result_dir, options[:recursively])
   else
-    puts "Неправильный запуск"
-    puts "Необходимо передавать первым параметром путь до директории с результатами расчёта"
+    puts "Wrond run!"
+    puts doc
   end
 end
 
