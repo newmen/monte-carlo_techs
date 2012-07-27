@@ -12,9 +12,9 @@ NOCOReactorContext::NOCOReactorContext() : RTReactorContext(404) {
     double pNO = 3.7e-6;
     double pCO = 3e-6;
     addReaction(new CellReactionData(1.93e5 * pNO, 1, 2));
-    addReaction(new DimerReactionExchangeData(1e4, 2, 1));
+    addReaction(new DimerReactionExchangeData(2.5e2, 2, 1));
     addReaction(new CellReactionData(1.93e5 * pCO, 1, 3));
-    addReaction(new DimerReactionExchangeData(1e4, 3, 1));
+    addReaction(new DimerReactionExchangeData(2.5e3, 3, 1));
 
     long double eps3[] = {-2e3, -0.8e3};
     addReaction(new DimerLateralReactionExplosionData(2, 3, 1, this, 2e15 / 4, 24.5e3, eps3));

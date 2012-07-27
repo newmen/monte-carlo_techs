@@ -258,8 +258,9 @@ def read_and_draw_perf_plots
 end
 
 def draw_into_dir(result_dir, recursively = false)
-  puts "Entering into #{File.expand_path(result_dir)}"
+  print "Entering into #{File.expand_path(result_dir)}..."
   Dir.chdir(result_dir)
+  puts " complete"
 
   read_and_draw_mc_plots
   read_and_draw_perf_plots
@@ -274,10 +275,10 @@ end
 
 def main
   doc = <<HEREHELP
-Usage: ruby #{__FILE__} [options]
-
+Usage: ruby #{__FILE__} options
+Options:
   -h, --help         Show this
-  -d DIR, --dir=DIR  Directory with results [default: results]
+  -d DIR, --dir=DIR  Directory with results
   -r, --recursively  Recursive searching a result files
 HEREHELP
 
