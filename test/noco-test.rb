@@ -22,8 +22,10 @@ T = 404
 R = 1.987
 RT = R * T
 
-def rate(name, nNO, nCO, k, e, epsNO, epsCO)
-  r = k * Math.exp(-(e + nNO * epsNO + nCO * epsCO) / RT)
+def rate(name, nNO, nCO, k, e, epsNO, epsCO, maxN)
+  # r = k * Math.exp(-(e + nNO * epsNO + nCO * epsCO) / RT)
+  # r = k * Math.exp(-e / RT) * (1 + nNO * (Math.exp(epsNO / RT) - 1) + nCO * (Math.exp(epsCO / RT) - 1)) ** maxN
+  r = k * Math.exp((-e + nNO * epsNO + nCO * epsCO) / RT)
   [r, "#{name} [NO: #{nNO}, CO: #{nCO}]"]
 end
 
