@@ -16,7 +16,7 @@ public:
 
     INodeS *find(long double *r) const;
 
-    void reCount();
+    void reCount(const SimulationBaseContext *simulationContext);
     bool diagnoze() const;
 
 private:

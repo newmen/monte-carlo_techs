@@ -30,15 +30,15 @@ def rate(name, nNO, nCO, k, e, epsNO, epsCO, maxN)
 end
 
 def rate3(nNO, nCO)
-  rate('dual(3)', nNO, nCO, K3, E3, Eps3NO, Eps3CO)
+  rate('dual(3)', nNO, nCO, K3, E3, Eps3NO, Eps3CO, 6)
 end
 
 def rate4(nNO, nCO)
-  rate('mono(4)', nNO, nCO, K4, E4, Eps4NO, Eps4CO)
+  rate('mono(4)', nNO, nCO, K4, E4, Eps4NO, Eps4CO, 4)
 end
 
 def rate5(nNO, nCO)
-  rate('mono(5)', nNO, nCO, K5, E5, Eps5NO, Eps5CO)
+  rate('mono(5)', nNO, nCO, K5, E5, Eps5NO, Eps5CO, 4)
 end
 
 def separator

@@ -18,8 +18,8 @@ MainWindowContext::MainWindowContext() : _area(50, 50), _cellSideLength(5), _tot
 
 //    _reactor = new ABCDCellReactorContext;
 //    _reactor = new ABCDDimerReactorContext;
-//    _reactor = new NOCOReactorContext;
-    _reactor = new LotkaReactorContext;
+    _reactor = new NOCOReactorContext;
+//    _reactor = new LotkaReactorContext;
 //    _reactor = new LotkaThreeReactorContext;
 
 //    _simulationContext = new RejectionSimulationContext(&_area, _reactor);

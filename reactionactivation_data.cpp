@@ -5,5 +5,5 @@ ReactionActivationData::ReactionActivationData(const RTReactorContext *reactor, 
     _reactor(reactor), _Ea(Ea) {}
 
 long double ReactionActivationData::expFactor(long double additionalEnergy) const {
-    return exp(-(_Ea + additionalEnergy) / _reactor->RT());
+    return exp((-_Ea + additionalEnergy) / _reactor->RT());
 }

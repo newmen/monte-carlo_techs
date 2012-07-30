@@ -49,10 +49,10 @@ INodeS *NodeN::find(long double *r) const {
     return 0; // happens when need reCount
 }
 
-void NodeN::reCount() {
+void NodeN::reCount(const SimulationBaseContext *simulationContext) {
     _sum = 0;
     for (int i = 0; i < _numberOfChilds; ++i) {
-        _childs[i]->reCount();
+        _childs[i]->reCount(simulationContext);
         _sum += _childs[i]->sum();
     }
 }

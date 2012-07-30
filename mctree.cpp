@@ -26,8 +26,8 @@ INodeS *MCTree::find(long double *r) const {
     return _root->find(r);
 }
 
-void MCTree::reCount() {
-    _root->reCount();
+void MCTree::reCount(const SimulationBaseContext *simulationContext) {
+    _root->reCount(simulationContext);
 }
 
 bool MCTree::diagnostic() const {

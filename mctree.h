@@ -3,6 +3,7 @@
 
 #include "noden.h"
 #include "inodes.h"
+#include "simulationbase_context.h"
 
 class MCTree
 {
@@ -15,7 +16,7 @@ public:
 
     INodeS *find(long double *r) const;
 
-    void reCount();
+    void reCount(const SimulationBaseContext *simulationContext);
     bool diagnostic() const;
 
 private:

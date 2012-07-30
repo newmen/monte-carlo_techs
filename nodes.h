@@ -23,7 +23,7 @@ public:
     void updateRates(const SimulationBaseContext *simulationContext, const PerDimer *exceptPerDimer);
     void updateLocalCommonRate(const SimulationBaseContext *simulationContext, int otherSideIndex);
 
-    void reCount();
+    void reCount(const SimulationBaseContext *simulationContext);
     bool diagnoze() const;
 
 private:
@@ -65,7 +65,8 @@ void NodeS<SmartSite>::updateLocalCommonRate(const SimulationBaseContext *simula
 }
 
 template <class SmartSite>
-void NodeS<SmartSite>::reCount() {
+void NodeS<SmartSite>::reCount(const SimulationBaseContext *simulationContext) {
+    SmartSite::updateRates(simulationContext);
     initSum();
 }
 

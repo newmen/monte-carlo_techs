@@ -1,6 +1,8 @@
 #ifndef NODEBASE_H
 #define NODEBASE_H
 
+#include "simulationbase_context.h"
+
 class NodeBase
 {
 public:
@@ -12,7 +14,7 @@ public:
 
     void accSum(long double sum);
 
-    virtual void reCount() = 0;
+    virtual void reCount(const SimulationBaseContext *simulationContext) = 0;
     virtual bool diagnoze() const = 0;
 
 protected:

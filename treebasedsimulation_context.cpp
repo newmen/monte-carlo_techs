@@ -33,9 +33,9 @@ EventInfoData TreeBasedSimulationContext::doReaction() {
         if (totalRate == 0.0) {
             if (isRealyOver) break;
             else {
-                std::cout << "ONE TIME! -> _tree.reCount()" << std::endl;
+                std::cerr << "ONE TIME! -> _tree.reCount()" << std::endl;
                 isRealyOver = true;
-                _tree.reCount();
+                _tree.reCount(this);
                 continue;
             }
         }
@@ -44,7 +44,7 @@ EventInfoData TreeBasedSimulationContext::doReaction() {
         long double r = randomN01() * totalRate;
         INodeS *currentNode = _tree.find(&r);
         if (currentNode == 0) {
-            _tree.reCount();
+            _tree.reCount(this);
             continue;
         }
         currentNode->doReaction(this, r);
