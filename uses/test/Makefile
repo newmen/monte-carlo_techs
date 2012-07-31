@@ -1,20 +1,23 @@
 GCC_PATH = /opt/gcc47
 CXX = $(GCC_PATH)/bin/g++
-CXX_CFLAGS = -Wall -O2 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64
+CXXFLAGS = -Wall -O2 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64 -I../../src
+
 NAME = test_mc
 HEAP_NAME = heap_test
 
 LIB_DIRS = contexts datas roles
 LIBS = $(wildcard $(addsuffix /*.o, $(addprefix ../../obj/, $(LIB_DIRS))))
 
+SOURCE_FILES = $(wildcard src/*.cpp)
+
 default:	$(NAME)
 
 $(NAME):
-	$(CXX) $(CXX_CFLAGS) $(LIBS) *.cpp -o $@
+	$(CXX) $(CXXFLAGS) $(LIBS) $(SOURCE_FILES) -o $@
 
-heap_test:
-	$(CXX) $(CXX_CFLAGS) $(LIBS) -ltcmalloc *.cpp -o $@
+$(HEAP_NAME):
+	$(CXX) $(CXXFLAGS) $(LIBS) $(SOURCE_FILES) -ltcmalloc -o $@
 
 clean:
-	rm $(NAME)
-	rm $(HEAP_NAME)
+	rm -f $(NAME)
+	rm -f $(HEAP_NAME)

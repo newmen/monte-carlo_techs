@@ -1,9 +1,9 @@
 #ifndef SIMULATIONCONTEXTFACTORY_H
 #define SIMULATIONCONTEXTFACTORY_H
 
-#include "../../src/datas/area_data.h"
-#include "../../src/contexts/basereactor_context.h"
-#include "../../src/contexts/basesimulation_context.h"
+#include <datas/area_data.h>
+#include <contexts/basereactor_context.h>
+#include <contexts/basesimulation_context.h>
 
 class SimulationContextFactory
 {

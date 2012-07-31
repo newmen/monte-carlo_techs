@@ -1,6 +1,6 @@
 #include "treesimcontextfactory.h"
 
-#include "../../src/contexts/treebasedsimulation_context.h"
+#include <contexts/treebasedsimulation_context.h>
 
 TreeSimContextFactory::TreeSimContextFactory(int levels) : _levels(levels) {}
 

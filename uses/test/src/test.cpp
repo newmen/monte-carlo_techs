@@ -10,19 +10,19 @@
 #include "typicalsimcontextfactory.h"
 #include "treesimcontextfactory.h"
 
-#include "../../src/datas/area_data.h"
-#include "../../src/contexts/abcdcellreactor_context.h"
-#include "../../src/contexts/abcddimerreactor_context.h"
-#include "../../src/contexts/nocoreactor_context.h"
-#include "../../src/contexts/lotkareactor_context.h"
-#include "../../src/contexts/lotkathreereactor_context.h"
+#include <datas/area_data.h>
+#include <contexts/abcdcellreactor_context.h>
+#include <contexts/abcddimerreactor_context.h>
+#include <contexts/nocoreactor_context.h>
+#include <contexts/lotkareactor_context.h>
+#include <contexts/lotkathreereactor_context.h>
 
-#include "../../src/contexts/dynamicsimulation_context.h"
-#include "../../src/contexts/kineticsimulation_context.h"
-#include "../../src/contexts/rejectionsimulation_context.h"
-#include "../../src/contexts/rejectionfreesimulation_context.h"
-#include "../../src/contexts/treebasedsimulation_context.h"
-#include "../../src/contexts/store_context.h"
+#include <contexts/dynamicsimulation_context.h>
+#include <contexts/kineticsimulation_context.h>
+#include <contexts/rejectionsimulation_context.h>
+#include <contexts/rejectionfreesimulation_context.h>
+#include <contexts/treebasedsimulation_context.h>
+#include <contexts/store_context.h>
 
 #define GRAPH_EXT "mcr"
 
