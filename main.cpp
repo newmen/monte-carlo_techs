@@ -2,19 +2,19 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "area_data.h"
+#include "app/datas/area_data.h"
 
-#include "abcdcellreactor_context.h"
-#include "abcddimerreactor_context.h"
-#include "nocoreactor_context.h"
-#include "lotkareactor_context.h"
+#include "app/contexts/abcdcellreactor_context.h"
+#include "app/contexts/abcddimerreactor_context.h"
+#include "app/contexts/nocoreactor_context.h"
+#include "app/contexts/lotkareactor_context.h"
 
-#include "rejectionsimulation_context.h"
-#include "rejectionfreesimulation_context.h"
-#include "dynamicsimulation_context.h"
-#include "kineticsimulation_context.h"
-#include "treebasedsimulation_context.h"
-#include "store_context.h"
+#include "app/contexts/rejectionsimulation_context.h"
+#include "app/contexts/rejectionfreesimulation_context.h"
+#include "app/contexts/dynamicsimulation_context.h"
+#include "app/contexts/kineticsimulation_context.h"
+#include "app/contexts/treebasedsimulation_context.h"
+#include "app/contexts/store_context.h"
 
 template <class SimulationContext>
 void run() {

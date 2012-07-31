@@ -10,9 +10,11 @@
 *.prf
 
 *.gch
+*.d
 
-test/test_mc
-test/heap_test
+uses/test/test_mc
+uses/test/heap_test
+uses/test/*results*
 
 # Compiled Object files
 *.slo
