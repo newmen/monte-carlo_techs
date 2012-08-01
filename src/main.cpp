@@ -2,28 +2,28 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "app/datas/area_data.h"
+#include "datas/area_data.h"
 
-#include "app/contexts/abcdcellreactor_context.h"
-#include "app/contexts/abcddimerreactor_context.h"
-#include "app/contexts/nocoreactor_context.h"
-#include "app/contexts/lotkareactor_context.h"
+#include "contexts/abcdcellreactor_context.h"
+#include "contexts/abcddimerreactor_context.h"
+#include "contexts/nocoreactor_context.h"
+#include "contexts/lotkareactor_context.h"
 
-#include "app/contexts/rejectionsimulation_context.h"
-#include "app/contexts/rejectionfreesimulation_context.h"
-#include "app/contexts/dynamicsimulation_context.h"
-#include "app/contexts/kineticsimulation_context.h"
-#include "app/contexts/treebasedsimulation_context.h"
-#include "app/contexts/store_context.h"
+#include "contexts/rejectionsimulation_context.h"
+#include "contexts/rejectionfreesimulation_context.h"
+#include "contexts/dynamicsimulation_context.h"
+#include "contexts/kineticsimulation_context.h"
+#include "contexts/treebasedsimulation_context.h"
+#include "contexts/store_context.h"
 
 template <class SimulationContext>
 void run() {
-    AreaData area(100, 100);
+    AreaData area(50, 50);
 //    AreaData area(13, 13);
 
-//    ABCDCellReactorContext reactor;
+    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
-    NOCOReactorContext reactor;
+//    NOCOReactorContext reactor;
 //    LotkaReactorContext reactor;
 
     SimulationContext sc(&area, &reactor);
@@ -56,10 +56,10 @@ int main() {
 
     std::cout << "Running..." << std::endl;
 
-//    run<RejectionSimulationContext>();
-//    run<RejectionFreeSimulationContext>();
-//    run<DynamicSimulationContext>();
-//    run<KineticSimulationContext>();
+    run<RejectionSimulationContext>();
+    run<RejectionFreeSimulationContext>();
+    run<DynamicSimulationContext>();
+    run<KineticSimulationContext>();
     run<TreeBasedSimulationContext>();
 
     std::cout << "Complete :)" << std::endl;

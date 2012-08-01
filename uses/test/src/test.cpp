@@ -105,7 +105,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
             totalTime += dt;
             ++iterations;
         }
-        if (counter != 0) storeContext->store(totalTime); // last value
+        if (tc->needGraph && counter != 0) storeContext->store(totalTime); // last value
     }
 
     double stopTime = currTime();
@@ -141,8 +141,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-//    ABCDCellReactorContext reactor;
-    NOCOReactorContext reactor;
+    ABCDCellReactorContext reactor;
+//    NOCOReactorContext reactor;
 //    LotkaReactorContext reactor;
     TestConfig tc(&reactor, argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
                   (argc == 6 && strcmp(argv[5], "true") == 0));
@@ -160,27 +160,27 @@ int main(int argc, char *argv[]) {
 
     srand(time(0));
 
-//    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
-//    runTest(&tc, "Rejection MC", "rejection");
-//    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
-//    runTest(&tc, "Rejection-free MC", "rejection-free");
-//    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
-//    runTest(&tc, "Dynamic MC", "dynamic");
-//    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
-//    runTest(&tc, "Kinetic MC", "kinetic");
+    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
+    runTest(&tc, "Rejection MC", "rejection");
+    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
+    runTest(&tc, "Rejection-free MC", "rejection-free");
+    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
+    runTest(&tc, "Dynamic MC", "dynamic");
+    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
+    runTest(&tc, "Kinetic MC", "kinetic");
 
-//    TreeSimContextFactory *factory = new TreeSimContextFactory(2);
-//    tc.changeFactory(factory);
-//    runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
-//    factory->setWidth((int)log2(tc.sizeX * tc.sizeY));
-//    runTest(&tc, "Faster Binary MC", "faster_binary");
+    TreeSimContextFactory *factory = new TreeSimContextFactory(2);
+    tc.changeFactory(factory);
+    runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
+    factory->setWidth((int)log2(tc.sizeX * tc.sizeY));
+    runTest(&tc, "Faster Binary MC", "faster_binary");
 
-//    factory->setWidth(3);
-//    runTest(&tc, "Faster 3 MC", "faster_3");
-//    factory->setWidth(4);
-//    runTest(&tc, "Faster 4 MC", "faster_4");
-//    factory->setWidth(6);
-//    runTest(&tc, "Faster 6 MC", "faster_6");
+    factory->setWidth(3);
+    runTest(&tc, "Faster 3 MC", "faster_3");
+    factory->setWidth(4);
+    runTest(&tc, "Faster 4 MC", "faster_4");
+    factory->setWidth(6);
+    runTest(&tc, "Faster 6 MC", "faster_6");
 
     tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
     runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
