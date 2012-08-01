@@ -92,7 +92,7 @@ SOURCES += \
     src/datas/basenode_data.cpp \
     src/datas/node_data.cpp \
     src/datas/eventinfo_data.cpp \
-    main.cpp
+    src/main.cpp
 
 OTHER_FILES += \
     .gitignore \
