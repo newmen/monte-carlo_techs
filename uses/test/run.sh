@@ -1,6 +1,6 @@
 #!/bin/sh
 
-min_size=25
+min_size=20
 max_size=100
 size_step=20
 repeats=3
@@ -14,7 +14,7 @@ fi
 test_mc_dir=`pwd`
 test_mc_bin=${test_mc_dir}/test_mc
 plots_script=${test_mc_dir}/plots.rb
-results_dir=${test_mc_dir}/results_${name}
+results_dir=${test_mc_dir}/results/${name}
 
 if [ -x ${results_dir} ]; then
     echo "Clearing ${results_dir} dir..."

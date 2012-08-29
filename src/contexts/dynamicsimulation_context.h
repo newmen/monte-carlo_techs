@@ -9,10 +9,8 @@
 
 class DynamicSimulationContext : public SimpleSimulationContext
 {
-    typedef std::map<const ReactionData<CellData> *const, std::vector<CellData *> > CellsMap;
-    typedef std::map<const ReactionData<DimerData> *const, std::vector<DimerData *> > DimersMap;
-    typedef std::map<const ReactionData<CellData> *const, long double> RatesOnSitesMap;
-    typedef std::map<const ReactionData<DimerData> *const, long double> RatesOnDimersMap;
+    typedef std::map<long double, std::vector<std::pair<CellData *const, const ReactionData<CellData> *const> > > CellsMap;
+    typedef std::map<long double, std::vector<std::pair<DimerData *const, const ReactionData<DimerData> *const> > > DimersMap;
 
 public:
     DynamicSimulationContext(AreaData *area, const BaseReactorContext *reactor);
@@ -28,20 +26,14 @@ protected:
 
 private:
     template <class SData>
-    void addEvent(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer, std::map<const ReactionData<SData> *const, long double> *rates, SData *const site, const ReactionData<SData> *const reaction);
+    void addEvent(std::map<long double, std::vector<std::pair<SData *const, const ReactionData<SData> *const> > > *sitesMap, SData *const site, const ReactionData<SData> *const reaction);
 
     template <class SData>
-    const ReactionData<SData> *findReaction(long double *r, long double *max, const std::map<const ReactionData<SData> *const, long double> &ratesMap) const;
-
-    template <class SData>
-    void clearEvents(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer, std::map<const ReactionData<SData> *const, long double> *rates);
+    SData *findAndDoReaction(long double *r, const std::map<long double, std::vector<std::pair<SData *const, const ReactionData<SData> *const> > > &sitesMap) const;
 
 private:
     CellsMap _cells;
     DimersMap _dimers;
-
-    RatesOnSitesMap _ratesOnSites;
-    RatesOnDimersMap _ratesOnDimers;
 
     long double _totalRate;
 };
