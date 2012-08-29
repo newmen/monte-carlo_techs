@@ -9,78 +9,70 @@ EventInfoData DynamicSimulationContext::doReaction() {
     reviewAllEvents();
     if (_totalRate == 0.0) return EventInfoData(0);
 
-    long double max = 0;
-    long double r = randomN01() * _totalRate;
-    auto indexLambda = [&r, &max](unsigned int size) -> int {
-        return size * r / max;
-    };
-
     EventInfoData ei(negativLogU() / _totalRate);
-    const ReactionData<CellData> *cellReaction = findReaction(&r, &max, _ratesOnSites);
-    if (cellReaction) {
-        auto &cells = _cells[cellReaction];
-        CellData *cell = cells[indexLambda(cells.size())];
-        cellReaction->doIt(cell);
-        ei.set(cell);
+
+    long double r = randomN01() * _totalRate;
+
+    if ((int)r % 2 == 0) {
+        CellData *cell = findAndDoReaction(&r, _cells);
+        if (cell) {
+            ei.set(cell);
+        } else {
+            DimerData *dimer = findAndDoReaction(&r, _dimers);
+            ei.set(dimer);
+        }
     } else {
-        const ReactionData<DimerData> *dimerReaction = findReaction(&r, &max, _ratesOnDimers);
-        auto &dimers = _dimers[dimerReaction];
-        DimerData *dimer = dimers[indexLambda(dimers.size())];
-        dimerReaction->doIt(dimer);
-        ei.set(dimer);
+        DimerData *dimer = findAndDoReaction(&r, _dimers);
+        if (dimer) {
+            ei.set(dimer);
+        } else {
+            CellData *cell = findAndDoReaction(&r, _cells);
+            ei.set(cell);
+        }
     }
 
     return ei;
 }
 
 void DynamicSimulationContext::clearAllEvents() {
-    clearEvents(&_cells, &_ratesOnSites);
-    clearEvents(&_dimers, &_ratesOnDimers);
+    _cells.clear();
+    _dimers.clear();
     _totalRate = 0;
 }
 
 void DynamicSimulationContext::addCellEvent(CellData *const cell, const ReactionData<CellData> *const reaction) {
-    addEvent(&_cells, &_ratesOnSites, cell, reaction);
+    addEvent(&_cells, cell, reaction);
 }
 
 void DynamicSimulationContext::addDimerEvent(DimerData *const dimer, const ReactionData<DimerData> *const reaction) {
-    addEvent(&_dimers, &_ratesOnDimers, dimer, reaction);
+    addEvent(&_dimers, dimer, reaction);
 }
 
 template <class SData>
-void DynamicSimulationContext::addEvent(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer,
-                                        std::map<const ReactionData<SData> *const, long double> *rates,
-                                        SData *const site,
-                                        const ReactionData<SData> *const reaction)
-{
+void DynamicSimulationContext::addEvent(std::map<long double, std::vector<std::pair<SData *const, const ReactionData<SData> *const> > > *sitesMap, SData *const site, const ReactionData<SData> *const reaction) {
     long double rate = reaction->rate(site);
     if (rate > 0) {
-        (*dataContainer)[reaction].push_back(site);
-        (*rates)[reaction] += rate;
+        (*sitesMap)[rate].push_back(std::pair<SData *const, const ReactionData<SData> *const>(site, reaction));
         _totalRate += rate;
     }
 }
 
 template <class SData>
-const ReactionData<SData> *DynamicSimulationContext::findReaction(long double *r, long double *max,
-                                                                  const std::map<const ReactionData<SData> *const, long double> &ratesMap) const
+SData *DynamicSimulationContext::findAndDoReaction(long double *r, const std::map<long double, std::vector<std::pair<SData *const, const ReactionData<SData> *const> > > &sitesMap) const
 {
+    SData *site = 0;
     const ReactionData<SData> *reaction = 0;
-    for (auto p = ratesMap.cbegin(); p != ratesMap.cend(); ++p) {
-        *max = p->second;
-        if (*r < p->second) {
-            reaction = p->first;
+    for (auto p = sitesMap.cbegin(); p != sitesMap.cend(); ++p) {
+        long double commonRate = p->first * p->second.size();
+        if (*r < commonRate) {
+            int index = (int)(*r * p->second.size() / commonRate);
+            site = p->second[index].first;
+            reaction = p->second[index].second;
+            reaction->doIt(site);
             break;
         } else {
-            *r -= p->second;
+            *r -= commonRate;
         }
     }
-    return reaction;
-}
-
-template <class SData>
-void DynamicSimulationContext::clearEvents(std::map<const ReactionData<SData> *const, std::vector<SData *> > *dataContainer,
-                                           std::map<const ReactionData<SData> *const, long double> *rates) {
-    for (auto p = dataContainer->begin(); p != dataContainer->end(); ++p) p->second.clear();
-    for (auto p = rates->begin(); p != rates->end(); ++p) p->second = 0;
+    return site;
 }
