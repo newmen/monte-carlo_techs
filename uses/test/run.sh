@@ -1,13 +1,17 @@
 #!/bin/sh
 
+if [ ! $# == 2 ]; then
+    echo "run: $0 NAME CALC"
+    exit
+fi
+
+#min_size=20
+max_size=100
+#size_step=20
 repeats=2
 
 name=$1
 calc=$2
-if [ "$name" == "" || "$calc" == "" ]; then
-    echo "run: $0 NAME CALC"
-    exit
-fi
 
 test_mc_dir=`pwd`
 test_mc_bin=${test_mc_dir}/bin/sep/${name}
@@ -28,12 +32,16 @@ fi
 
 echo "Executing calculations..."
 
-#${test_mc_bin} ${results_dir} ${max_size} ${max_size} 1 true
+if [ "$calc" == "crv" ]; then
+    ${test_mc_bin} ${results_dir} ${max_size} ${max_size} 1 true
+fi
 
 #for i in `seq ${min_size} ${size_step} ${max_size}`; do
 #    ${test_mc_bin} ${results_dir} ${i} ${i} ${repeats}
 #done
-${test_mc_bin} ${results_dir} ${calc} ${calc} ${repeats}
+if [ "$calc" != "crv" ]; then
+    ${test_mc_bin} ${results_dir} ${calc} ${calc} ${repeats}
+fi
 
 #home_results=${test_mc_dir}/results
 #mkdir -p ${home_results}
