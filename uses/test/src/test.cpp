@@ -165,11 +165,13 @@ int main(int argc, char *argv[]) {
     runTest(&tc, "Rejection MC", "rejection");
     tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
     runTest(&tc, "Rejection-free MC", "rejection-free");
+*/
     tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
     runTest(&tc, "Dynamic MC", "dynamic");
+/*
     tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
     runTest(&tc, "Kinetic MC", "kinetic");
-*/
+
     TreeSimContextFactory *factory = new TreeSimContextFactory(2);
     tc.changeFactory(factory);
     runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
@@ -185,6 +187,6 @@ int main(int argc, char *argv[]) {
 
     tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
     runTest(&tc, "Faster Optimal (5) MC", "faster_optimal");
-
+*/
     return 0;
 }

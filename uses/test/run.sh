@@ -1,8 +1,5 @@
 #!/bin/sh
 
-#min_size=20
-max_size=100
-#size_step=20
 repeats=2
 
 name=$1
