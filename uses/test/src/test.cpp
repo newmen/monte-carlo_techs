@@ -141,8 +141,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    ABCDCellReactorContext reactor;
-//    NOCOReactorContext reactor;
+//    ABCDCellReactorContext reactor;
+    NOCOReactorContext reactor;
 //    LotkaReactorContext reactor;
     TestConfig tc(&reactor, argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
                   (argc == 6 && strcmp(argv[5], "true") == 0));
@@ -160,6 +160,7 @@ int main(int argc, char *argv[]) {
 
     srand(time(0));
 
+/*
     tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
     runTest(&tc, "Rejection MC", "rejection");
     tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
@@ -168,7 +169,7 @@ int main(int argc, char *argv[]) {
     runTest(&tc, "Dynamic MC", "dynamic");
     tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
     runTest(&tc, "Kinetic MC", "kinetic");
-
+*/
     TreeSimContextFactory *factory = new TreeSimContextFactory(2);
     tc.changeFactory(factory);
     runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
