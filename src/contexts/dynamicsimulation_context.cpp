@@ -65,7 +65,7 @@ SData *DynamicSimulationContext::findAndDoReaction(long double *r, const std::ma
     for (auto p = sitesMap.cbegin(); p != sitesMap.cend(); ++p) {
         long double commonRate = p->first * p->second.size();
         if (*r < commonRate) {
-            int index = (int)(*r * p->second.size() / commonRate);
+            int index = (int)(*r / p->first);
             site = p->second[index].first;
             reaction = p->second[index].second;
             reaction->doIt(site);
