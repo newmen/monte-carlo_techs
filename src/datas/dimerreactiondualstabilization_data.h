@@ -7,7 +7,7 @@
 class DimerReactionDualStabilizationData : public ReactionData<DimerData>
 {
 public:
-    DimerReactionDualStabilizationData(long double k, int firstPrevState, int secondPrevState, int nextState);
+    DimerReactionDualStabilizationData(int firstPrevState, int secondPrevState, int nextState, long double k);
 
     long double rate(const DimerData *dimer) const;
     void doIt(DimerData *const dimer) const;

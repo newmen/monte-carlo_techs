@@ -7,7 +7,7 @@
 class DimerReactionExchangeData : public ReactionData<DimerData>
 {
 public:
-    DimerReactionExchangeData(long double k, int prevState, int nextState);
+    DimerReactionExchangeData(int prevState, int nextState, long double k);
 
     long double rate(const DimerData *dimer) const;
     void doIt(DimerData *const dimer) const;

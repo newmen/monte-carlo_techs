@@ -1,7 +1,7 @@
 #include "dimerreactioncapture_data.h"
 
-DimerReactionCaptureData::DimerReactionCaptureData(long double k, int prevState, int nextState) :
-    ReactionData<DimerData>(k, prevState, nextState) {}
+DimerReactionCaptureData::DimerReactionCaptureData(int prevState, int nextState, long double k) :
+    ReactionData<DimerData>(prevState, nextState, k) {}
 
 long double DimerReactionCaptureData::rate(const DimerData *dimer) const {
     return ((dimer->first->value() == nextState() && dimer->second->value() == prevState()) ||
