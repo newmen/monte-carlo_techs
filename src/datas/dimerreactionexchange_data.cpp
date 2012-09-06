@@ -1,7 +1,7 @@
 #include "dimerreactionexchange_data.h"
 
-DimerReactionExchangeData::DimerReactionExchangeData(long double k, int prevState, int nextState) :
-    ReactionData<DimerData>(k, prevState, nextState) {}
+DimerReactionExchangeData::DimerReactionExchangeData(int prevState, int nextState, long double k) :
+    ReactionData<DimerData>(prevState, nextState, k) {}
 
 long double DimerReactionExchangeData::rate(const DimerData *dimer) const {
     return ((dimer->first->value() == nextState() && dimer->second->value() == prevState()) ||

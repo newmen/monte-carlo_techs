@@ -15,9 +15,8 @@ public:
 
     void addPerDimer(PerDimerData *const perDimer);
 
-    void updateRates(const BaseSimulationContext *simulationContext);
-    virtual void updateRates(const BaseSimulationContext *simulationContext, const PerDimerData *exceptPerDimer);
-    virtual void updateLocalCommonRate(const BaseSimulationContext *simulationContext, int otherSideIndex);
+    void updateAroundRates(const BaseSimulationContext *simulationContext, int depth);
+    virtual void updateAroundRates(const BaseSimulationContext *simulationContext, int depth, int woDimerIndex); // optimization
 
 private:
     PerDimerData *_perDimers[PERDIMERS_NUM];
