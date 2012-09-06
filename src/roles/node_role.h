@@ -20,8 +20,8 @@ public:
     void doReaction(const BaseSimulationContext *simulationContext, long double r);
 
     void updateRates(const BaseSimulationContext *simulationContext);
-    void updateRates(const BaseSimulationContext *simulationContext, const PerDimerData *exceptPerDimer);
-    void updateLocalCommonRate(const BaseSimulationContext *simulationContext, int otherSideIndex);
+    void updateAroundRates(const BaseSimulationContext *simulationContext, int depth);
+    void updateAroundRates(const BaseSimulationContext *simulationContext, int depth, int woDimerIndex); // override only for PSData = PerCellData
 
     void reCount(const BaseSimulationContext *simulationContext);
     bool diagnoze() const;
@@ -50,17 +50,17 @@ void NodeRole<PSData>::updateRates(const BaseSimulationContext *simulationContex
     updateSum();
 }
 
-// this method only for PerSite instance
+// optimization
 template <class PSData>
-void NodeRole<PSData>::updateRates(const BaseSimulationContext *simulationContext, const PerDimerData *exceptPerDimer) {
-    PSData::updateRates(simulationContext, exceptPerDimer);
-    updateSum();
+void NodeRole<PSData>::updateAroundRates(const BaseSimulationContext *simulationContext, int depth) {
+    PSData::updateAroundRates(simulationContext, depth);
+    if (dynamic_cast<PerCellData *>(this) == 0) updateSum();
 }
 
-// this method only for PerSite instance
+// optimization again only for PSData = PerCellData
 template <class PSData>
-void NodeRole<PSData>::updateLocalCommonRate(const BaseSimulationContext *simulationContext, int otherSideIndex) {
-    PSData::updateLocalCommonRate(simulationContext, otherSideIndex);
+void NodeRole<PSData>::updateAroundRates(const BaseSimulationContext *simulationContext, int depth, int woDimerIndex) {
+    PSData::updateAroundRates(simulationContext, depth, woDimerIndex);
     updateSum();
 }
 

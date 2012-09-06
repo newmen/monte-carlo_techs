@@ -18,7 +18,9 @@ public:
     long double commonRate() const;
     void doReaction(const BaseSimulationContext *simulationContext, long double r);
 
+    // must be public!
     virtual void updateRates(const BaseSimulationContext *simulationContext);
+    virtual void updateAroundRates(const BaseSimulationContext *simulationContext, int depth) = 0;
 
     SData *site() const;
 
@@ -72,7 +74,7 @@ void PerSiteData<SData>::doReaction(const BaseSimulationContext *simulationConte
             r -= p->second;
         }
     }
-    updateRates(simulationContext);
+    updateAroundRates(simulationContext, 1);
 }
 
 #endif // PERSITE_DATA_H

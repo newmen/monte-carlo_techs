@@ -4,10 +4,10 @@
 #include "../datas/dimerreactionexchange_data.h"
 
 ABCDReactorContext::ABCDReactorContext() {
-    addReaction(new CellReactionData(144, 1, 2));
-    addReaction(new CellReactionData(34, 2, 1));
-    addReaction(new CellReactionData(55, 2, 3));
-    addReaction(new DimerReactionExchangeData(1e2, 3, 1));
+    addReaction(new CellReactionData(1, 2, 144));
+    addReaction(new CellReactionData(2, 1, 34));
+    addReaction(new CellReactionData(2, 3, 55));
+    addReaction(new DimerReactionExchangeData(3, 1, 1e2));
 }
 
 void ABCDReactorContext::solveToOut(std::ostream &out) const {

@@ -15,14 +15,14 @@ public:
     int nextState() const { return _nextState; }
 
 protected:
-    ReactionData(long double k, int prevState, int nextState) :
-        _k(k), _prevState(prevState), _nextState(nextState) {}
+    ReactionData(int prevState, int nextState, long double k) :
+        _prevState(prevState), _nextState(nextState), _k(k) {}
 
     virtual long double rateValue(const SData *) const { return _k; }
 
 private:
-    long double _k;
     int _prevState, _nextState;
+    long double _k;
 };
 
 #endif // REACTION_DATA_H

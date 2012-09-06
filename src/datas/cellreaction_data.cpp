@@ -1,7 +1,7 @@
 #include "cellreaction_data.h"
 
-CellReactionData::CellReactionData(long double k, int prevState, int nextState) :
-    ReactionData<CellData>(k, prevState, nextState) {}
+CellReactionData::CellReactionData(int prevState, int nextState, long double k) :
+    ReactionData<CellData>(prevState, nextState, k) {}
 
 long double CellReactionData::rate(const CellData *site) const {
     return (site->value() == prevState()) ? rateValue(site) : 0;
