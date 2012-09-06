@@ -13,8 +13,6 @@ public:
 
     void addPerCell(PerCellData *const perCell);
 
-//    void doReaction(const BaseSimulationContext *simulationContext, long double r);
-
     void updateAroundRates(const BaseSimulationContext *simulationContext, int depth);
 
     PerCellData *first() const;

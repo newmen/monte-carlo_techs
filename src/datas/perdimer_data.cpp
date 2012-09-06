@@ -10,10 +10,6 @@ void PerDimerData::addPerCell(PerCellData *const perCell) {
     *p = perCell;
 }
 
-//void PerDimerData::doReaction(const BaseSimulationContext *simulationContext, long double r) {
-//    PerSiteData<DimerData>::doReaction(simulationContext, r);
-//}
-
 void PerDimerData::updateAroundRates(const BaseSimulationContext *simulationContext, int depth) {
     updateRates(simulationContext);
     if (depth == 0) return;

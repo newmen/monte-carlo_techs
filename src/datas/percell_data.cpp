@@ -55,15 +55,3 @@ void PerCellData::updateAroundRates(const BaseSimulationContext *simulationConte
         }
     }
 }
-
-//void PerCellData::updateRates(const BaseSimulationContext *simulationContext, const PerDimerData *exceptPerDimer, int depth) {
-//    PerSiteData<CellData>::updateRates(simulationContext);
-//    for (int i = 0; i < PERDIMERS_NUM; ++i) {
-//        PerDimerData *perDimer = _perDimers[i];
-//        if (perDimer == exceptPerDimer) continue;
-//        perDimer->updateRates(simulationContext);
-
-//        PerCellData *neighbour = (perDimer->first() == this) ? perDimer->second() : perDimer->first();
-//        neighbour->updateLocalCommonRate(simulationContext, (i < 2) ? i + 2 : i - 2);
-//    }
-//}
