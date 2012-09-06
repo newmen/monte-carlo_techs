@@ -38,23 +38,32 @@ void PerCellData::addPerDimer(PerDimerData *const perDimer) {
     }
 }
 
-void PerCellData::updateRates(const BaseSimulationContext *simulationContext) {
-    updateRates(simulationContext, nullptr);
+void PerCellData::updateAroundRates(const BaseSimulationContext *simulationContext, int depth) {
+    updateAroundRates(simulationContext, depth, -1);
 }
 
-void PerCellData::updateRates(const BaseSimulationContext *simulationContext, const PerDimerData *exceptPerDimer) {
-    PerSiteData<CellData>::updateRates(simulationContext);
+// optimization
+void PerCellData::updateAroundRates(const BaseSimulationContext *simulationContext, int depth, int woDimerIndex) {
+    updateRates(simulationContext);
     for (int i = 0; i < PERDIMERS_NUM; ++i) {
         PerDimerData *perDimer = _perDimers[i];
-        if (perDimer == exceptPerDimer) continue;
-        perDimer->updateRates(simulationContext);
-
-        PerCellData *neighbour = (perDimer->first() == this) ? perDimer->second() : perDimer->first();
-        neighbour->updateLocalCommonRate(simulationContext, (i < 2) ? i + 2 : i - 2);
+        if (depth == 0) {
+            if (i != woDimerIndex) perDimer->updateRates(simulationContext);
+        } else {
+            PerCellData *neighbourCell = (perDimer->first() == this) ? perDimer->second() : perDimer->first();
+            neighbourCell->updateAroundRates(simulationContext, depth - 1, woDimerIndex);
+        }
     }
 }
 
-void PerCellData::updateLocalCommonRate(const BaseSimulationContext *simulationContext, int otherSideIndex) {
-    PerSiteData<CellData>::updateRates(simulationContext);
-    _perDimers[otherSideIndex]->updateRates(simulationContext);
-}
+//void PerCellData::updateRates(const BaseSimulationContext *simulationContext, const PerDimerData *exceptPerDimer, int depth) {
+//    PerSiteData<CellData>::updateRates(simulationContext);
+//    for (int i = 0; i < PERDIMERS_NUM; ++i) {
+//        PerDimerData *perDimer = _perDimers[i];
+//        if (perDimer == exceptPerDimer) continue;
+//        perDimer->updateRates(simulationContext);
+
+//        PerCellData *neighbour = (perDimer->first() == this) ? perDimer->second() : perDimer->first();
+//        neighbour->updateLocalCommonRate(simulationContext, (i < 2) ? i + 2 : i - 2);
+//    }
+//}

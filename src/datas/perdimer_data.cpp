@@ -10,11 +10,18 @@ void PerDimerData::addPerCell(PerCellData *const perCell) {
     *p = perCell;
 }
 
-void PerDimerData::doReaction(const BaseSimulationContext *simulationContext, long double r) {
-    PerSiteData<DimerData>::doReaction(simulationContext, r);
-    for (PerCellData *perCell : _perCells) {
-        perCell->updateRates(simulationContext, this);
-    }
+//void PerDimerData::doReaction(const BaseSimulationContext *simulationContext, long double r) {
+//    PerSiteData<DimerData>::doReaction(simulationContext, r);
+//}
+
+void PerDimerData::updateAroundRates(const BaseSimulationContext *simulationContext, int depth) {
+    updateRates(simulationContext);
+    if (depth == 0) return;
+
+    // logical for depth = 1
+    int exsDimerIndex = (first()->site()->x() != second()->site()->x()) ? 3 : 2;
+    first()->updateAroundRates(simulationContext, depth);
+    second()->updateAroundRates(simulationContext, depth, exsDimerIndex);
 }
 
 PerCellData *PerDimerData::first() const {
