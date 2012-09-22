@@ -193,7 +193,7 @@ def read_and_draw_perf_file(file_name)
       line.chomp!
       next if line == ''
 
-      if line =~ /^#/
+      if line =~ /\A#/
         line.split(/\t/).each do |tech|
           next if tech == '#' || tech == ''
           arrs_y[tech] = []
@@ -219,12 +219,8 @@ def read_and_draw_perf_file(file_name)
 
   if base_file_name == 'times'
     faster_arrs_y = {}
-    i = 0
     arrs_y.each do |k, v|
-      if i > 3
-        faster_arrs_y[k] = v
-      end
-      i += 1
+      faster_arrs_y[k] = v if k =~ /\Afaster/
     end
 
     draw_perf_graph(arr_x, faster_arrs_y, 'faster')
@@ -274,20 +270,26 @@ end
 
 def main
   doc = <<HEREHELP
-Usage: ruby #{__FILE__} options
+Usage: 
+  #{__FILE__} -d RESULTS_DIR
+
 Options:
   -h, --help         Show this
   -d DIR, --dir=DIR  Directory with results
   -r, --recursively  Recursive searching a result files
 HEREHELP
 
-  options = Docopt(doc)
-  result_dir = options[:dir]
-  if result_dir
-    draw_into_dir(result_dir, options[:recursively])
-  else
-    puts "Wrond run!"
-    puts doc
+  begin
+    options = Docopt::docopt(doc)
+    result_dir = options['--dir']
+    if result_dir
+      draw_into_dir(result_dir, options['--recursively'])
+    else
+      puts "Wrond run!"
+      puts doc
+    end
+  rescue Docopt::Exit => e
+    puts e.message
   end
 end
 
