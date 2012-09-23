@@ -18,8 +18,8 @@
 
 template <class SimulationContext>
 void run() {
-//    AreaData area(50, 50);
-    AreaData area(13, 13);
+    AreaData area(50, 50);
+//    AreaData area(13, 13);
 
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
@@ -27,7 +27,7 @@ void run() {
 //    LotkaReactorContext reactor;
 
     SimulationContext sc(&area, &reactor);
-    StoreEventContext se("test.mcd", area);
+    StoreEventContext se("noco406_50x50.mcd", area);
     long double dt, totalTime = 0;
     int counter = 0, iterations = 0;
     do {

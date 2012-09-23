@@ -8,13 +8,13 @@
 #include "../datas/dimerreactionexchange_data.h"
 #include "../roles/neighbouring_role.h"
 
-NOCOReactorContext::NOCOReactorContext() : RTReactorContext(404) {
+NOCOReactorContext::NOCOReactorContext() : RTReactorContext(406) {
     double pNO = 3.7e-6;
     double pCO = 3e-6;
     addReaction(new CellReactionData(1, 2, 1.93e5 * pNO));
-    addReaction(new DimerReactionExchangeData(2, 1, 250));
+    addReaction(new DimerReactionExchangeData(2, 1, 50));
     addReaction(new CellReactionData(1, 3, 1.93e5 * pCO));
-    addReaction(new DimerReactionExchangeData(3, 1, 250));
+    addReaction(new DimerReactionExchangeData(3, 1, 50));
 
     long double eps3[] = {-2e3, -0.8e3};
     addReaction(new DimerLateralReactionExplosionData(2, 3, 1, 2e15 / 4, 24.5e3, eps3, this));
