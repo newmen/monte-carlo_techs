@@ -7,7 +7,7 @@ BaseReactorContext::~BaseReactorContext() {
     for (auto p = _dimerReactions.begin(); p != _dimerReactions.end(); ++p) delete *p;
 }
 
-CellData *BaseReactorContext::createCell(int *cell, int x, int y) const {
+CellData *BaseReactorContext::createCell(CellType *cell, CoordType x, CoordType y) const {
     return new CellData(cell, x, y);
 }
 

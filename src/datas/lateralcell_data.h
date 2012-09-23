@@ -9,7 +9,7 @@ class LateralCellData :
         public LateralSiteData
 {
 public:
-    LateralCellData(int *cell, int x, int y, int numOfSpecs);
+    LateralCellData(CellType *cell, CoordType x, CoordType y, int numOfSpecs);
 };
 
 #endif // LATERALCELL_DATA_H

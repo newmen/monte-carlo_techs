@@ -22,7 +22,7 @@
 #include <contexts/rejectionsimulation_context.h>
 #include <contexts/rejectionfreesimulation_context.h>
 #include <contexts/treebasedsimulation_context.h>
-#include <contexts/store_context.h>
+#include <contexts/store_concentrations_context.h>
 
 #define GRAPH_EXT "mcr"
 
@@ -62,7 +62,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
 
     AreaData *area = 0;
     BaseSimulationContext *simulationContext = 0;
-    StoreContext *storeContext = 0;
+    StoreConcentrationsContext *storeContext = 0;
     auto freeUpMemory = [&area, &simulationContext, &storeContext]() {
         delete storeContext;
         delete simulationContext;
@@ -84,7 +84,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         area = new AreaData(tc->sizeX, tc->sizeY);
         simulationContext = tc->simFactory->createContext(area, tc->reactor);
         if (tc->needGraph) {
-            storeContext = new StoreContext(area, tc->reactor->numOfSpecs(), fullFilePath, name);
+            storeContext = new StoreConcentrationsContext(fullFilePath, name, area, tc->reactor->numOfSpecs());
         }
 
         totalTime = 0;

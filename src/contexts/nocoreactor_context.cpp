@@ -24,7 +24,7 @@ NOCOReactorContext::NOCOReactorContext() : RTReactorContext(404) {
     addReaction(new CellLateralReactionData(3, 1, 1e15, 37.5e3, eps5, this));
 }
 
-CellData *NOCOReactorContext::createCell(int *cell, int x, int y) const {
+CellData *NOCOReactorContext::createCell(CellType *cell, CoordType x, CoordType y) const {
     return new LateralCellData(cell, x, y, numOfSpecs());
 }
 

@@ -18,7 +18,7 @@ public:
     virtual long double maxTime() const = 0;
     virtual long double timeStep() const = 0;
 
-    virtual CellData *createCell(int *cell, int x, int y) const;
+    virtual CellData *createCell(CellType *cell, CoordType x, CoordType y) const;
     virtual DimerData *createDimer(CellData *first, CellData *second) const;
 
     virtual void reinitCell(CellData *, const AreaData *) const {}

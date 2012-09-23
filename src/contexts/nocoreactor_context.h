@@ -12,7 +12,7 @@ public:
     long double maxTime() const { return 50.0; }
     long double timeStep() const { return 0.25; }
 
-    CellData *createCell(int *cell, int x, int y) const;
+    CellData *createCell(CellType *cell, CoordType x, CoordType y) const;
     DimerData *createDimer(CellData *first, CellData *second) const;
 
     void reinitCell(CellData *cell, const AreaData *area) const;
