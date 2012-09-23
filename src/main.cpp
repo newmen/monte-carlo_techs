@@ -27,7 +27,7 @@ void run() {
 //    LotkaReactorContext reactor;
 
     SimulationContext sc(&area, &reactor);
-    StoreEventContext se("test.dat", area);
+    StoreEventContext se("test.mcd", area);
     long double dt, totalTime = 0;
     int counter = 0, iterations = 0;
     do {

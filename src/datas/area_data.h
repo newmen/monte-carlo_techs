@@ -14,9 +14,11 @@ public:
     int sizeX() const { return _sizeX; }
     int sizeY() const { return _sizeY; }
 
-    int index(short int x, short int y) const { return y * _sizeX + x; }
+    int index(CoordType x, CoordType y) const { return y * _sizeX + x; }
     CellType value(int index) const { return _cells[index]; }
     void eachCell(const std::function<void (CellType *const, CoordType, CoordType)> &lambda) const;
+
+    void setValue(CellType value, CoordType x, CoordType y);
 
 private:
     int _sizeX, _sizeY;

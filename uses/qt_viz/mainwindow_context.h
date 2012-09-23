@@ -4,12 +4,13 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
+#include <QTextEdit>
 #include <QTimer>
 #include "playbutton.h"
 #include "renderarea_context.h"
 
-#include "../../src/contexts/basereactor_context.h"
-#include "../../src/contexts/basesimulation_context.h"
+#include "../../src/contexts/readevent_context.h"
+#include "../../src/datas/area_data.h"
 
 class MainWindowContext : public QWidget
 {
@@ -18,30 +19,34 @@ public:
     MainWindowContext();
     ~MainWindowContext();
     
-//signals:
-//public slots:
 private slots:
     void doReaction();
 
     void playAnimation();
     void stopAnimation();
 
+    void openFile();
+    void updateSideLength();
+
 private:
-    void updateCell(const CellData *cell);
+    void updateCell(CellType value, CoordType x, CoordType y);
     void updateStatusBar();
 
 private:
-    AreaData _area;
-    BaseReactorContext *_reactor;
-    BaseSimulationContext *_simulationContext;
+    AreaData *_area;
+    ReadEventContext *_readContext;
     RenderAreaContext *_renderArea;
     float _cellSideLength;
+
+    QPushButton *_loadButton;
+    QLabel *_sideLengthLabel;
+    QTextEdit *_sideLengthText;
 
     QPushButton *_doButton;
     PlayButton *_playButton;
     QTimer *_animationTimer;
 
-    long double _totalTime;
+    double _totalTime;
     QLabel *_totalTimeTextLabel;
     QLabel *_totalTimeValueLabel;
     QLabel *_timeDimLabel;

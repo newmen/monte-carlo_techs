@@ -25,3 +25,7 @@ void AreaData::eachCell(const std::function<void (CellType *const, CoordType, Co
         }
     }
 }
+
+void AreaData::setValue(CellType value, CoordType x, CoordType y) {
+    _cells[index(x, y)] = value;
+}

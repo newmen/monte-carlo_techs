@@ -56,7 +56,8 @@ HEADERS += \
     src/datas/eventrecord_data.h \
     src/roles/neighbouring_role.h \
     src/roles/node_role.h \
-    src/roles/storing_role.h
+    src/roles/storing_role.h \
+    src/contexts/readevent_context.h
 
 SOURCES += \
     src/contexts/basesimulation_context.cpp \
@@ -98,7 +99,8 @@ SOURCES += \
     src/datas/node_data.cpp \
     src/datas/eventinfo_data.cpp \
     src/datas/eventrecord_data.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/contexts/readevent_context.cpp
 
 OTHER_FILES += \
     .gitignore \

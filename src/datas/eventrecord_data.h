@@ -11,13 +11,24 @@ struct Point2D {
 
 class EventRecordData
 {
-    enum class SiteType : short int { SINGLE = 1, HORIZONTAL = 2, VERTICAL = 3 };
+    enum class SiteType : short int { NOTHING = 0, SINGLE = 1, HORIZONTAL = 2, VERTICAL = 3 };
 public:
+    EventRecordData();
     explicit EventRecordData(const EventInfoData &ei);
     EventRecordData(CellType *const cell, CoordType x, CoordType y);
 
     std::ostream &write(std::ostream &os) const;
     std::istream &read(std::istream &is);
+
+    double dt() const { return _dt; }
+    CoordType x() const { return _coord.x; }
+    CoordType y() const { return _coord.y; }
+    bool nothing() const { return _type == SiteType::NOTHING; }
+    bool isCell() const { return _type == SiteType::SINGLE; }
+    bool isHorizontalDimer() const { return _type == SiteType::HORIZONTAL; }
+//    bool isVerticalDimer() const { return _type == SiteType::VERTICAL; }
+    CellType first() const { return _first; }
+    CellType second() const { return _second; }
 
 private:
     double _dt;

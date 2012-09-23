@@ -1,12 +1,14 @@
 #include "eventrecord_data.h"
 
-EventRecordData::EventRecordData(const EventInfoData &ei) : _dt(ei.dt()) {
+EventRecordData::EventRecordData() : _dt(0), _type(SiteType::NOTHING) {}
+
+EventRecordData::EventRecordData(const EventInfoData &ei) : _dt(ei.dt()), _type(SiteType::NOTHING) {
     if (ei.cell() != 0) {
         _coord.x = ei.cell()->x();
         _coord.y = ei.cell()->y();
         _type = SiteType::SINGLE;
         _first = ei.cell()->value();
-    } else {
+    } else if (ei.dimer() != 0) {
         _coord.x = ei.dimer()->first->x();
         _coord.y = ei.dimer()->first->y();
         if (ei.dimer()->first->x() != ei.dimer()->second->x()) {
