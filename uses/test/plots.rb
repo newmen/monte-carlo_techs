@@ -308,6 +308,7 @@ def draw_into_dir(config)
   return unless config.recursively
 
   Dir['*/'].each do |dir|
+    config.change_dir(dir)
     draw_into_dir(config)
     Dir.chdir('..')
   end
@@ -330,6 +331,10 @@ class PlotsConfig
     unless %w(hour min sec).include?(@time)
       raise Docopt::Exit, "Invalid time value\n"
     end
+  end
+
+  def change_dir(dir)
+    @result_dir = dir
   end
 
   def time
