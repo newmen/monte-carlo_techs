@@ -3,6 +3,7 @@
 
 #include <functional>
 #include "cell_data.h"
+#include "../contexts/basedistribution_context.h"
 
 class AreaData
 {
@@ -10,9 +11,11 @@ public:
     AreaData(CoordType sizeX, CoordType sizeY);
     ~AreaData();
 
-    int size() const { return _sizeX * _sizeY; }
-    int sizeX() const { return _sizeX; }
-    int sizeY() const { return _sizeY; }
+    void init(BaseDistributionContext *distributor);
+
+    CoordType size() const { return _sizeX * _sizeY; }
+    CoordType sizeX() const { return _sizeX; }
+    CoordType sizeY() const { return _sizeY; }
 
     int index(CoordType x, CoordType y) const { return y * _sizeX + x; }
     CellType value(int index) const { return _cells[index]; }

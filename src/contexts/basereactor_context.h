@@ -4,6 +4,7 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include "basedistribution_context.h"
 #include "../datas/reaction_data.h"
 #include "../datas/area_data.h"
 #include "../datas/cell_data.h"
@@ -18,6 +19,8 @@ public:
     virtual long double maxTime() const = 0;
     virtual long double timeStep() const = 0;
 
+    void initArea(AreaData *area) const;
+
     virtual CellData *createCell(CellType *cell, CoordType x, CoordType y) const;
     virtual DimerData *createDimer(CellData *first, CellData *second) const;
 
@@ -31,6 +34,8 @@ public:
 
 protected:
     BaseReactorContext() {}
+
+    virtual BaseDistributionContext *createDistrubutor() const;
 
     template <class SData>
     void addReaction(const ReactionData<SData> *const reaction);

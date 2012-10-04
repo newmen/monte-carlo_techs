@@ -1,5 +1,7 @@
 #include <ostream>
 #include "nocoreactor_context.h"
+#include "flatwavedistribution_context.h"
+#include "spiralwavedistribution_context.h"
 #include "../datas/lateralcell_data.h"
 #include "../datas/lateraldimer_data.h"
 #include "../datas/cellreaction_data.h"
@@ -38,6 +40,17 @@ void NOCOReactorContext::reinitCell(CellData *cell, const AreaData *area) const 
 
 void NOCOReactorContext::reinitDimer(DimerData *dimer, const AreaData *area) const {
     reinitSite<DimerData, LateralDimerData>(dimer, area);
+}
+
+BaseDistributionContext *NOCOReactorContext::createDistrubutor() const {
+    float concs[] = {
+        0.067, 0.223,
+        0.249, 0.504,
+        0.533, 0.292,
+        0.319, 0.104
+    };
+//    return new FlatWaveDistributionContext(concs, 2);
+    return new SpiralWaveDistributionContext(concs, 2);
 }
 
 void NOCOReactorContext::solveToOut(std::ostream &out) const {

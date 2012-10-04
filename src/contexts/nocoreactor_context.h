@@ -19,6 +19,7 @@ public:
     void reinitDimer(DimerData *dimer, const AreaData *area) const;
 
 protected:
+    BaseDistributionContext *createDistrubutor() const;
     void solveToOut(std::ostream &out) const;
 
 private:

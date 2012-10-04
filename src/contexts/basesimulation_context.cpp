@@ -6,6 +6,8 @@
 BaseSimulationContext::BaseSimulationContext(AreaData *area, const BaseReactorContext *reactor) :
     _area(area), _reactor(reactor)
 {
+    _reactor->initArea(_area);
+
     _area->eachCell([this](CellType *const cell, CoordType x, CoordType y) {
         _cells.push_back(_reactor->createCell(cell, x ,y));
     });
