@@ -349,16 +349,21 @@ end
 def main
   doc = <<HEREHELP
 Usage: 
-  #{__FILE__} [options]
+  #{__FILE__} -d RESULTS_DIR [options]
 
 Options:
   -h, --help         Show this
   -d DIR, --dir=DIR  Directory with results
   -r, --recursively  Recursive searching a result files
   -a, --average      Average the time by the number of iterations
-  -t, --time=UNIT    Mean unit of time (hour|min|sec) [default: sec]
+  -t, --time=unit    Mean unit of time (hour|min|sec) [default: sec]
   --names=NAMES      Set the names of curves separated by commas
 HEREHELP
+
+  # TODO:
+  # 1. так и не запилен пересчёт времени, с учётом указанного параметра
+  # 2. нужно предоставлять возможность указывать логарифмическую шкалу времени
+  # 3. предоставлять возможность указывать какие из имеющихся результатов методов обрабатывать
 
   begin
     options = Docopt::docopt(doc)
