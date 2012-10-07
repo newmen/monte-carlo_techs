@@ -1,4 +1,5 @@
 #include "lotkareactor_context.h"
+#include "simpledistribution_context.h"
 #include "../datas/cellreaction_data.h"
 #include "../datas/dimerreactioncapture_data.h"
 #include "../datas/dimerreactionexchange_data.h"
@@ -45,6 +46,11 @@ LotkaReactorContext::LotkaReactorContext() {
 //    addReaction(new CellReactionData(3, 1, 0.07));
 //    addReaction(new DimerReactionExchangeData(2, 1, 0.0001));
 //    addReaction(new DimerReactionExchangeData(3, 1, 20.0));
+}
+
+BaseDistributionContext *LotkaReactorContext::createDistrubutor() const {
+    float concs[] = { 0.1, 0.1 };
+    return new SimpleDistributionContext(concs, 2);
 }
 
 void LotkaReactorContext::solveToOut(std::ostream &out) const {

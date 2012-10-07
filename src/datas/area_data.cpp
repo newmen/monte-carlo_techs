@@ -1,31 +1,37 @@
 #include "area_data.h"
-#include <cstdlib>
 
-AreaData::AreaData(int sizeX, int sizeY) : _sizeX(sizeX), _sizeY(sizeY) {
-    _cells = new int[size()];
-    int i = 0;
-    for (int y = 0; y < _sizeY; ++y) {
-        for (int x = 0; x < _sizeX; ++x) {
-            int value = (rand() % 10 < 8) ? 1 : ((rand() % 2 == 0) ? 2 : 3);
-//            int value = (rand() % 10 < 7) ? 1 : ((rand() % 3 == 0) ? 2 : ((rand() % 2 == 0) ? 3 : 4));
-//            int value = 1;
-            _cells[i++] = value;
-        }
-    }
+AreaData::AreaData(CoordType sizeX, CoordType sizeY) : _sizeX(sizeX), _sizeY(sizeY) {
+    _cells = new CellType[size()];
+//    int i = 0;
+//    for (CoordType y = 0; y < _sizeY; ++y) {
+//        for (CoordType x = 0; x < _sizeX; ++x) {
+//            _cells[i++] = 0;
+//        }
+//    }
 }
 
 AreaData::~AreaData() {
     delete [] _cells;
 }
 
-void AreaData::eachCell(const std::function<void (int *const, int, int)> &lambda) const {
-    for (int y = 0; y < _sizeY; ++y) {
-        for (int x = 0; x < _sizeX; ++x) {
+void AreaData::init(BaseDistributionContext *distributor) {
+    int i = 0;
+    for (CoordType y = 0; y < _sizeY; ++y) {
+        for (CoordType x = 0; x < _sizeX; ++x) {
+            distributor->selectAppropriateConcs(_sizeX, _sizeY, x, y);
+            _cells[i++] = distributor->value();
+        }
+    }
+}
+
+void AreaData::eachCell(const std::function<void (CellType *const, CoordType, CoordType)> &lambda) const {
+    for (CoordType y = 0; y < _sizeY; ++y) {
+        for (CoordType x = 0; x < _sizeX; ++x) {
             lambda(&_cells[index(x, y)], x, y);
         }
     }
 }
 
-//int *AreaData::cell(int x, int y) const {
-//    return _cells[index(x, y)];
-//}
+void AreaData::setValue(CellType value, CoordType x, CoordType y) {
+    _cells[index(x, y)] = value;
+}

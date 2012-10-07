@@ -7,15 +7,15 @@ EXEC	:= lib$(NAME).a
 
 SOURCE_SUBDIRS	:= contexts datas roles
 
-SOURCE_DIRS			:= $(addprefix src/, $(SOURCE_SUBDIRS))
-OBJECTS_DIRS		:= $(addprefix obj/, $(SOURCE_SUBDIRS))
-SOURCE_FILES		:= $(wildcard $(addsuffix /*.cpp, $(SOURCE_DIRS)))
-SRC_OBJECTS			:= $(SOURCE_FILES:%.cpp=%.o)
-REAL_OBJECTS		:= $(patsubst src/%, obj/%, $(SRC_OBJECTS))
+SOURCE_DIRS	:= $(addprefix src/, $(SOURCE_SUBDIRS))
+OBJECTS_DIRS	:= $(addprefix obj/, $(SOURCE_SUBDIRS))
+SOURCE_FILES	:= $(wildcard $(addsuffix /*.cpp, $(SOURCE_DIRS)))
+SRC_OBJECTS	:= $(SOURCE_FILES:%.cpp=%.o)
+REAL_OBJECTS	:= $(patsubst src/%, obj/%, $(SRC_OBJECTS))
 
 all :	$(EXEC)
 
-$(EXEC) :	obj_dirs $(SRC_OBJECTS)
+$(EXEC) : obj_dirs $(SRC_OBJECTS)
 	mkdir -p lib
 	rm -f lib/$@
 	ar cq lib/$@ $(REAL_OBJECTS)

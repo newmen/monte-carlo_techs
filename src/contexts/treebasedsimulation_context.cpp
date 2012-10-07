@@ -9,7 +9,7 @@ int calcTreeWidthByK(int size, float levels) {
 }
 
 int optimalTreeWidth(int size) {
-    return calcTreeWidthByK(size, 5);
+    return calcTreeWidthByK(size, 4);
 }
 
 TreeBasedSimulationContext::TreeBasedSimulationContext(AreaData *area, const BaseReactorContext *reactor) :

@@ -14,8 +14,8 @@ size_or_repeats=$5
 test_mc_dir=`pwd`
 test_mc_bin=${test_mc_dir}/${bin_dir}/${name}
 plots_script=${test_mc_dir}/plots.rb
-#results_dir=/tmp/${base_results_dir}/${name}
-results_dir=${test_mc_dir}/${base_results_dir}/${name}-${calc}
+results_dir=/tmp/${base_results_dir}/${name}
+#results_dir=${test_mc_dir}/${base_results_dir}/${name}-${calc}
 
 gcc_path=/share/home/tools/gcc-4.7.1
 export LD_LIBRARY_PATH=${gcc_path}/lib:${gcc_path}/lib64
@@ -38,8 +38,8 @@ if [ "$calc" != "crv" ]; then
     ${test_mc_bin} ${results_dir} ${calc} ${calc} ${size_or_repeats}
 fi
 
-#home_results=${test_mc_dir}/${base_results_dir}
-#mkdir -p ${home_results}
-#mv ${results_dir} ${home_results}/
+home_results=${test_mc_dir}/${base_results_dir}
+mkdir -p ${home_results}
+mv -r ${results_dir} ${home_results}/
 
 #ruby ${plots_script} -d ${results_dir}
