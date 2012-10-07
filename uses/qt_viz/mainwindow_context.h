@@ -26,19 +26,29 @@ private slots:
     void stopAnimation();
 
     void openFile();
+    void openDirectory();
     void updateSideLength();
+
+    void saveSnapShot();
 
 private:
     void updateCell(CellType value, CoordType x, CoordType y);
     void updateStatusBar();
 
+
 private:
+    QString _snapShotsPath;
+    double _everySecond;
+    double _secondsCounter;
+
     AreaData *_area;
     ReadEventContext *_readContext;
     RenderAreaContext *_renderArea;
     float _cellSideLength;
 
     QPushButton *_loadButton;
+    QPushButton *_selectDirButton;
+    QLabel *_selectDirLabel;
     QLabel *_sideLengthLabel;
     QTextEdit *_sideLengthText;
 

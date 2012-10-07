@@ -31,7 +31,7 @@ HEADERS += \
     src/contexts/simpledistribution_context.h \
     src/contexts/wavedistribution_context.h \
     src/contexts/flatwavedistribution_context.h \
-    src/contexts/spiralwavedistribution_context.h
+    src/contexts/spiralwavedistribution_context.h \
     src/datas/area_data.h \
     src/datas/cell_data.h \
     src/datas/dimer_data.h \
@@ -62,7 +62,7 @@ HEADERS += \
     src/datas/eventrecord_data.h \
     src/roles/neighbouring_role.h \
     src/roles/node_role.h \
-    src/roles/storing_role.h \
+    src/roles/storing_role.h
 
 SOURCES += \
     src/contexts/basesimulation_context.cpp \

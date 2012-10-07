@@ -1,14 +1,27 @@
 #include <QtGui>
 #include "mainwindow_context.h"
 
-MainWindowContext::MainWindowContext() : _readContext(0), _renderArea(0), _cellSideLength(2), _totalTime(0) {
+MainWindowContext::MainWindowContext() : _snapShotsPath("mc_results"), _everySecond(0.05), _secondsCounter(0),
+    _readContext(0), _renderArea(0), _cellSideLength(3), _totalTime(0)
+{
     setWindowTitle("Monte Carlo simulation");
+    QVBoxLayout *layout = new QVBoxLayout;
 
     _area = new AreaData(0, 1); // костыль!
     _renderArea = new RenderAreaContext(_area, _cellSideLength, false);
+    layout->addWidget(_renderArea);
 
     _loadButton = new QPushButton("Load MC Data");
     connect(_loadButton, SIGNAL(clicked()), this, SLOT(openFile()));
+    layout->addWidget(_loadButton);
+
+    _selectDirButton = new QPushButton("Select Snapshot dir");
+    connect(_selectDirButton, SIGNAL(clicked()), this, SLOT(openDirectory()));
+    layout->addWidget(_selectDirButton);
+
+//    _selectDirLabel = new QLabel(_snapShotsPath);
+//    layout->addWidget(_selectDirLabel);
+
     _sideLengthLabel = new QLabel("Cell side length: ");
     QString sideLengthStr;
     sideLengthStr.setNum((double)_cellSideLength);
@@ -20,13 +33,16 @@ MainWindowContext::MainWindowContext() : _readContext(0), _renderArea(0), _cellS
     sideLengthLayout->addWidget(_sideLengthText);
     QGroupBox *sideLengthGroup = new QGroupBox;
     sideLengthGroup->setLayout(sideLengthLayout);
+    layout->addWidget(sideLengthGroup);
 
     _doButton = new QPushButton("Do reaction");
     connect(_doButton, SIGNAL(clicked()), this, SLOT(doReaction()));
+    layout->addWidget(_doButton);
 
     _playButton = new PlayButton("Play", "Stop");
     connect(_playButton, SIGNAL(timerStart()), this, SLOT(playAnimation()));
     connect(_playButton, SIGNAL(timerStop()), this, SLOT(stopAnimation()));
+    layout->addWidget(_playButton);
 
     _totalTimeTextLabel = new QLabel("Total time: ");
     _totalTimeValueLabel = new QLabel("0.0");
@@ -38,14 +54,8 @@ MainWindowContext::MainWindowContext() : _readContext(0), _renderArea(0), _cellS
     totalTimeLayout->addWidget(_timeDimLabel);
     QGroupBox *totalTimeGroup = new QGroupBox;
     totalTimeGroup->setLayout(totalTimeLayout);
-
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(_renderArea);
-    layout->addWidget(_loadButton);
-    layout->addWidget(sideLengthGroup);
-    layout->addWidget(_doButton);
-    layout->addWidget(_playButton);
     layout->addWidget(totalTimeGroup);
+
     setLayout(layout);
 
     _animationTimer = new QTimer(this);
@@ -78,6 +88,12 @@ void MainWindowContext::doReaction() {
     } else {
         updateCell(eRecord.first(), eRecord.x(), eRecord.y());
         updateCell(eRecord.second(), eRecord.x(), eRecord.y() + 1);
+    }
+
+    _secondsCounter += eRecord.dt();
+    if (_secondsCounter > _everySecond) {
+        _secondsCounter = 0;
+        saveSnapShot();
     }
 }
 
@@ -122,8 +138,35 @@ void MainWindowContext::openFile() {
     _renderArea->resetArea(_area);
 }
 
+void MainWindowContext::openDirectory() {
+    QFileDialog dialog(this);
+    dialog.setDirectory(_snapShotsPath);
+    dialog.setOption(QFileDialog::ShowDirsOnly);
+    dialog.setFileMode(QFileDialog::Directory);
+
+    if (dialog.exec()) {
+        QStringList selectedFiles = dialog.selectedFiles();
+        _snapShotsPath = selectedFiles[0];
+        qDebug() << selectedFiles[0];
+
+    }
+}
+
 void MainWindowContext::updateSideLength() {
     _cellSideLength = _sideLengthText->toPlainText().toInt();
     if (_cellSideLength == 0) return;
     _renderArea->resetSideLength(_cellSideLength);
+}
+
+void MainWindowContext::saveSnapShot() {
+    QPixmap pixmap = QPixmap::grabWidget(_renderArea);
+//    pixmap.fill();
+    QString out = _snapShotsPath + QString('/') + QString::number(_totalTime) + QString(".png");
+//    QString out = QString::number(_totalTime) + QString(".png");
+    if (pixmap.save(out)) {
+        qDebug() << out;
+    } else {
+        QString msgText = tr("Failed to write into ") + out;
+        QMessageBox::critical(this, tr("Error Writing"), msgText);
+    }
 }
