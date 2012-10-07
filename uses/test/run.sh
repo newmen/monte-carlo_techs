@@ -1,8 +1,8 @@
 #!/bin/sh
 
-min_size=20
-max_size=100
-size_step=20
+min_size=50
+max_size=200
+size_step=25
 repeats=3
 
 name=$1
@@ -26,10 +26,10 @@ fi
 
 echo "Executing calculations..."
 
-${test_mc_bin} ${results_dir} ${max_size} ${max_size} 1 true
+${test_mc_bin} ${results_dir} ${max_size} ${min_size} 1 true
 
-for i in `seq ${min_size} ${size_step} ${max_size}`; do
-    ${test_mc_bin} ${results_dir} ${i} ${i} ${repeats}
-done
+#for i in `seq ${min_size} ${size_step} ${max_size}`; do
+#    ${test_mc_bin} ${results_dir} ${i} ${i} ${repeats}
+#done
 
 ruby ${plots_script} -d ${results_dir}

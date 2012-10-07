@@ -7,7 +7,13 @@ BaseReactorContext::~BaseReactorContext() {
     for (auto p = _dimerReactions.begin(); p != _dimerReactions.end(); ++p) delete *p;
 }
 
-CellData *BaseReactorContext::createCell(int *cell, int x, int y) const {
+void BaseReactorContext::initArea(AreaData *area) const {
+    BaseDistributionContext *distributor = createDistrubutor();
+    area->init(distributor);
+    delete distributor;
+}
+
+CellData *BaseReactorContext::createCell(CellType *cell, CoordType x, CoordType y) const {
     return new CellData(cell, x, y);
 }
 
@@ -22,6 +28,10 @@ void BaseReactorContext::solve(const std::string &fileName) const {
     } else {
         solveToOut(out);
     }
+}
+
+BaseDistributionContext *BaseReactorContext::createDistrubutor() const {
+    return new BaseDistributionContext();
 }
 
 template <>

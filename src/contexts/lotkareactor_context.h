@@ -13,6 +13,7 @@ public:
     long double timeStep() const { return 1; }
 
 protected:
+    BaseDistributionContext *createDistrubutor() const;
     void solveToOut(std::ostream &out) const;
 };
 

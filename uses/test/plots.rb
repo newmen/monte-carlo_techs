@@ -137,18 +137,18 @@ def draw_perf_graph(arr_x, arrs_y, name)
   end
 
   make_perf_gnuplot(name, title, ylabel) do |plot|
-    plot.data = arrs_y.map do |name, arr_y|
+    plot.data = arrs_y.map do |c_name, arr_y|
       Gnuplot::DataSet.new([arr_x, arr_y]) do |ds|
         ds.with = "linespoints"
         ds.linewidth = 2
-        ds.title = name
+        ds.title = c_name
       end
     end
   end
 
 end
 
-def read_mc_file(file_name)
+def read_mc_file(file_name, names)
   name = ''
   arr_x = []
   arrs_y = {}
@@ -163,8 +163,8 @@ def read_mc_file(file_name)
         values = line.split("\t").map { |v| v.to_f }
         arr_x << values.shift
 
-        if (arrs_y.empty?)
-          ('A'..'Z').to_a[0...(values.size)].each do |char|
+        if arrs_y.empty?
+          (names + ('A'..'Z').to_a)[0...(values.size)].each do |char|
             arrs_y[char.to_sym] = []
           end
         end
@@ -182,7 +182,7 @@ def read_mc_file(file_name)
   [arr_x, arrs_y, name]
 end
 
-def read_and_draw_perf_file(file_name)
+def read_perf_file(file_name)
   arr_x = []
   arrs_y = {}
 
@@ -193,19 +193,20 @@ def read_and_draw_perf_file(file_name)
       line.chomp!
       next if line == ''
 
-      if line =~ /^#/
+      if line =~ /\A#/
+        # если первая строка - заполняем названия, инитим кривые
         line.split(/\t/).each do |tech|
           next if tech == '#' || tech == ''
           arrs_y[tech] = []
         end
       else
-        line = line.split(/\t/)
-        size = line[0].to_i
+        values = line.split(/\t/)
+        size = values[0].to_i
         arr_x << size
 
         i = 1
         arrs_y.each do |k, v|
-          v << line[i].to_f
+          v << values[i].to_f
           i += 1
         end
       end
@@ -213,28 +214,26 @@ def read_and_draw_perf_file(file_name)
   end
 
   puts " complete"
+  [arr_x, arrs_y]
+end
 
-  base_file_name = File.basename(file_name, ".#{EXT_PERF}")
+def draw_perf_file(arr_x, arrs_y, base_file_name)
   draw_perf_graph(arr_x, arrs_y, base_file_name)
 
   if base_file_name == 'times'
     faster_arrs_y = {}
-    i = 0
     arrs_y.each do |k, v|
-      if i > 3
-        faster_arrs_y[k] = v
-      end
-      i += 1
+      faster_arrs_y[k] = v if k =~ /\A(F|f)aster/
     end
 
-    draw_perf_graph(arr_x, faster_arrs_y, 'faster')
+    draw_perf_graph(arr_x, faster_arrs_y, 'faster-times')
   end
 end
 
-def read_and_draw_mc_plots
+def read_and_draw_mc_plots(names)
   original_file = "original.#{EXT_MC}"
   if File.exist?(original_file) && File.size(original_file) > 0
-    original = read_mc_file(original_file)
+    original = read_mc_file(original_file, names)
     draw_original_time(original)
     draw_concentrations_graphs('original', original, nil)
   else
@@ -243,50 +242,135 @@ def read_and_draw_mc_plots
 
   mc_files = Dir["*.#{EXT_MC}"] - [original_file]
   mc_files.each do |file_name|
-    mc = read_mc_file(file_name)
-    base_filename = File.basename(file_name, ".#{EXT_MC}")
-    draw_mc_time_graph(original, mc, base_filename)
-    draw_concentrations_graphs(base_filename, original, mc)
+    mc = read_mc_file(file_name, names)
+    base_file_name = File.basename(file_name, ".#{EXT_MC}")
+    draw_mc_time_graph(original, mc, base_file_name)
+    draw_concentrations_graphs(base_file_name, original, mc)
   end
 end
 
-def read_and_draw_perf_plots
+def read_and_draw_perf_plots(time_coef, is_average_time)
+  iterations_data = nil
+  times_data = nil
+
   Dir["*.#{EXT_PERF}"].each do |file_name|
-    read_and_draw_perf_file(file_name)
+    data = read_perf_file(file_name)
+    arr_x, arrs_y = data
+    base_file_name = File.basename(file_name, ".#{EXT_PERF}")
+
+    if is_average_time
+      iterations_data = data if base_file_name == 'iterations'
+      times_data = data if base_file_name == 'times'
+    end
+
+    unless is_average_time && base_file_name == 'times'
+      draw_perf_file(arr_x, arrs_y, base_file_name)
+    end
   end
+
+  return unless iterations_data && times_data
+
+  iter_arr_x, iter_arrs_y = iterations_data
+  time_arr_x, time_arrs_y = times_data
+  raise "Size values do not match" unless iter_arr_x == time_arr_x
+  
+  average_iters = []
+  time_arrs_y.each do |name, values|
+    values.each_index do |i|
+      values[i] /= iter_arrs_y[name][i]
+      average_iters[i] ||= []
+      average_iters[i] << iter_arrs_y[name][i]
+    end
+  end
+
+  average_iters.map! do |slice|
+    sum = slice.inject(0) { |acc, x| acc + x }
+    sum / slice.size
+  end
+
+  time_arrs_y.each do |name, values|
+    values.each_index do |i|
+      values[i] *= average_iters[i]
+    end
+  end
+
+  draw_perf_file(time_arr_x, time_arrs_y, 'times')
 end
 
-def draw_into_dir(result_dir, recursively = false)
-  print "Entering into #{File.expand_path(result_dir)}..."
-  Dir.chdir(result_dir)
+def draw_into_dir(config)
+  print "Entering into #{File.expand_path(config.result_dir)}..."
+  Dir.chdir(config.result_dir)
   puts " complete"
 
-  read_and_draw_mc_plots
-  read_and_draw_perf_plots
+  read_and_draw_mc_plots(config.names)
+  read_and_draw_perf_plots(config.time, config.average)
 
-  return unless recursively
+  return unless config.recursively
 
   Dir['*/'].each do |dir|
-    draw_into_dir(dir, true)
+    config.change_dir(dir)
+    draw_into_dir(config)
     Dir.chdir('..')
+  end
+end
+
+class PlotsConfig
+  attr_reader :result_dir, :recursively, :average, :time, :names
+
+  def initialize(options)
+    @result_dir = options.delete('--dir')
+
+    @names = options.delete('--names')
+    @names = @names ? @names.split(',') : []
+
+    options.each do |dashed_k, v|
+      k = dashed_k[2..dashed_k.length]
+      instance_variable_set("@#{k}".to_sym, v)
+    end
+
+    unless %w(hour min sec).include?(@time)
+      raise Docopt::Exit, "Invalid time value\n"
+    end
+  end
+
+  def change_dir(dir)
+    @result_dir = dir
+  end
+
+  def time
+    case @time
+    when 'hour' then 3600
+    when 'min' then 60
+    when 'sec' then 1
+    end
   end
 end
 
 def main
   doc = <<HEREHELP
-Usage: ruby #{__FILE__} options
+Usage: 
+  #{__FILE__} [options]
+
 Options:
   -h, --help         Show this
   -d DIR, --dir=DIR  Directory with results
   -r, --recursively  Recursive searching a result files
+  -a, --average      Average the time by the number of iterations
+  -t, --time=UNIT    Mean unit of time (hour|min|sec) [default: sec]
+  --names=NAMES      Set the names of curves separated by commas
 HEREHELP
 
-  options = Docopt(doc)
-  result_dir = options[:dir]
-  if result_dir
-    draw_into_dir(result_dir, options[:recursively])
-  else
-    puts "Wrond run!"
+  begin
+    options = Docopt::docopt(doc)
+    config = PlotsConfig.new(options)
+
+    if config.result_dir
+      draw_into_dir(config)
+    else
+      puts "Wrond run!"
+      puts doc
+    end
+  rescue Docopt::Exit
     puts doc
   end
 end

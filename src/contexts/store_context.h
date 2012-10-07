@@ -3,18 +3,14 @@
 
 #include <fstream>
 #include <string>
-#include "../datas/area_data.h"
 
 class StoreContext
 {
-public:
-    StoreContext(const AreaData *area, int numOfSpecs, const std::string &fileName, const std::string &methodName);
-
-    void store(long double currentTime);
+protected:
+    StoreContext(const std::string &fileName);
+    std::ofstream &out();
 
 private:
-    const AreaData *_area;
-    const int _numOfSpecs;
     std::ofstream _outFile;
 };
 
