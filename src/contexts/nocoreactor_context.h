@@ -9,7 +9,7 @@ public:
     NOCOReactorContext();
 
     int numOfSpecs() const { return 2; }
-    long double maxTime() const { return 10.0; }
+    long double maxTime() const { return 200.0; }
     long double timeStep() const { return 0.25; }
 
     CellData *createCell(CellType *cell, CoordType x, CoordType y) const;
