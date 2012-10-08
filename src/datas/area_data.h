@@ -13,12 +13,12 @@ public:
 
     void init(BaseDistributionContext *distributor);
 
-    CoordType size() const { return _sizeX * _sizeY; }
+    int size() const { return _sizeX * _sizeY; }
     CoordType sizeX() const { return _sizeX; }
     CoordType sizeY() const { return _sizeY; }
 
-    CoordType index(CoordType x, CoordType y) const { return y * _sizeX + x; }
-    CellType value(CoordType index) const { return _cells[index]; }
+    int index(CoordType x, CoordType y) const { return y * _sizeX + x; }
+    CellType value(int index) const { return _cells[index]; }
     void eachCell(const std::function<void (CellType *const, CoordType, CoordType)> &lambda) const;
 
     void setValue(CellType value, CoordType x, CoordType y);

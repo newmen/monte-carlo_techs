@@ -10,7 +10,7 @@ class LateralDimerData :
         public LateralSiteData
 {
 public:
-    LateralDimerData(CellData *first, CellData *second, int numOfSpecs);
+    LateralDimerData(CellData *first, CellData *second, short numOfSpecs);
 };
 
 #endif // LATERALDIMER_DATA_H

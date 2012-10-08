@@ -7,6 +7,8 @@
 class BaseDistributionContext
 {
 public:
+    virtual ~BaseDistributionContext() {}
+
     // sizeX, sizeY, x, y
     virtual void selectAppropriateConcs(CoordType, CoordType, CoordType, CoordType) {}
     virtual int value() const {

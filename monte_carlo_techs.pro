@@ -17,6 +17,7 @@ HEADERS += \
     src/contexts/treebasedsimulation_context.h \
     src/contexts/store_context.h \
     src/contexts/store_concentrations_context.h \
+    src/contexts/storeshot_context.h \
     src/contexts/storeevent_context.h \
     src/contexts/readevent_context.h \
     src/contexts/basereactor_context.h \
@@ -62,7 +63,8 @@ HEADERS += \
     src/datas/eventrecord_data.h \
     src/roles/neighbouring_role.h \
     src/roles/node_role.h \
-    src/roles/storing_role.h
+    src/roles/storingconcs_role.h \
+    src/roles/storingshot_role.h
 
 SOURCES += \
     src/contexts/basesimulation_context.cpp \
@@ -75,6 +77,7 @@ SOURCES += \
     src/contexts/treebasedsimulation_context.cpp \
     src/contexts/store_context.cpp \
     src/contexts/store_concentrations_context.cpp \
+    src/contexts/storeshot_context.cpp \
     src/contexts/storeevent_context.cpp \
     src/contexts/readevent_context.cpp \
     src/contexts/basereactor_context.cpp \

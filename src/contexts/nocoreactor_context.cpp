@@ -43,17 +43,17 @@ void NOCOReactorContext::reinitDimer(DimerData *dimer, const AreaData *area) con
 }
 
 BaseDistributionContext *NOCOReactorContext::createDistrubutor() const {
-    // float concs[] = {
-    //     0.067, 0.223,
-    //     0.249, 0.504,
-    //     0.533, 0.292,
-    //     0.319, 0.104
-    // };
+     float concs[] = {
+         0.067, 0.223,
+         0.249, 0.504,
+         0.533, 0.292,
+         0.319, 0.104
+     };
     // return new FlatWaveDistributionContext(concs, 2);
-    // return new SpiralWaveDistributionContext(concs, 2);
+     return new SpiralWaveDistributionContext(concs, 2);
 
-    float concs[] = { 0.1, 0.1 };
-    return new SimpleDistributionContext(concs, 2);
+//    float concs[] = { 0.1, 0.1 };
+//    return new SimpleDistributionContext(concs, 2);
 }
 
 void NOCOReactorContext::solveToOut(std::ostream &out) const {

@@ -24,9 +24,11 @@
 #include <contexts/treebasedsimulation_context.h>
 
 #include <contexts/store_concentrations_context.h>
+#include <contexts/storeshot_context.h>
 #include <contexts/storeevent_context.h>
 
 #define GRAPH_CONC_EXT "mcr"
+#define GRAPH_SHOT_EXT "mcs"
 #define GRAPH_EVENT_EXT "mcd"
 
 using namespace std;
@@ -59,8 +61,10 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
 {
     const string graphConcExt = GRAPH_CONC_EXT;
     const string fullFileConcPath = tc->pathBuilder.buildPath(fileName, graphConcExt);
-    const string graphEventExt = GRAPH_EVENT_EXT;
-    const string fullFileEventPath = tc->pathBuilder.buildPath(fileName, graphEventExt);
+//    const string graphEventExt = GRAPH_EVENT_EXT;
+//    const string fullFileEventPath = tc->pathBuilder.buildPath(fileName, graphEventExt);
+    const string graphShotExt = GRAPH_SHOT_EXT;
+    const string fullFileShotPath = tc->pathBuilder.buildPath(fileName, graphShotExt);
 
     cout << name << endl;
     if (!tc->needGraph) tc->perfSaver.storeName(name);
@@ -68,9 +72,11 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
     AreaData *area = 0;
     BaseSimulationContext *simulationContext = 0;
     StoreConcentrationsContext *storeConcContext = 0;
-    StoreEventContext *storeEventContext = 0;
-    auto freeUpMemory = [&area, &simulationContext, &storeConcContext, &storeEventContext]() {
-        delete storeEventContext;
+//    StoreEventContext *storeEventContext = 0;
+    StoreShotContext *storeShotContext = 0;
+    auto freeUpMemory = [&area, &simulationContext, &storeConcContext, &storeShotContext]() {
+        delete storeShotContext;
+//        delete storeEventContext;
         delete storeConcContext;
         delete simulationContext;
         delete area;
@@ -92,7 +98,8 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         simulationContext = tc->simFactory->createContext(area, tc->reactor);
         if (tc->needGraph) {
             storeConcContext = new StoreConcentrationsContext(fullFileConcPath, name, area, tc->reactor->numOfSpecs());
-            storeEventContext = new StoreEventContext(fullFileEventPath, *area);
+            storeShotContext = new StoreShotContext(fullFileShotPath, area);
+//            storeEventContext = new StoreEventContext(fullFileEventPath, *area);
         }
 
         totalTime = 0;
@@ -101,9 +108,10 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
             EventInfoData ei = simulationContext->doReaction();
             dt = ei.dt();
             if (tc->needGraph) {
-                storeEventContext->storeByInfo(ei);
+//                storeEventContext->storeByInfo(ei);
                 if (counter > tc->reactor->timeStep()) {
                     storeConcContext->store(totalTime);
+                    storeShotContext->store(totalTime);
                     counter = 0;
                 }
             }
