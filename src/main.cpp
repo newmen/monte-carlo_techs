@@ -18,7 +18,7 @@
 
 template <class SimulationContext>
 void run() {
-    AreaData area(500, 500);
+    AreaData area(1000, 1000);
 //    AreaData area(13, 13);
 
 //    ABCDCellReactorContext reactor;

@@ -13,7 +13,7 @@ public:
 
 private:
     const AreaData *_area;
-    const int _numOfSpecs;
+    const short _numOfSpecs;
 };
 
 #endif // STORE_CONCENTRATIONS_CONTEXT_H

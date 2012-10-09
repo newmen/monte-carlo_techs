@@ -1,7 +1,7 @@
 #include <QtGui>
 #include "mainwindow_context.h"
 
-MainWindowContext::MainWindowContext() : _snapShotsPath("mc_results"), _everySecond(0.05), _secondsCounter(0),
+MainWindowContext::MainWindowContext() : _snapShotsPath(""), _everySecond(0.05), _secondsCounter(0),
     _readContext(0), _renderArea(0), _cellSideLength(3), _totalTime(0)
 {
     setWindowTitle("Monte Carlo simulation");
@@ -136,6 +136,7 @@ void MainWindowContext::openFile() {
     delete _area;
     _area = new AreaData(sizes.x, sizes.y);
     _renderArea->resetArea(_area);
+    _totalTime = 0;
 }
 
 void MainWindowContext::openDirectory() {
@@ -159,6 +160,8 @@ void MainWindowContext::updateSideLength() {
 }
 
 void MainWindowContext::saveSnapShot() {
+    if (_snapShotsPath == "") return;
+
     QPixmap pixmap = QPixmap::grabWidget(_renderArea);
 //    pixmap.fill();
     QString out = _snapShotsPath + QString('/') + QString::number(_totalTime) + QString(".png");
