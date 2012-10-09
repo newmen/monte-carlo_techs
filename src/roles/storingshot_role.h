@@ -14,7 +14,7 @@ public:
 template <class AData>
 void StoringShotRole<AData>::store(std::ostream &os) const {
     this->eachCell([this, &os](CellType *const value, CoordType, CoordType) {
-        os << value;
+        os << *value;
     });
 }
 
