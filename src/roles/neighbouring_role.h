@@ -17,16 +17,16 @@ public:
     void uniqPairs(const AreaData *area, const Lambda &lambda) const;
 
 private:
-    void neighboursIter(int (*neighboursCoords)[2], int neighboursNum, const AreaData *area, std::function<void (int)> lambda) const;
+    void neighboursIter(CoordType (*neighboursCoords)[2], CoordType neighboursNum, const AreaData *area, std::function<void (int)> lambda) const;
 
-    void checkAndUpdateIfNeed(int coords[2], const AreaData *area) const;
-    int torus(int curr, int maxSize) const;
+    void checkAndUpdateIfNeed(CoordType coords[], const AreaData *area) const;
+    int torus(CoordType curr, CoordType maxSize) const;
 };
 
 template <>
 template <typename Lambda>
 void NeighbouringRole<CellData>::uniqPairs(const AreaData *area, const Lambda &lambda) const {
-    int neighboursCoords[][2] = {
+    CoordType neighboursCoords[][2] = {
         { this->x() + 1, this->y() },
         { this->x(), this->y() + 1 }
     };
@@ -38,7 +38,7 @@ template <>
 template <typename Lambda>
 void NeighbouringRole<CellData>::eachNeighbour(const AreaData *area, const Lambda &lambda) const {
     // the middle pair of coordinates is the same as in uniqPairs method
-    int neighboursCoords[][2] = {
+    CoordType neighboursCoords[][2] = {
         { this->x(), this->y() - 1 },
         { this->x() + 1, this->y() },
         { this->x(), this->y() + 1 },
@@ -51,7 +51,7 @@ void NeighbouringRole<CellData>::eachNeighbour(const AreaData *area, const Lambd
 template <>
 template <typename Lambda>
 void NeighbouringRole<DimerData>::eachNeighbour(const AreaData *area, const Lambda &lambda) const {
-    int ncs[6][2];
+    CoordType ncs[6][2];
     if (this->first->x() == this->second->x()) {
         ncs[0][0] = this->first->x() - 1; ncs[0][1] = this->first->y();
         ncs[1][0] = this->first->x() + 1; ncs[1][1] = this->first->y();
@@ -88,24 +88,24 @@ void NeighbouringRole<DimerData>::eachNeighbour(const AreaData *area, const Lamb
 }
 
 template <class SData>
-void NeighbouringRole<SData>::neighboursIter(int (*neighboursCoords)[2], int neighboursNum,
+void NeighbouringRole<SData>::neighboursIter(CoordType (*neighboursCoords)[2], CoordType neighboursNum,
                                              const AreaData *area, std::function<void (int)> lambda) const
 {
     for (int i = 0; i < neighboursNum; ++i) {
-        int *nc = neighboursCoords[i];
+        CoordType *nc = neighboursCoords[i];
         checkAndUpdateIfNeed(nc, area);
         lambda(area->index(nc[0], nc[1]));
     }
 }
 
 template <class SData>
-void NeighbouringRole<SData>::checkAndUpdateIfNeed(int coords[2], const AreaData *area) const {
+void NeighbouringRole<SData>::checkAndUpdateIfNeed(CoordType coords[2], const AreaData *area) const {
     coords[0] = torus(coords[0], area->sizeX());
     coords[1] = torus(coords[1], area->sizeY());
 }
 
 template <class SData>
-int NeighbouringRole<SData>::torus(int curr, int maxSize) const {
+int NeighbouringRole<SData>::torus(CoordType curr, CoordType maxSize) const {
     if (curr < 0) return curr + maxSize;
     else if (curr >= maxSize) return curr - maxSize;
     else return curr;

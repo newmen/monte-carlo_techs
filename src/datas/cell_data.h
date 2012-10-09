@@ -1,21 +1,26 @@
 #ifndef CELL_DATA_H
 #define CELL_DATA_H
 
+typedef short int CellType;
+typedef short int CoordType;
+
+#pragma pack(push, 2)
 class CellData
 {
 public:
-    CellData(int *cell, int x, int y) : _cell(cell), _x(x), _y(y) {}
+    CellData(CellType *cell, CoordType x, CoordType y) : _cell(cell), _x(x), _y(y) {}
     virtual ~CellData() {}
 
-    int value() const { return *_cell; }
-    void setValue(int value) { *_cell = value; }
+    CellType value() const { return *_cell; }
+    void setValue(CellType value) { *_cell = value; }
 
-    int x() const { return _x; }
-    int y() const { return _y; }
+    CoordType x() const { return _x; }
+    CoordType y() const { return _y; }
 
 private:
-    int *_cell;
-    int _x, _y;
+    CellType *_cell;
+    CoordType _x, _y;
 };
+#pragma pack(pop)
 
 #endif // CELL_DATA_H
