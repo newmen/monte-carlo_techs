@@ -56,7 +56,7 @@ EventInfoData TreeBasedSimulationContext::doReaction() {
 
         return ei;
     }
-    return EventInfoData(0);
+    return EventInfoData(-1.0);
 }
 
 void TreeBasedSimulationContext::storeDimer(NodeDimer *nodeDimer) {

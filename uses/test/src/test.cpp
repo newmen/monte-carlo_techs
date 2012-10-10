@@ -119,7 +119,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
                     counter = 0;
                 }
             }
-            if (dt == 0.0) {
+            if (dt == -1.0) {
                 std::cout << "Stacionar" << std::endl;
                 break;
             }
