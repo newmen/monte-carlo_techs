@@ -91,6 +91,11 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
 
     long double totalTime, dt;
     unsigned long long iterations = 0;
+    auto storeLambda = [&totalTime, &storeConcContext, &storeShotContext]() {
+        storeConcContext->store(totalTime);
+        storeShotContext->store(totalTime);
+    };
+
     for (int i = 0; i < tc->repeats; ++i) {
         freeUpMemory();
 
@@ -110,12 +115,11 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
             if (tc->needGraph) {
 //                storeEventContext->storeByInfo(ei);
                 if (counter > tc->reactor->timeStep()) {
-                    storeConcContext->store(totalTime);
-                    storeShotContext->store(totalTime);
+                    storeLambda();
                     counter = 0;
                 }
             }
-            if (dt == 0.0) {
+            if (dt == -1.0) {
                 std::cout << "Stacionar" << std::endl;
                 break;
             }
@@ -123,8 +127,11 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
             counter += dt;
             totalTime += dt;
             ++iterations;
+
         }
-        if (tc->needGraph && counter != 0) storeConcContext->store(totalTime); // last value
+        if (tc->needGraph && counter != 0) { // last value
+            storeLambda();
+        }
     }
 
     double stopTime = currTime();
