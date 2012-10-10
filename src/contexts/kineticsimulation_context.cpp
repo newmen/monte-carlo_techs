@@ -12,10 +12,10 @@ KineticSimulationContext::~KineticSimulationContext() {
 }
 
 EventInfoData KineticSimulationContext::doReaction() {
-    long double dt = 0;
+    long double dt = -1.0;
     BasePerSiteData *minPerSite = findMin(&dt);
 
-    if (dt == 0.0) return EventInfoData(0);
+    if (dt == -1.0) return EventInfoData(-1.0);
 
     doRandomReaction(minPerSite);
 
@@ -41,7 +41,7 @@ BasePerSiteData *KineticSimulationContext::findMin(long double *dt) const {
         if ((*p)->commonRate() == 0.0) continue;
 
         long double localDt = negativLogU() / (*p)->commonRate();
-        if (*dt == 0.0 || localDt < *dt) {
+        if (*dt == -1.0 || localDt < *dt) {
             *dt = localDt;
             min = *p;
         }

@@ -7,7 +7,7 @@ EventBasedSimulationContext::EventBasedSimulationContext(AreaData *area, const B
 EventInfoData EventBasedSimulationContext::doReaction() {
     reviewAllEvents();
 
-    if (_totalRate == 0.0) return EventInfoData(0);
+    if (_totalRate == 0.0) return EventInfoData(-1.0);
 
     BaseEventData *event = randomEvent();
     event->doIt();

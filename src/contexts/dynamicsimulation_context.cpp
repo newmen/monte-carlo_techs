@@ -7,7 +7,7 @@ DynamicSimulationContext::DynamicSimulationContext(AreaData *area, const BaseRea
 
 EventInfoData DynamicSimulationContext::doReaction() {
     reviewAllEvents();
-    if (_totalRate == 0.0) return EventInfoData(0);
+    if (_totalRate == 0.0) return EventInfoData(-1.0);
 
     EventInfoData ei(negativLogU() / _totalRate);
 
