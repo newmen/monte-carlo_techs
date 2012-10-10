@@ -10,12 +10,16 @@ public:
 
 protected:
     void selectAppropriateConcs(CoordType sizeX, CoordType, CoordType x, CoordType) {
+        CoordType partSize = sizeX / 4;
+        CoordType seekX = x;
+        while (seekX > partSize) { seekX -= partSize; }
+
         float *concs = new float[num()];
-        if (x < sizeX / 4) {
+        if (seekX < partSize / 4) {
             setupConcs(concs, 0);
-        } else if (x < sizeX / 2) {
+        } else if (seekX < partSize / 2) {
             setupConcs(concs, 1);
-        } else if (x < sizeX * 3 / 4) {
+        } else if (seekX < partSize * 3 / 4) {
             setupConcs(concs, 2);
         } else {
             setupConcs(concs, 3);

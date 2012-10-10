@@ -50,7 +50,7 @@ BaseDistributionContext *NOCOReactorContext::createDistrubutor() const {
          0.319, 0.104
      };
     // return new FlatWaveDistributionContext(concs, 2);
-     return new SpiralWaveDistributionContext(concs, 2);
+    return new SpiralWaveDistributionContext(concs, 2);
 
 //    float concs[] = { 0.1, 0.1 };
 //    return new SimpleDistributionContext(concs, 2);

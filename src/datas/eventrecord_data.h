@@ -4,10 +4,7 @@
 #include <iostream>
 #include "eventinfo_data.h"
 #include "cell_data.h"
-
-struct Point2D {
-    CoordType x, y;
-};
+#include "point2d.h"
 
 class EventRecordData
 {
