@@ -4,7 +4,9 @@ def convert(dir, hundredths_of_second, name_of_animation)
   Dir.chdir(dir)
   Dir['*.png'].each do |file_name|
     numbers = file_name.split('.')
-    zerofiled_name = "#{numbers[0].rjust(4, '0')}.#{numbers[1]}"
+    seconds_str = numbers[0].rjust(4, '0')
+    micro_seconds_str = numbers[1] =~ /^\d+$/ ? numbers[1] : '0'
+    zerofiled_name = "#{seconds_str}.#{micro_seconds_str}"
     short_name = zerofiled_name[0..7]
     `convert -colors 4 #{file_name} #{short_name}.gif`
     # `rm #{file_name}`
