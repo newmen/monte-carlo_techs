@@ -223,7 +223,7 @@ def draw_perf_file(arr_x, arrs_y, base_file_name)
   if base_file_name == 'times'
     faster_arrs_y = {}
     arrs_y.each do |k, v|
-      faster_arrs_y[k] = v if k =~ /\A(F|f)aster/
+      faster_arrs_y[k] = v if k =~ /\A(F|f)aster/ || k =~ /\A(М|м)ного/
     end
 
     draw_perf_graph(arr_x, faster_arrs_y, 'faster-times')
