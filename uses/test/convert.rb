@@ -13,13 +13,14 @@ class Converter
     Dir.chdir(dir)
     Dir['*.png'].each do |file_name|
       numbers = file_name.split('.')
-      seconds_str = numbers[0].rjust(4, '0')
+      seconds_str = numbers[0].rjust(5, '0')
       micro_seconds_str = numbers[1] =~ /^\d+$/ ? numbers[1] : '0'
+      micro_seconds_str = micro_seconds_str.ljust(3, '0')
       
       zerofiled_name = seconds_str
       zerofiled_name << '.' unless is_movie
       zerofiled_name << micro_seconds_str
-      short_name = zerofiled_name[0..7]
+      short_name = zerofiled_name[0..8]
 
       convert_file(file_name, short_name)
     end
@@ -53,7 +54,7 @@ private
   end
 
   def create_mp4_command
-    command = %(ffmpeg -f image2 -i "%05d.#{mp4_origin_files_ext}")
+    command = %(ffmpeg -f image2 -i "%06d.#{mp4_origin_files_ext}")
     command << " -r #{rate}" if rate
     command << " #{out_name}.#{format}"
     command
