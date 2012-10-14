@@ -21,26 +21,31 @@ class Converter
       zerofiled_name << micro_seconds_str
       short_name = zerofiled_name[0..7]
 
-      command = 'convert'
-      command << ' -colors 4' unless is_movie
-      command << " #{file_name} #{short_name}.#{format}"
-      `#{command}`
-      # `rm #{file_name}`
+      convert_file(file_name, short_name)
     end
 
-    `#{create_animation_command}`
+    create_animation
   end
 
-  def create_animation_command
-    is_movie ? create_mp4_command : create_gif_command
-  end
-
-  private
+private
 
   attr_reader :animation_name, :format, :is_movie, :rate
 
-  def result_dir
-    '..'
+  def mp4_origin_files_ext
+    'png'
+  end
+
+  def convert_file(from, to)
+    if is_movie
+      `mv #{from} #{to}.#{mp4_origin_files_ext}`
+    else
+      `convert -colors 4 #{from} #{to}.#{format}`
+      # `rm #{from}`
+    end
+  end
+
+  def create_animation
+    `#{is_movie ? create_mp4_command : create_gif_command}`
   end
 
   def create_gif_command
@@ -48,10 +53,14 @@ class Converter
   end
 
   def create_mp4_command
-    command = %(ffmpeg -f image2 -i "%05d.#{format}")
+    command = %(ffmpeg -f image2 -i "%05d.#{mp4_origin_files_ext}")
     command << " -r #{rate}" if rate
-    command << " #{out_name}.mp4"
+    command << " #{out_name}.#{format}"
     command
+  end
+
+  def result_dir
+    '..'
   end
 
   def out_name
@@ -69,7 +78,7 @@ Options:
   -d, --dir=DIR                   Setup current dir
   -s, --hund-second=HUND_SECONDS  Hundredths of a second
   -n, --name=NAME                 Name of result animation file [default: animation]
-  -f, --format=EXT                Format of output files (gif|jpg) [default: gif]
+  -f, --format=EXT                Format of output files (gif|mp4) [default: gif]
 DOC
 
   begin
