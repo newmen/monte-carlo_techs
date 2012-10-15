@@ -26,6 +26,11 @@ NOCOReactorContext::NOCOReactorContext() : RTReactorContext(406) {
     addReaction(new CellLateralReactionData(3, 1, 1e15, 37.5e3, eps5, this));
 }
 
+bool NOCOReactorContext::isTorusArea() const {
+//    return true;
+    return false;
+}
+
 CellData *NOCOReactorContext::createCell(CellType *cell, CoordType x, CoordType y) const {
     return new LateralCellData(cell, x, y, numOfSpecs());
 }
@@ -63,7 +68,7 @@ template <class SData, class LData>
 void NOCOReactorContext::reinitSite(SData *site, const AreaData *area) const {
     LData *lateralSite = static_cast<LData *>(site);
     lateralSite->resetNumsOfSpecs(numOfSpecs());
-    static_cast<NeighbouringRole<SData> *>(site)->eachNeighbour(area, [this, &area, &lateralSite](int neighbourIndex) {
+    static_cast<NeighbouringRole<SData> *>(site)->eachNeighbour(area, isTorusArea(), [this, &area, &lateralSite](int neighbourIndex) {
         int value = area->value(neighbourIndex);
         if (value > 1) lateralSite->incNumOfSpec(value - 2);
     });

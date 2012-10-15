@@ -19,6 +19,7 @@ public:
     virtual long double maxTime() const = 0;
     virtual long double timeStep() const = 0;
 
+    virtual bool isTorusArea() const;
     void initArea(AreaData *area) const;
 
     virtual CellData *createCell(CellType *cell, CoordType x, CoordType y) const;

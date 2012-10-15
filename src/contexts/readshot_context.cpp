@@ -19,7 +19,7 @@ double ReadShotContext::setShotToArea(AreaData *area) {
     double currentTime = 0;
     ss >> currentTime;
 
-    area->eachCell([this, &ss](CellType *value, CoordType x, CoordType y) {
+    area->eachCell([this, &ss](CellType *value, CoordType, CoordType) {
         char cv;
         ss.get(cv);
         *value = (int)cv - 48;

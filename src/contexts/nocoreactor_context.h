@@ -12,6 +12,8 @@ public:
     long double maxTime() const { return 100.0; }
     long double timeStep() const { return 0.1; }
 
+    bool isTorusArea() const;
+
     CellData *createCell(CellType *cell, CoordType x, CoordType y) const;
     DimerData *createDimer(CellData *first, CellData *second) const;
 

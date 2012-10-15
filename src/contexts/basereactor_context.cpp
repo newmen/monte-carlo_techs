@@ -7,6 +7,10 @@ BaseReactorContext::~BaseReactorContext() {
     for (auto p = _dimerReactions.begin(); p != _dimerReactions.end(); ++p) delete *p;
 }
 
+bool BaseReactorContext::isTorusArea() const {
+    return true;
+}
+
 void BaseReactorContext::initArea(AreaData *area) const {
     BaseDistributionContext *distributor = createDistrubutor();
     area->init(distributor);
