@@ -41,6 +41,9 @@ protected:
     template <class SData>
     void addReaction(const ReactionData<SData> *const reaction);
 
+    const ReactionData<CellData> *cellReaction(int index) const;
+    const ReactionData<DimerData> *dimerReaction(int index) const;
+
     virtual void solveToOut(std::ostream &out) const = 0;
 
 private:

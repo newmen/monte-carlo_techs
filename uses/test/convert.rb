@@ -6,8 +6,8 @@ class Converter
     @format = docopts['--format']
     @is_movie = (@format != 'gif')
     @rate = docopts['--hund-second'] || (!@is_movie && 100)
+    @geometry = docopts['--resize']
   end
-
 
   def convert(dir)
     Dir.chdir(dir)
@@ -15,12 +15,12 @@ class Converter
       numbers = file_name.split('.')
       seconds_str = numbers[0].rjust(5, '0')
       micro_seconds_str = numbers[1] =~ /^\d+$/ ? numbers[1] : '0'
-      micro_seconds_str = micro_seconds_str.ljust(3, '0')
+      micro_seconds_str = micro_seconds_str.ljust(4, '0')
       
       zerofiled_name = seconds_str
       zerofiled_name << '.' unless is_movie
       zerofiled_name << micro_seconds_str
-      short_name = zerofiled_name[0..8]
+      short_name = zerofiled_name[0..10]
 
       convert_file(file_name, short_name)
     end
@@ -30,7 +30,7 @@ class Converter
 
 private
 
-  attr_reader :animation_name, :format, :is_movie, :rate
+  attr_reader :animation_name, :format, :is_movie, :rate, :geometry
 
   def mp4_origin_files_ext
     'png'
@@ -38,9 +38,18 @@ private
 
   def convert_file(from, to)
     if is_movie
-      `mv #{from} #{to}.#{mp4_origin_files_ext}`
+      from_to_str = "#{from} #{to}.#{mp4_origin_files_ext}"
+      # if geometry
+      #   `convert -resize #{geometry} #{from_to_str}`
+      #   `rm #{from}`
+      # else
+        `mv #{from_to_str}`
+      # end
     else
-      `convert -colors 4 #{from} #{to}.#{format}`
+      command = "convert -colors 4"
+      command << " -resize #{geometry}" if geometry
+      command << " #{from} #{to}.#{format}"
+      `#{command}`
       # `rm #{from}`
     end
   end
@@ -54,8 +63,9 @@ private
   end
 
   def create_mp4_command
-    command = %(ffmpeg -f image2 -i "%06d.#{mp4_origin_files_ext}")
+    command = %(ffmpeg -f image2 -i "%09d.#{mp4_origin_files_ext}")
     command << " -r #{rate}" if rate
+    command << " -s #{geometry}" if geometry
     command << " #{out_name}.#{format}"
     command
   end
@@ -80,6 +90,7 @@ Options:
   -s, --hund-second=HUND_SECONDS  Hundredths of a second
   -n, --name=NAME                 Name of result animation file [default: animation]
   -f, --format=EXT                Format of output files (gif|mp4) [default: gif]
+  -r, --resize=GEOMETRY           Resize to geometry
 DOC
 
   begin

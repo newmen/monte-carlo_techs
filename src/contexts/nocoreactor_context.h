@@ -9,8 +9,9 @@ public:
     NOCOReactorContext();
 
     int numOfSpecs() const { return 2; }
-    long double maxTime() const { return 100.0; }
+    long double maxTime() const { return 200.0; }
     long double timeStep() const { return 0.1; }
+//    long double timeStep() const { return 0.0405; }
 
     bool isTorusArea() const;
 

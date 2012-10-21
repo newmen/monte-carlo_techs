@@ -47,6 +47,8 @@ void PerCellData::updateAroundRates(const BaseSimulationContext *simulationConte
     updateRates(simulationContext);
     for (int i = 0; i < PERDIMERS_NUM; ++i) {
         PerDimerData *perDimer = _perDimers[i];
+        if (perDimer == 0) continue;
+
         if (depth == 0) {
             if (i != woDimerIndex) perDimer->updateRates(simulationContext);
         } else {

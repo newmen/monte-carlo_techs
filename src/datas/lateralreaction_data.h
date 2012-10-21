@@ -4,10 +4,12 @@
 #include "reactionactivation_data.h"
 #include "lateralsite_data.h"
 
-class LateralReactionData : private ReactionActivationData
+class LateralReactionData : public ReactionActivationData
 {
 public:
     ~LateralReactionData();
+
+    long double eps(int index) const;
 
 protected:
     LateralReactionData(const RTReactorContext *reactor, long double Ea, long double epss[]);

@@ -7,3 +7,7 @@ ReadContext::ReadContext(const std::string &fileName) : _inFile(fileName) {
         exit(1);
     }
 }
+
+void ReadContext::close() {
+    _inFile.close();
+}

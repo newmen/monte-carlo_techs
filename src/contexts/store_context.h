@@ -8,7 +8,9 @@ class StoreContext
 {
 protected:
     StoreContext(const std::string &fileName);
+
     std::ofstream &out();
+    bool isNew();
 
 private:
     std::ofstream _outFile;

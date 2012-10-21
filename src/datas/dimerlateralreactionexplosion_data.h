@@ -6,7 +6,7 @@
 
 class DimerLateralReactionExplosionData :
         public DimerReactionDualStabilizationData,
-        private LateralReactionData
+        public LateralReactionData
 {
 public:
     DimerLateralReactionExplosionData(int firstPrevState, int secondPrevState, int nextState, long double k, long double Ea, long double epss[], const RTReactorContext *reactor);

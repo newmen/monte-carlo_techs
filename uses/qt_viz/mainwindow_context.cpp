@@ -154,6 +154,8 @@ void MainWindowContext::saveSnapShot() {
     if (_snapShotsPath == "") return;
 
     QPixmap pixmap = QPixmap::grabWidget(_renderArea);
+//    QPixmap pixmap = QPixmap::grabWidget(_renderArea, 0, 0,
+//                                         _area->sizeX() * _cellSideLength, _area->sizeY() * _cellSideLength);
     QString out = _snapShotsPath + QString('/') + QString::number(_totalTime) + QString(".png");
     if (pixmap.save(out)) {
         qDebug() << out;
