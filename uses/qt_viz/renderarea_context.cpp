@@ -2,37 +2,20 @@
 #include "renderarea_context.h"
 #include "drawing_role.h"
 
-RenderAreaContext::RenderAreaContext(const AreaData *area, float cellSideLength, bool needBorder) :
-    _area(area), _cellSideLength(cellSideLength), _needBorder(needBorder)
-{
-    processSize();
-}
+RenderAreaContext::RenderAreaContext(float cellSideLength) : _cellSideLength(cellSideLength) {}
 
 void RenderAreaContext::resetArea(const AreaData *area) {
     _area = area;
     processSize();
 }
 
-void RenderAreaContext::resetSideLength(float cellSideLength) {
-    _cellSideLength = cellSideLength;
-    processSize();
-}
-
 void RenderAreaContext::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
-    QPen pen((_needBorder) ? Qt::gray : Qt::transparent);
+    QPen pen(Qt::transparent);
     painter.setPen(pen);
 
     painter.setRenderHint(QPainter::Antialiasing, true);
-
-//    const QRect &r = event->rect();
-
-//    // lol condition xD
-//    if (r.width() == _cellSideLength || r.height() == _cellSideLength) {
-//        static_cast<const DrawingRole<AreaData> *>(_area)->redrawRegion(&painter, r, _cellSideLength);
-//    } else {
-        static_cast<const DrawingRole<AreaData> *>(_area)->draw(&painter, _cellSideLength);
-//    }
+    static_cast<const DrawingRole<AreaData> *>(_area)->draw(&painter, _cellSideLength);
 
     painter.setRenderHint(QPainter::Antialiasing, false);
 }

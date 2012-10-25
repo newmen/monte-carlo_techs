@@ -26,7 +26,7 @@ end
 def make_mc_time_gnuplot(file_name, title, &block)
   make_gnuplot(file_name, title, 'Время (сек)', 'Концентрация (%)') do |plot|
    # plot.xrange('[45:70]')
-   plot.xrange('[0:120]')
+   # plot.xrange('[0:120]')
     
     block.call(plot)
   end
