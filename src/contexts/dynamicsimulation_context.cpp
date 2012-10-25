@@ -7,7 +7,7 @@ DynamicSimulationContext::DynamicSimulationContext(AreaData *area, const BaseRea
 
 EventInfoData DynamicSimulationContext::doReaction() {
     reviewAllEvents();
-    if (_totalRate == 0.0) return EventInfoData(0);
+    if (_totalRate == 0.0) return EventInfoData(-1.0);
 
     EventInfoData ei(negativLogU() / _totalRate);
 
@@ -40,16 +40,16 @@ void DynamicSimulationContext::clearAllEvents() {
     _totalRate = 0;
 }
 
-void DynamicSimulationContext::addCellEvent(CellData *const cell, const ReactionData<CellData> *const reaction) {
+void DynamicSimulationContext::addCellEvent(CellData *cell, const ReactionData<CellData> *reaction) {
     addEvent(&_cells, cell, reaction);
 }
 
-void DynamicSimulationContext::addDimerEvent(DimerData *const dimer, const ReactionData<DimerData> *const reaction) {
+void DynamicSimulationContext::addDimerEvent(DimerData *dimer, const ReactionData<DimerData> *reaction) {
     addEvent(&_dimers, dimer, reaction);
 }
 
 template <class SData>
-void DynamicSimulationContext::addEvent(std::map<long double, std::vector<std::pair<SData *const, const ReactionData<SData> *const> > > *sitesMap, SData *const site, const ReactionData<SData> *const reaction) {
+void DynamicSimulationContext::addEvent(std::map<long double, std::vector<std::pair<SData *, const ReactionData<SData> *> > > *sitesMap, SData *site, const ReactionData<SData> * reaction) {
     long double rate = reaction->rate(site);
     if (rate > 0) {
         (*sitesMap)[rate].push_back(std::pair<SData *const, const ReactionData<SData> *const>(site, reaction));
@@ -58,7 +58,7 @@ void DynamicSimulationContext::addEvent(std::map<long double, std::vector<std::p
 }
 
 template <class SData>
-SData *DynamicSimulationContext::findAndDoReaction(long double *r, const std::map<long double, std::vector<std::pair<SData *const, const ReactionData<SData> *const> > > &sitesMap) const
+SData *DynamicSimulationContext::findAndDoReaction(long double *r, const std::map<long double, std::vector<std::pair<SData *, const ReactionData<SData> *> > > &sitesMap) const
 {
     SData *site = 0;
     const ReactionData<SData> *reaction = 0;

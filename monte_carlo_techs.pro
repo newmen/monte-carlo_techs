@@ -64,7 +64,10 @@ HEADERS += \
     src/roles/neighbouring_role.h \
     src/roles/node_role.h \
     src/roles/storingconcs_role.h \
-    src/roles/storingshot_role.h
+    src/roles/storingshot_role.h \
+    src/contexts/read_context.h \
+    src/contexts/readshot_context.h \
+    src/datas/point2d.h
 
 SOURCES += \
     src/contexts/basesimulation_context.cpp \
@@ -110,7 +113,9 @@ SOURCES += \
     src/datas/node_data.cpp \
     src/datas/eventinfo_data.cpp \
     src/datas/eventrecord_data.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/contexts/read_context.cpp \
+    src/contexts/readshot_context.cpp
 
 OTHER_FILES += \
     .gitignore \

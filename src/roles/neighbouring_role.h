@@ -11,13 +11,13 @@ class NeighbouringRole : public SData
 {
 public:
     template <typename Lambda>
-    void eachNeighbour(const AreaData *area, const Lambda &lambda) const;
+    void eachNeighbour(const AreaData *area, bool isTorus, const Lambda &lambda) const;
 
     template <typename Lambda>
-    void uniqPairs(const AreaData *area, const Lambda &lambda) const;
+    void uniqPairs(const AreaData *area, bool isTorus, const Lambda &lambda) const;
 
 private:
-    void neighboursIter(CoordType (*neighboursCoords)[2], CoordType neighboursNum, const AreaData *area, std::function<void (int)> lambda) const;
+    void neighboursIter(CoordType (*neighboursCoords)[2], CoordType neighboursNum, const AreaData *area, bool isTorus, std::function<void (int)> lambda) const;
 
     void checkAndUpdateIfNeed(CoordType coords[], const AreaData *area) const;
     int torus(CoordType curr, CoordType maxSize) const;
@@ -25,74 +25,89 @@ private:
 
 template <>
 template <typename Lambda>
-void NeighbouringRole<CellData>::uniqPairs(const AreaData *area, const Lambda &lambda) const {
+void NeighbouringRole<CellData>::uniqPairs(const AreaData *area, bool isTorus, const Lambda &lambda) const {
     CoordType neighboursCoords[][2] = {
-        { this->x() + 1, this->y() },
-        { this->x(), this->y() + 1 }
+        { (CoordType)(this->x() + 1), (CoordType)(this->y()) },
+        { (CoordType)(this->x()), (CoordType)(this->y() + 1) }
     };
 
-    neighboursIter(neighboursCoords, 2, area, lambda);
+    neighboursIter(neighboursCoords, 2, area, isTorus, lambda);
 }
 
 template <>
 template <typename Lambda>
-void NeighbouringRole<CellData>::eachNeighbour(const AreaData *area, const Lambda &lambda) const {
+void NeighbouringRole<CellData>::eachNeighbour(const AreaData *area, bool isTorus, const Lambda &lambda) const {
     // the middle pair of coordinates is the same as in uniqPairs method
     CoordType neighboursCoords[][2] = {
-        { this->x(), this->y() - 1 },
-        { this->x() + 1, this->y() },
-        { this->x(), this->y() + 1 },
-        { this->x() - 1, this->y() }
+        { (CoordType)(this->x()), (CoordType)(this->y() - 1) },
+        { (CoordType)(this->x() + 1), (CoordType)(this->y()) },
+        { (CoordType)(this->x()), (CoordType)(this->y() + 1) },
+        { (CoordType)(this->x() - 1), (CoordType)(this->y()) }
     };
 
-    neighboursIter(neighboursCoords, 4, area, lambda);
+    neighboursIter(neighboursCoords, 4, area, isTorus, lambda);
 }
 
 template <>
 template <typename Lambda>
-void NeighbouringRole<DimerData>::eachNeighbour(const AreaData *area, const Lambda &lambda) const {
+void NeighbouringRole<DimerData>::eachNeighbour(const AreaData *area, bool isTorus, const Lambda &lambda) const {
     CoordType ncs[6][2];
     if (this->first->x() == this->second->x()) {
-        ncs[0][0] = this->first->x() - 1; ncs[0][1] = this->first->y();
-        ncs[1][0] = this->first->x() + 1; ncs[1][1] = this->first->y();
-        ncs[2][0] = this->second->x() - 1; ncs[2][1] = this->second->y();
-        ncs[3][0] = this->second->x() + 1; ncs[3][1] = this->second->y();
+        ncs[0][0] = (CoordType)(this->first->x() - 1);
+        ncs[0][1] = (CoordType)(this->first->y());
 
-        ncs[4][0] = this->first->x();
-        ncs[5][0] = this->first->x();
+        ncs[1][0] = (CoordType)(this->first->x() + 1);
+        ncs[1][1] = (CoordType)(this->first->y());
+
+        ncs[2][0] = (CoordType)(this->second->x() - 1);
+        ncs[2][1] = (CoordType)(this->second->y());
+
+        ncs[3][0] = (CoordType)(this->second->x() + 1);
+        ncs[3][1] = (CoordType)(this->second->y());
+
+        ncs[4][0] = (CoordType)(this->first->x());
+        ncs[5][0] = (CoordType)(this->first->x());
         if (this->first->y() > this->second->y()) {
-            ncs[4][1] = this->first->y() + 1;
-            ncs[5][1] = this->second->y() - 1;
+            ncs[4][1] = (CoordType)(this->first->y() + 1);
+            ncs[5][1] = (CoordType)(this->second->y() - 1);
         } else {
-            ncs[4][1] = this->first->y() - 1;
-            ncs[5][1] = this->second->y() + 1;
+            ncs[4][1] = (CoordType)(this->first->y() - 1);
+            ncs[5][1] = (CoordType)(this->second->y() + 1);
         }
     } else {
-        ncs[0][0] = this->first->x(); ncs[0][1] = this->first->y() - 1;
-        ncs[1][0] = this->first->x(); ncs[1][1] = this->first->y() + 1;
-        ncs[2][0] = this->second->x(); ncs[2][1] = this->second->y() - 1;
-        ncs[3][0] = this->second->x(); ncs[3][1] = this->second->y() + 1;
+        ncs[0][0] = (CoordType)(this->first->x());
+        ncs[0][1] = (CoordType)(this->first->y() - 1);
 
-        ncs[4][1] = this->first->y();
-        ncs[5][1] = this->first->y();
+        ncs[1][0] = (CoordType)(this->first->x());
+        ncs[1][1] = (CoordType)(this->first->y() + 1);
+
+        ncs[2][0] = (CoordType)(this->second->x());
+        ncs[2][1] = (CoordType)(this->second->y() - 1);
+
+        ncs[3][0] = (CoordType)(this->second->x());
+        ncs[3][1] = (CoordType)(this->second->y() + 1);
+
+        ncs[4][1] = (CoordType)(this->first->y());
+        ncs[5][1] = (CoordType)(this->first->y());
         if (this->first->x() > this->second->x()) {
-            ncs[4][0] = this->first->x() + 1;
-            ncs[5][0] = this->second->x() - 1;
+            ncs[4][0] = (CoordType)(this->first->x() + 1);
+            ncs[5][0] = (CoordType)(this->second->x() - 1);
         } else {
-            ncs[4][0] = this->first->x() - 1;
-            ncs[5][0] = this->second->x() + 1;
+            ncs[4][0] = (CoordType)(this->first->x() - 1);
+            ncs[5][0] = (CoordType)(this->second->x() + 1);
         }
     }
 
-    neighboursIter(ncs, 6, area, lambda);
+    neighboursIter(ncs, 6, area, isTorus, lambda);
 }
 
 template <class SData>
 void NeighbouringRole<SData>::neighboursIter(CoordType (*neighboursCoords)[2], CoordType neighboursNum,
-                                             const AreaData *area, std::function<void (int)> lambda) const
+                                             const AreaData *area, bool isTorus, std::function<void (int)> lambda) const
 {
     for (int i = 0; i < neighboursNum; ++i) {
         CoordType *nc = neighboursCoords[i];
+        if (!isTorus && (nc[0] < 0 || nc[1] < 0 || nc[0] >= area->sizeX() || nc[1] >= area->sizeY())) continue;
         checkAndUpdateIfNeed(nc, area);
         lambda(area->index(nc[0], nc[1]));
     }

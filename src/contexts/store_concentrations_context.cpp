@@ -4,7 +4,9 @@
 StoreConcentrationsContext::StoreConcentrationsContext(const std::string &fileName, const std::string &methodName, const AreaData *area, int numOfSpecs) :
     StoreContext(fileName), _area(area), _numOfSpecs(numOfSpecs)
 {
-    out() << "# " << methodName << std::endl;
+    if (isNew()) {
+        out() << "# " << methodName << std::endl;
+    }
 }
 
 void StoreConcentrationsContext::store(long double currentTime) {
