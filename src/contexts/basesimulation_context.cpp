@@ -3,17 +3,24 @@
 #include "basesimulation_context.h"
 #include "../roles/neighbouring_role.h"
 
+//#include <iostream>
+
 BaseSimulationContext::BaseSimulationContext(AreaData *area, const BaseReactorContext *reactor) :
     _area(area), _reactor(reactor)
 {
-    _area->eachCell([this](int *const cell, int x, int y) {
+    _reactor->initArea(_area);
+
+    _area->eachCell([this](CellType *const cell, CoordType x, CoordType y) {
         _cells.push_back(_reactor->createCell(cell, x ,y));
     });
 
+    long long i = 0;
     for (auto p = _cells.begin(); p != _cells.end(); ++p) {
         CellData *cell = *p;
-        static_cast<NeighbouringRole<CellData> *>(cell)->uniqPairs(_area, [this, &cell](int neighbourIndex) {
+        static_cast<NeighbouringRole<CellData> *>(cell)->uniqPairs(_area, [this, &cell, &i](int neighbourIndex) {
+//std::cout << i << " - " << neighbourIndex << " = ";
             _dimers.push_back(_reactor->createDimer(cell, _cells[neighbourIndex]));
+//std::cout << i++ << std::endl;
         });
     }
 }

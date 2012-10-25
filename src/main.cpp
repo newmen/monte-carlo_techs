@@ -14,23 +14,25 @@
 #include "contexts/dynamicsimulation_context.h"
 #include "contexts/kineticsimulation_context.h"
 #include "contexts/treebasedsimulation_context.h"
-#include "contexts/store_context.h"
+#include "contexts/storeevent_context.h"
 
 template <class SimulationContext>
 void run() {
-    AreaData area(50, 50);
+    AreaData area(1000, 1000);
 //    AreaData area(13, 13);
 
-    ABCDCellReactorContext reactor;
+//    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
-//    NOCOReactorContext reactor;
+    NOCOReactorContext reactor;
 //    LotkaReactorContext reactor;
 
     SimulationContext sc(&area, &reactor);
+    StoreEventContext se("spiral_T406_d50_500x500.mcd", area);
     long double dt, totalTime = 0;
     int counter = 0, iterations = 0;
     do {
         EventInfoData ei = sc.doReaction();
+        se.storeByInfo(ei);
         dt = ei.dt();
         totalTime += dt;
 
@@ -56,10 +58,10 @@ int main() {
 
     std::cout << "Running..." << std::endl;
 
-    run<RejectionSimulationContext>();
-    run<RejectionFreeSimulationContext>();
-    run<DynamicSimulationContext>();
-    run<KineticSimulationContext>();
+//    run<RejectionSimulationContext>();
+//    run<RejectionFreeSimulationContext>();
+//    run<DynamicSimulationContext>();
+//    run<KineticSimulationContext>();
     run<TreeBasedSimulationContext>();
 
     std::cout << "Complete :)" << std::endl;

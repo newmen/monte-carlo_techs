@@ -9,16 +9,17 @@ public:
     NOCOReactorContext();
 
     int numOfSpecs() const { return 2; }
-    long double maxTime() const { return 50.0; }
-    long double timeStep() const { return 0.25; }
+    long double maxTime() const { return 100.0; }
+    long double timeStep() const { return 0.1; }
 
-    CellData *createCell(int *cell, int x, int y) const;
+    CellData *createCell(CellType *cell, CoordType x, CoordType y) const;
     DimerData *createDimer(CellData *first, CellData *second) const;
 
     void reinitCell(CellData *cell, const AreaData *area) const;
     void reinitDimer(DimerData *dimer, const AreaData *area) const;
 
 protected:
+    BaseDistributionContext *createDistrubutor() const;
     void solveToOut(std::ostream &out) const;
 
 private:
