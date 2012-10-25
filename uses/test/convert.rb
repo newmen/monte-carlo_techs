@@ -39,12 +39,7 @@ private
   def convert_file(from, to)
     if is_movie
       from_to_str = "#{from} #{to}.#{mp4_origin_files_ext}"
-      # if geometry
-      #   `convert -resize #{geometry} #{from_to_str}`
-      #   `rm #{from}`
-      # else
-        `mv #{from_to_str}`
-      # end
+      `mv #{from_to_str}`
     else
       command = "convert -colors 4"
       command << " -resize #{geometry}" if geometry
