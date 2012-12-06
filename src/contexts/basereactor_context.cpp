@@ -7,6 +7,10 @@ BaseReactorContext::~BaseReactorContext() {
     for (auto p = _dimerReactions.begin(); p != _dimerReactions.end(); ++p) delete *p;
 }
 
+bool BaseReactorContext::isTorusArea() const {
+    return true;
+}
+
 void BaseReactorContext::initArea(AreaData *area) const {
     BaseDistributionContext *distributor = createDistrubutor();
     area->init(distributor);
@@ -30,10 +34,6 @@ void BaseReactorContext::solve(const std::string &fileName) const {
     }
 }
 
-BaseDistributionContext *BaseReactorContext::createDistrubutor() const {
-    return new BaseDistributionContext();
-}
-
 template <>
 void BaseReactorContext::eachReaction<CellData>(const std::function<void (const ReactionData<CellData> *const)> &lambda) const {
     for (auto p = _cellReactions.cbegin(); p != _cellReactions.cend(); ++p) lambda(*p);
@@ -53,3 +53,16 @@ template <>
 void BaseReactorContext::addReaction<DimerData>(const ReactionData<DimerData> *const reaction) {
     _dimerReactions.push_back(reaction);
 }
+
+BaseDistributionContext *BaseReactorContext::createDistrubutor() const {
+    return new BaseDistributionContext();
+}
+
+const ReactionData<CellData> *BaseReactorContext::cellReaction(int index) const {
+    return _cellReactions[index];
+}
+
+const ReactionData<DimerData> *BaseReactorContext::dimerReaction(int index) const {
+    return _dimerReactions[index];
+}
+

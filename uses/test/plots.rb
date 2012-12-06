@@ -14,7 +14,7 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
       plot.terminal('png truecolor')
 #      plot.size("5,3")
 
-      plot.title(title)
+      # plot.title(title)
       plot.xlabel(xlabel)
       plot.ylabel(ylabel)
 
@@ -25,7 +25,8 @@ end
 
 def make_mc_time_gnuplot(file_name, title, &block)
   make_gnuplot(file_name, title, 'Время (сек)', 'Концентрация (%)') do |plot|
-#    plot.xrange('[0:50]')
+   # plot.xrange('[45:70]')
+   # plot.xrange('[0:120]')
     
     block.call(plot)
   end
@@ -79,7 +80,8 @@ end
 
 def mc_concentrations_data(a_data, b_data)
   make_mc_concentrations_data(a_data, b_data, 'linespoints') do |ds|
-    ds.title = "MC time"
+    # ds.title = 'MC time'
+    ds.title = 'time'
   end
 end
 
@@ -117,7 +119,8 @@ def draw_mc_time_graph(original, mc, file_name)
     org_data = []
     org_data += original_time_data(original) if original
     plot.data = org_data + make_mc_time_data(mc, 'linespoints') do |name, ds|
-      ds.title = "MC #{name}"
+      # ds.title = "MC #{name}"
+      ds.title = name
     end
   end
 end
@@ -223,7 +226,7 @@ def draw_perf_file(arr_x, arrs_y, base_file_name)
   if base_file_name == 'times'
     faster_arrs_y = {}
     arrs_y.each do |k, v|
-      faster_arrs_y[k] = v if k =~ /\A(F|f)aster/
+      faster_arrs_y[k] = v if k =~ /\A(F|f)aster/ || k =~ /\A(М|м)ного/
     end
 
     draw_perf_graph(arr_x, faster_arrs_y, 'faster-times')
@@ -349,16 +352,23 @@ end
 def main
   doc = <<HEREHELP
 Usage: 
-  #{__FILE__} [options]
+  #{__FILE__} -d RESULTS_DIR [options]
 
 Options:
   -h, --help         Show this
   -d DIR, --dir=DIR  Directory with results
   -r, --recursively  Recursive searching a result files
   -a, --average      Average the time by the number of iterations
-  -t, --time=UNIT    Mean unit of time (hour|min|sec) [default: sec]
+  -t, --time=unit    Mean unit of time (hour|min|sec) [default: sec]
   --names=NAMES      Set the names of curves separated by commas
 HEREHELP
+
+  # TODO:
+  # 1. так и не запилен пересчёт времени, с учётом указанного параметра
+  # 2. нужно предоставлять возможность указывать логарифмическую шкалу времени
+  # 3. предоставлять возможность указывать какие из имеющихся результатов методов обрабатывать
+  # 4. выбирать диапазон рисуемых графиков концентраций (в секундах)
+  # 5. определять рисовать ли title графика
 
   begin
     options = Docopt::docopt(doc)

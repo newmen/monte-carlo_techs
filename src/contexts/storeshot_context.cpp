@@ -4,8 +4,10 @@
 StoreShotContext::StoreShotContext(const std::string &fileName, const AreaData *area) :
     StoreContext(fileName), _area(area)
 {
-    out() << _area->sizeX() << "\n";
-    out() << _area->sizeY() << "\n";
+    if (isNew()) {
+        out() << _area->sizeX() << "\n";
+        out() << _area->sizeY() << "\n";
+    }
 }
 
 void StoreShotContext::store(long double currentTime) {

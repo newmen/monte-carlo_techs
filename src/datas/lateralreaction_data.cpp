@@ -11,6 +11,10 @@ LateralReactionData::~LateralReactionData() {
     delete [] _epss;
 }
 
+long double LateralReactionData::eps(int index) const {
+     return _epss[index];
+}
+
 long double LateralReactionData::expFactor(const LateralSiteData *site) const {
     long double lateralEnergy = 0;
     for (int i = 0; i < _numOfSpecs; ++i) {

@@ -5,6 +5,9 @@
 
 class ReactionActivationData
 {
+public:
+    long double Ea() const { return _Ea; }
+
 protected:
     ReactionActivationData(const RTReactorContext *reactor, long double Ea);
 

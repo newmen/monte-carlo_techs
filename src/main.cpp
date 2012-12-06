@@ -14,40 +14,74 @@
 #include "contexts/dynamicsimulation_context.h"
 #include "contexts/kineticsimulation_context.h"
 #include "contexts/treebasedsimulation_context.h"
-#include "contexts/storeevent_context.h"
+
+#include "contexts/readshot_context.h"
+#include "contexts/storeshot_context.h"
+#include "contexts/store_concentrations_context.h"
+
+#define FILE_NAME "../monte_carlo_techs/uses/test/results/big_spiral_null_stream/faster_optimal"
+//#define FILE_NAME "oe"
 
 template <class SimulationContext>
 void run() {
-    AreaData area(1000, 1000);
-//    AreaData area(13, 13);
-
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
     NOCOReactorContext reactor;
 //    LotkaReactorContext reactor;
 
-    SimulationContext sc(&area, &reactor);
-    StoreEventContext se("spiral_T406_d50_500x500.mcd", area);
+    std::string mcr = std::string(FILE_NAME) + std::string(".mcr");
+    std::string mcs = std::string(FILE_NAME) + std::string(".mcs");
+
+    std::cout << "Opening " << mcs << std::endl;
+    ReadShotContext reader(mcs);
+    Point2D sizes = reader.areaSizes();
+    std::cout << "Readed: x = " << sizes.x << ", y = " << sizes.y << std::endl;
+    AreaData area(sizes.x, sizes.y);
+//    AreaData area(5, 5);
+
     long double dt, totalTime = 0;
-    int counter = 0, iterations = 0;
+    SimulationContext sc(&area, &reactor);
+    // сначала распределили случайно из реактора по ареа, а потом задали ласт шот.. :(
+    totalTime = reader.setLastShotToArea(&area);
+    reader.close();
+
+    StoreConcentrationsContext concStorage(mcr, "faster_optimal", &area, reactor.numOfSpecs());
+    StoreShotContext shotStorage(mcs, &area);
+    auto storeLambda = [&totalTime, &concStorage, &shotStorage]() {
+        std::cout << "Stored " << totalTime << std::endl;
+        concStorage.store(totalTime);
+        shotStorage.store(totalTime);
+    };
+
+    std::cout << "Initialization complete" << std::endl;
+
+    long double counter = 0.0;
+    int iterations = 0;
     do {
         EventInfoData ei = sc.doReaction();
-        se.storeByInfo(ei);
         dt = ei.dt();
+        if (dt == -1.0) {
+            std::cout << "Stacionar" << std::endl;
+            break;
+        }
+
         totalTime += dt;
+        counter += dt;
+        iterations++;
 
         if (dt > reactor.maxTime()) {
             std::cout << "Overtime! " << dt << " sec. "
                       << "It is a " << ((ei.cell() == 0) ? "dimer" : "cell") << " reaction" << std::endl;
         }
 
-        iterations++;
-        if (counter++ == 100000) {
-            std::cout << "Intermediate time: " << totalTime << " sec" << std::endl;
+        if (counter > reactor.timeStep()) {
+            storeLambda();
             counter = 0;
-//            break;
         }
-    } while (dt > 0 && totalTime < reactor.maxTime());
+    } while (totalTime < reactor.maxTime());
+    if (counter > 0 && iterations > 1) {
+        storeLambda();
+    }
 
     std::cout << "Total time: " << totalTime << " sec" << std::endl;
     std::cout << "Iterations: " << iterations << std::endl;
@@ -62,7 +96,11 @@ int main() {
 //    run<RejectionFreeSimulationContext>();
 //    run<DynamicSimulationContext>();
 //    run<KineticSimulationContext>();
+
     run<TreeBasedSimulationContext>();
+
+//    NOCOReactorContext reactor;
+//    reactor.solve("odu.mcr");
 
     std::cout << "Complete :)" << std::endl;
 

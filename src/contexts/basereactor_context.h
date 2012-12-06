@@ -19,6 +19,7 @@ public:
     virtual long double maxTime() const = 0;
     virtual long double timeStep() const = 0;
 
+    virtual bool isTorusArea() const;
     void initArea(AreaData *area) const;
 
     virtual CellData *createCell(CellType *cell, CoordType x, CoordType y) const;
@@ -39,6 +40,9 @@ protected:
 
     template <class SData>
     void addReaction(const ReactionData<SData> *const reaction);
+
+    const ReactionData<CellData> *cellReaction(int index) const;
+    const ReactionData<DimerData> *dimerReaction(int index) const;
 
     virtual void solveToOut(std::ostream &out) const = 0;
 

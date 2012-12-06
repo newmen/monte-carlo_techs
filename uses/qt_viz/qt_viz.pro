@@ -5,22 +5,16 @@ QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += \
     main.cpp \
-    mainwindow_context.cpp \
-    renderarea_context.cpp \
-    playbutton.cpp \
-    visualizer.cpp
+    shotsave_context.cpp \
+    renderarea_context.cpp
 
 HEADERS += \
-    mainwindow_context.h \
+    shotsave_context.h \
     renderarea_context.h \
-    playbutton.h \
     drawing_role.h \
-    visualizer.h
+    config.h
 
 unix:!macx:!symbian: LIBS += -L$$PWD/../../lib/ -lmonte_carlo
 
 INCLUDEPATH += $$PWD/../../lib/
 DEPENDPATH += $$PWD/../../lib/
-
-FORMS += \
-    visualizer.ui
