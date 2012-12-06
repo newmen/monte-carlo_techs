@@ -40,6 +40,6 @@ fi
 
 home_results=${test_mc_dir}/${base_results_dir}
 mkdir -p ${home_results}
-mv -r ${results_dir} ${home_results}/
+mv ${results_dir} ${home_results}/
 
 #ruby ${plots_script} -d ${results_dir}

@@ -1,11 +1,11 @@
 #!/bin/sh
 
-bin_dir='bin/406'
-results_dir='406r'
+bin_dir='bin/long'
+results_dir='long'
 
-min_size=20
-max_size=100
-step_size=20
+min_size=1000
+max_size=1000
+step_size=1000
 repeats=2
 
 run_qsub() {
@@ -18,7 +18,7 @@ for f in ${bin_dir}/*; do
 
     run_qsub ${curr_name} crv ${max_size}
 
-    for i in `seq ${min_size} ${step_size} ${max_size}`; do
-        run_qsub ${curr_name} ${i} ${repeats}
-    done
+#    for i in `seq ${min_size} ${step_size} ${max_size}`; do
+#        run_qsub ${curr_name} ${i} ${repeats}
+#    done
 done

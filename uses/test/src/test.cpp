@@ -93,7 +93,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
     unsigned long long iterations = 0;
     auto storeLambda = [&totalTime, &storeConcContext, &storeShotContext]() {
         storeConcContext->store(totalTime);
-        storeShotContext->store(totalTime);
+//        storeShotContext->store(totalTime);
     };
 
     for (int i = 0; i < tc->repeats; ++i) {
@@ -103,7 +103,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         simulationContext = tc->simFactory->createContext(area, tc->reactor);
         if (tc->needGraph) {
             storeConcContext = new StoreConcentrationsContext(fullFileConcPath, name, area, tc->reactor->numOfSpecs());
-            storeShotContext = new StoreShotContext(fullFileShotPath, area);
+//            storeShotContext = new StoreShotContext(fullFileShotPath, area);
 //            storeEventContext = new StoreEventContext(fullFileEventPath, *area);
         }
 
@@ -132,7 +132,6 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
             storeLambda();
         }
     }
-    cout << "dt = " << dt << endl;
 
     double stopTime = currTime();
 
@@ -187,29 +186,30 @@ int main(int argc, char *argv[]) {
     srand(time(0));
 
 //    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext>);
-//    runTest(&tc, "Rejection MC", "rejection");
+//    runTest(&tc, "Метод отказа", "rejection");
 //    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext>);
-//    runTest(&tc, "Rejection-free MC", "rejection-free");
+//    runTest(&tc, "Метод частичных сумм", "rejection-free");
 //    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
-//    runTest(&tc, "Dynamic MC", "dynamic");
+//    runTest(&tc, "Динамический метод", "dynamic");
 //    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
-//    runTest(&tc, "Kinetic MC", "kinetic");
+//    runTest(&tc, "Кинетический метод", "kinetic");
 
 //    TreeSimContextFactory *factory = new TreeSimContextFactory(2);
 //    tc.changeFactory(factory);
-//    runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
+//    runTest(&tc, "Многоуровневый метод (кв. корень)", "faster_sqrt");
 //    factory->setWidth((int)log2(tc.sizeX * tc.sizeY));
-//    runTest(&tc, "Faster Binary MC", "faster_binary");
+//    runTest(&tc, "Многоуровневый метод (бинарный)", "faster_binary");
 
 //    factory->setWidth(3);
-//    runTest(&tc, "Faster 3 MC", "faster_3");
+//    runTest(&tc, "Многоуровневый метод (4 уровня)", "faster_3");
+
 //    factory->setWidth(4);
 //    runTest(&tc, "Faster 5 MC", "faster_5");
 //    factory->setWidth(6);
 //    runTest(&tc, "Faster 6 MC", "faster_6");
 
     tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
-    runTest(&tc, "Faster Optimal (4) MC", "faster_optimal");
+    runTest(&tc, "Многоуровневый метод (5 уровней)", "faster_optimal");
 
     return 0;
 }
