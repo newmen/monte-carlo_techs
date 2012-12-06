@@ -127,8 +127,6 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
             counter += dt;
             totalTime += dt;
             ++iterations;
-
-            dt = -1;
         }
         if (tc->needGraph && counter != 0) { // last value
             storeLambda();

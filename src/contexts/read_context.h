@@ -11,6 +11,8 @@ public:
     virtual ~ReadContext() {}
     virtual Point2D areaSizes() = 0;
 
+    void close();
+
 protected:
     ReadContext(const std::string &fileName);
     std::ifstream &in() { return _inFile; }

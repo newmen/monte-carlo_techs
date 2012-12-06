@@ -6,7 +6,7 @@
 
 class CellLateralReactionData :
         public CellReactionData,
-        private LateralReactionData
+        public LateralReactionData
 {
 public:
     CellLateralReactionData(int prevState, int nextState, long double k, long double Ea, long double epss[], const RTReactorContext *reactor);
