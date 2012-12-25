@@ -53,13 +53,15 @@ void DrawingRole<AData>::drawCell(QPainter *painter, int cellValue, int x, int y
     QColor color;
     switch (cellValue) {
     case 1:
-        color.setRgb(248, 248, 248);
+        color.setRgb(255, 255, 255);
         break;
     case 2:
-        color.setRgb(222, 22, 22);
+//        color.setRgb(222, 22, 22);
+        color.setRgb(207, 207, 199);
         break;
     case 3:
-        color.setRgb(56, 56, 156);
+//        color.setRgb(56, 56, 156);
+        color.setRgb(0, 0, 0);
         break;
     case 4:
         color.setRgb(33, 33, 33);
