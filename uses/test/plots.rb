@@ -50,20 +50,9 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
   Gnuplot.open do |gp|
     Gnuplot::Plot.new(gp) do |plot|
       
-      # plot.output("#{file_name}.png")
-      # # plot.terminal('png truecolor')
-      # plot.set('term png size 355,255')
-      # plot.set('term png font', '",12"')
-
       plot.output("#{file_name}.eps")
       plot.set('enc cp1251')
-      # plot.set('terminal postscript eps monochrome 26')
-      # plot.set('term postscript eps font "URWPalladioL-Roma,26"')
-      # plot.set('term postscript eps font "URWPalladioL-Roma,26" fontfile "/usr/share/fonts/default/Type1/p052003l.pfb"')
       plot.set('term postscript eps font "Times-New-Roman,32"')
-
-      # plot.set("fontpath '/home/newmen/Downloads'")
-      # plot.set("term post eps enh 'SFBSR17' 26")
 
       plot.set('key left reverse')
 
