@@ -321,7 +321,7 @@ class PlotsConfig
   attr_reader :result_dir, :recursively, :average, :time, :names
 
   def initialize(options)
-    @result_dir = options.delete('--dir')
+    @result_dir = options.delete('--dir').first
 
     @names = options.delete('--names')
     @names = @names ? @names.split(',') : []
