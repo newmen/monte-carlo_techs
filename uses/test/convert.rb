@@ -58,7 +58,7 @@ private
   end
 
   def create_mp4_command
-    command = %(ffmpeg -f image2 -i "%09d.#{mp4_origin_files_ext}")
+    command = %(ffmpeg -f image2 -i "#{files_mask}.#{mp4_origin_files_ext}")
     command << " -r #{rate}" if rate
     command << " -s #{geometry}" if geometry
     command << " #{out_name}.#{format}"
@@ -71,6 +71,13 @@ private
 
   def out_name
     "#{result_dir}/#{animation_name}"
+  end
+
+  def files_mask
+    name = Dir["*.#{mp4_origin_files_ext}"].first
+    name = File.basename(name, File.extname(name))
+    _, numbers, zeros = name.split(/(0*[^0]+)(0*)/)
+    "%0#{numbers.size}d#{zeros}"
   end
 end
 
