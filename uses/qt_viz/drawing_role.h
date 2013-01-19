@@ -62,7 +62,7 @@ void DrawingRole<AData>::drawCell(QPainter *painter, int cellValue, int x, int y
         color.setRgb(56, 56, 156);
         break;
     case 4:
-        color.setRgb(33, 33, 33);
+        color.setRgb(255, 198, 2);
         break;
     case 5:
         color.setRgb(25, 225, 25);

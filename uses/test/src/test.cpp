@@ -13,9 +13,10 @@
 #include <datas/area_data.h>
 #include <contexts/abcdcellreactor_context.h>
 #include <contexts/abcddimerreactor_context.h>
-#include <contexts/nocoreactor_context.h>
 #include <contexts/lotkareactor_context.h>
 #include <contexts/lotkathreereactor_context.h>
+#include <contexts/simplenocoreactor_context.h>
+#include <contexts/fullnocoreactor_context.h>
 
 #include <contexts/dynamicsimulation_context.h>
 #include <contexts/kineticsimulation_context.h>
@@ -168,8 +169,9 @@ int main(int argc, char *argv[]) {
     }
 
 //    ABCDCellReactorContext reactor;
-    NOCOReactorContext reactor;
 //    LotkaReactorContext reactor;
+//    SimpleNOCOReactorContext reactor;
+    FullNOCOReactorContext reactor;
     TestConfig tc(&reactor, argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
                   (argc == 6 && strcmp(argv[5], "true") == 0));
 

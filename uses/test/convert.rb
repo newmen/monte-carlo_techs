@@ -11,7 +11,7 @@ class Converter
 
   def convert(dir)
     Dir.chdir(dir)
-    Dir['*.png'].each do |file_name|
+    Dir['*.png'].each_with_index do |file_name, i|
       numbers = file_name.split('.')
       seconds_str = numbers[0].rjust(5, '0')
       micro_seconds_str = numbers[1] =~ /^\d+$/ ? numbers[1] : '0'

@@ -6,8 +6,9 @@
 
 #include "contexts/abcdcellreactor_context.h"
 #include "contexts/abcddimerreactor_context.h"
-#include "contexts/nocoreactor_context.h"
 #include "contexts/lotkareactor_context.h"
+#include "contexts/simplenocoreactor_context.h"
+#include "contexts/fullnocoreactor_context.h"
 
 #include "contexts/rejectionsimulation_context.h"
 #include "contexts/rejectionfreesimulation_context.h"
@@ -19,31 +20,32 @@
 #include "contexts/storeshot_context.h"
 #include "contexts/store_concentrations_context.h"
 
-#define FILE_NAME "../monte_carlo_techs/uses/test/results/big_spiral_null_stream/faster_optimal"
+#define FILE_NAME "/home/newmen/c++/monte_carlo_techs/uses/test/results/full_noco/faster-tree"
 //#define FILE_NAME "oe"
 
 template <class SimulationContext>
 void run() {
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
-    NOCOReactorContext reactor;
 //    LotkaReactorContext reactor;
+//    SimpleNOCOReactorContext reactor;
+    FullNOCOReactorContext reactor;
 
     std::string mcr = std::string(FILE_NAME) + std::string(".mcr");
     std::string mcs = std::string(FILE_NAME) + std::string(".mcs");
 
-    std::cout << "Opening " << mcs << std::endl;
-    ReadShotContext reader(mcs);
-    Point2D sizes = reader.areaSizes();
-    std::cout << "Readed: x = " << sizes.x << ", y = " << sizes.y << std::endl;
-    AreaData area(sizes.x, sizes.y);
-//    AreaData area(5, 5);
+//    std::cout << "Opening " << mcs << std::endl;
+//    ReadShotContext reader(mcs);
+//    Point2D sizes = reader.areaSizes();
+//    std::cout << "Readed: x = " << sizes.x << ", y = " << sizes.y << std::endl;
+//    AreaData area(sizes.x, sizes.y);
+    AreaData area(120, 120);
 
     long double dt, totalTime = 0;
     SimulationContext sc(&area, &reactor);
-    // сначала распределили случайно из реактора по ареа, а потом задали ласт шот.. :(
-    totalTime = reader.setLastShotToArea(&area);
-    reader.close();
+//    // сначала распределили случайно из реактора по ареа, а потом задали ласт шот.. :(
+//    totalTime = reader.setLastShotToArea(&area);
+//    reader.close();
 
     StoreConcentrationsContext concStorage(mcr, "faster_optimal", &area, reactor.numOfSpecs());
     StoreShotContext shotStorage(mcs, &area);
@@ -99,7 +101,7 @@ int main() {
 
     run<TreeBasedSimulationContext>();
 
-//    NOCOReactorContext reactor;
+//    FullNOCOReactorContext reactor;
 //    reactor.solve("odu.mcr");
 
     std::cout << "Complete :)" << std::endl;
