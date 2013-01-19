@@ -1,7 +1,7 @@
 #!/bin/sh
 
-bin_dir='bin/long'
-results_dir='long'
+bin_dir='bin/full'
+results_dir='full'
 
 min_size=1000
 max_size=1000

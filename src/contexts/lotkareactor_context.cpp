@@ -11,11 +11,11 @@ LotkaReactorContext::LotkaReactorContext() {
 ////    addReaction(new DimerReactionExchangeData(2, 1, 0));
 //    addReaction(new DimerReactionExchangeData(3, 1, 0.5 / 4));
 
-    addReaction(new DimerReactionCaptureData(1, 2, 0.07 / 4));
-    addReaction(new DimerReactionCaptureData(2, 3, 1.0 / 4));
-    addReaction(new CellReactionData(3, 1, 0.07));
-//    addReaction(new DimerReactionExchangeData(2, 1, 0));
-//    addReaction(new DimerReactionExchangeData(3, 1, 0));
+//    addReaction(new DimerReactionCaptureData(1, 2, 0.07 / 4));
+//    addReaction(new DimerReactionCaptureData(2, 3, 1.0 / 4));
+//    addReaction(new CellReactionData(3, 1, 0.07));
+////    addReaction(new DimerReactionExchangeData(2, 1, 0));
+////    addReaction(new DimerReactionExchangeData(3, 1, 0));
 
 //    addReaction(new DimerReactionCaptureData(1, 2, 10.0 / 4));
 //    addReaction(new DimerReactionCaptureData(2, 3, 15.0 / 4));
@@ -45,7 +45,13 @@ LotkaReactorContext::LotkaReactorContext() {
 //    addReaction(new DimerReactionCaptureData(2, 3, 1.0 / 4));
 //    addReaction(new CellReactionData(3, 1, 0.07));
 //    addReaction(new DimerReactionExchangeData(2, 1, 0.0001));
-//    addReaction(new DimerReactionExchangeData(3, 1, 20.0));
+////    addReaction(new DimerReactionExchangeData(3, 1, 20.0));
+
+    addReaction(new DimerReactionCaptureData(1, 2, 2.0 / 4));
+    addReaction(new DimerReactionCaptureData(2, 3, 2.0 / 4));
+    addReaction(new CellReactionData(3, 1, 0.005));
+//    addReaction(new DimerReactionExchangeData(2, 1, 0));
+//    addReaction(new DimerReactionExchangeData(3, 1, 0));
 }
 
 BaseDistributionContext *LotkaReactorContext::createDistrubutor() const {

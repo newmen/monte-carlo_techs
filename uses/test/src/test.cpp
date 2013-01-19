@@ -13,9 +13,10 @@
 #include <datas/area_data.h>
 #include <contexts/abcdcellreactor_context.h>
 #include <contexts/abcddimerreactor_context.h>
-#include <contexts/nocoreactor_context.h>
 #include <contexts/lotkareactor_context.h>
 #include <contexts/lotkathreereactor_context.h>
+#include <contexts/simplenocoreactor_context.h>
+#include <contexts/fullnocoreactor_context.h>
 
 #include <contexts/dynamicsimulation_context.h>
 #include <contexts/kineticsimulation_context.h>
@@ -93,7 +94,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
     unsigned long long iterations = 0;
     auto storeLambda = [&totalTime, &storeConcContext, &storeShotContext]() {
         storeConcContext->store(totalTime);
-//        storeShotContext->store(totalTime);
+        storeShotContext->store(totalTime);
     };
 
     for (int i = 0; i < tc->repeats; ++i) {
@@ -103,7 +104,7 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
         simulationContext = tc->simFactory->createContext(area, tc->reactor);
         if (tc->needGraph) {
             storeConcContext = new StoreConcentrationsContext(fullFileConcPath, name, area, tc->reactor->numOfSpecs());
-//            storeShotContext = new StoreShotContext(fullFileShotPath, area);
+            storeShotContext = new StoreShotContext(fullFileShotPath, area);
 //            storeEventContext = new StoreEventContext(fullFileEventPath, *area);
         }
 
@@ -167,8 +168,9 @@ int main(int argc, char *argv[]) {
     }
 
 //    ABCDCellReactorContext reactor;
-    NOCOReactorContext reactor;
 //    LotkaReactorContext reactor;
+//    SimpleNOCOReactorContext reactor;
+    FullNOCOReactorContext reactor;
     TestConfig tc(&reactor, argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
                   (argc == 6 && strcmp(argv[5], "true") == 0));
 

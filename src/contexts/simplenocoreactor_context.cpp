@@ -1,23 +1,20 @@
 #include <cmath>
 #include <ostream>
-#include "nocoreactor_context.h"
+#include "simplenocoreactor_context.h"
 #include "flatwavedistribution_context.h"
 #include "spiralwavedistribution_context.h"
-#include "../datas/lateralcell_data.h"
-#include "../datas/lateraldimer_data.h"
 #include "../datas/cellreaction_data.h"
 #include "../datas/celllateralreaction_data.h"
 #include "../datas/dimerlateralreactionexplosion_data.h"
 #include "../datas/dimerreactionexchange_data.h"
-#include "../roles/neighbouring_role.h"
 
-NOCOReactorContext::NOCOReactorContext() : RTReactorContext(406) {
+SimpleNOCOReactorContext::SimpleNOCOReactorContext() : LateralReactorContext(406) {
     double pNO = 3.7e-6;
     double pCO = 3e-6;
     addReaction(new CellReactionData(1, 2, 1.93e5 * pNO));
-    addReaction(new DimerReactionExchangeData(2, 1, 250));
+    addReaction(new DimerReactionExchangeData(2, 1, 50));
     addReaction(new CellReactionData(1, 3, 1.93e5 * pCO));
-    addReaction(new DimerReactionExchangeData(3, 1, 250));
+    addReaction(new DimerReactionExchangeData(3, 1, 50));
 
     long double eps3[] = {-2e3, -0.8e3};
     addReaction(new DimerLateralReactionExplosionData(2, 3, 1, 2e15 / 4, 24.5e3, eps3, this));
@@ -27,28 +24,12 @@ NOCOReactorContext::NOCOReactorContext() : RTReactorContext(406) {
     addReaction(new CellLateralReactionData(3, 1, 1e15, 37.5e3, eps5, this));
 }
 
-bool NOCOReactorContext::isTorusArea() const {
+bool SimpleNOCOReactorContext::isTorusArea() const {
 //    return true;
     return false;
 }
 
-CellData *NOCOReactorContext::createCell(CellType *cell, CoordType x, CoordType y) const {
-    return new LateralCellData(cell, x, y, numOfSpecs());
-}
-
-DimerData *NOCOReactorContext::createDimer(CellData *first, CellData *second) const {
-    return new LateralDimerData(first, second, numOfSpecs());
-}
-
-void NOCOReactorContext::reinitCell(CellData *cell, const AreaData *area) const {
-    reinitSite<CellData, LateralCellData>(cell, area);
-}
-
-void NOCOReactorContext::reinitDimer(DimerData *dimer, const AreaData *area) const {
-    reinitSite<DimerData, LateralDimerData>(dimer, area);
-}
-
-BaseDistributionContext *NOCOReactorContext::createDistrubutor() const {
+BaseDistributionContext *SimpleNOCOReactorContext::createDistrubutor() const {
 //     float concs[] = {
 //         0.067, 0.223,
 //         0.249, 0.504,
@@ -63,12 +44,12 @@ BaseDistributionContext *NOCOReactorContext::createDistrubutor() const {
 }
 
 // копипакость
-void NOCOReactorContext::solveToOut(std::ostream &out) const {
+void SimpleNOCOReactorContext::solveToOut(std::ostream &out) const {
     long double dt = timeStep();
     long double currentTime = 0;
 
     long double *concs = new long double[numOfSpecs()];
-    for (int i = 0; i < numOfSpecs(); ++i) concs[i] = 0;
+    for (int i = 0; i < numOfSpecs(); ++i) concs[i] = 0.1;
     long double *csNext = new long double[numOfSpecs()];
 
     const CellReactionData *adsorbNO = static_cast<const CellReactionData *>(cellReaction(0));
@@ -106,14 +87,4 @@ void NOCOReactorContext::solveToOut(std::ostream &out) const {
 
     delete [] csNext;
     delete [] concs;
-}
-
-template <class SData, class LData>
-void NOCOReactorContext::reinitSite(SData *site, const AreaData *area) const {
-    LData *lateralSite = static_cast<LData *>(site);
-    lateralSite->resetNumsOfSpecs(numOfSpecs());
-    static_cast<NeighbouringRole<SData> *>(site)->eachNeighbour(area, isTorusArea(), [this, &area, &lateralSite](int neighbourIndex) {
-        int value = area->value(neighbourIndex);
-        if (value > 1) lateralSite->incNumOfSpec(value - 2);
-    });
 }
