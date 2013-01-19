@@ -79,7 +79,8 @@ def original_concentrations_data(a_data, b_data)
 end
 
 def mc_concentrations_data(a_data, b_data)
-  make_mc_concentrations_data(a_data, b_data, 'linespoints') do |ds|
+  # make_mc_concentrations_data(a_data, b_data, 'linespoints') do |ds|
+  make_mc_concentrations_data(a_data, b_data, 'lines') do |ds|
     # ds.title = 'MC time'
     ds.title = 'time'
   end
@@ -118,7 +119,8 @@ def draw_mc_time_graph(original, mc, file_name)
   make_mc_time_gnuplot(file_name, mc[2]) do |plot|
     org_data = []
     org_data += original_time_data(original) if original
-    plot.data = org_data + make_mc_time_data(mc, 'linespoints') do |name, ds|
+    # plot.data = org_data + make_mc_time_data(mc, 'linespoints') do |name, ds|
+    plot.data = org_data + make_mc_time_data(mc, 'lines') do |name, ds|
       # ds.title = "MC #{name}"
       ds.title = name
     end
@@ -321,7 +323,7 @@ class PlotsConfig
   attr_reader :result_dir, :recursively, :average, :time, :names
 
   def initialize(options)
-    @result_dir = options.delete('--dir')
+    @result_dir = options.delete('--dir').first
 
     @names = options.delete('--names')
     @names = @names ? @names.split(',') : []

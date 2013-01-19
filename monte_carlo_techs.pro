@@ -25,7 +25,7 @@ HEADERS += \
     src/contexts/abcdcellreactor_context.h \
     src/contexts/abcddimerreactor_context.h \
     src/contexts/rtreactor_context.h \
-    src/contexts/nocoreactor_context.h \
+    src/contexts/simplenocoreactor_context.h \
     src/contexts/lotkareactor_context.h \
     src/contexts/lotkathreereactor_context.h \
     src/contexts/basedistribution_context.h \
@@ -67,7 +67,12 @@ HEADERS += \
     src/roles/storingshot_role.h \
     src/contexts/read_context.h \
     src/contexts/readshot_context.h \
-    src/datas/point2d.h
+    src/datas/point2d.h \
+    src/contexts/lateralreactor_context.h \
+    src/contexts/fullnocoreactor_context.h \
+    src/datas/dimerreactiondissociation_data.h \
+    src/datas/dimerlateralreactiondissociation_data.h \
+    src/datas/dimerreactionactivationexplosion_data.h
 
 SOURCES += \
     src/contexts/basesimulation_context.cpp \
@@ -88,7 +93,7 @@ SOURCES += \
     src/contexts/abcdcellreactor_context.cpp \
     src/contexts/abcddimerreactor_context.cpp \
     src/contexts/rtreactor_context.cpp \
-    src/contexts/nocoreactor_context.cpp \
+    src/contexts/simplenocoreactor_context.cpp \
     src/contexts/lotkareactor_context.cpp \
     src/contexts/lotkathreereactor_context.cpp \
     src/contexts/wavedistribution_context.cpp \
@@ -115,7 +120,12 @@ SOURCES += \
     src/datas/eventrecord_data.cpp \
     src/main.cpp \
     src/contexts/read_context.cpp \
-    src/contexts/readshot_context.cpp
+    src/contexts/readshot_context.cpp \
+    src/contexts/lateralreactor_context.cpp \
+    src/contexts/fullnocoreactor_context.cpp \
+    src/datas/dimerreactiondissociation_data.cpp \
+    src/datas/dimerlateralreactiondissociation_data.cpp \
+    src/datas/dimerreactionactivationexplosion_data.cpp
 
 OTHER_FILES += \
     .gitignore \
