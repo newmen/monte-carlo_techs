@@ -15,6 +15,9 @@
 uses/test/test_mc
 uses/test/heap_test
 uses/test/*results*
+uses/test/bin
+uses/test/*.o*
+uses/test/*.e*
 
 # Compiled Object files
 *.slo

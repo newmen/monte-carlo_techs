@@ -1,6 +1,6 @@
-GCC_PATH	:= /opt/gcc47
+GCC_PATH	:= /share/home/tools/gcc-4.7.1
 CXX		:= $(GCC_PATH)/bin/g++
-CXXFLAGS	:= -Wall -O2 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64
+CXXFLAGS	:= -Wall -O2 -std=c++0x -I$(GCC_PATH)/include/c++/4.7.1 -L$(GCC_PATH)/lib64
 
 NAME	:= monte_carlo
 EXEC	:= lib$(NAME).a

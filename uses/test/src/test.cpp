@@ -137,7 +137,6 @@ void runTest(TestConfig *tc, const string &name, const string &fileName)
             storeLambda();
         }
     }
-    cout << "dt = " << dt << endl;
 
     double stopTime = currTime();
 
@@ -174,8 +173,8 @@ int main(int argc, char *argv[]) {
 
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
-    LotkaReactorContext reactor;
-//    SimpleNOCOReactorContext reactor;
+//    LotkaReactorContext reactor;
+    SimpleNOCOReactorContext reactor;
 //    FullNOCOReactorContext reactor;
     TestConfig tc(&reactor, argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
                   (argc == 6 && strcmp(argv[5], "true") == 0));
@@ -194,38 +193,33 @@ int main(int argc, char *argv[]) {
     srand(time(0));
 
 //    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext<EventBasedSimulationContext> >);
-//    runTest(&tc, "Rejection MC", "rejection");
+//    runTest(&tc, "Метод отказа", "rejection");
 //    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext<EventBasedSimulationContext> >);
-//    runTest(&tc, "Rejection-free MC", "rejection-free");
+//    runTest(&tc, "Метод частичных сумм", "rejection-free");
 //    tc.changeFactory(new TypicalSimContextFactory<DynamicSimulationContext>);
-//    runTest(&tc, "Dynamic MC", "dynamic");
+//    runTest(&tc, "Динамический метод", "dynamic");
 //    tc.changeFactory(new TypicalSimContextFactory<KineticSimulationContext>);
-//    runTest(&tc, "Kinetic MC", "kinetic");
+//    runTest(&tc, "Кинетический метод", "kinetic");
 
-    TreeSimContextFactory *factory = new TreeSimContextFactory(2);
-    tc.changeFactory(factory);
-//    runTest(&tc, "Faster Sqrt MC", "faster_sqrt");
+//    TreeSimContextFactory *factory = new TreeSimContextFactory(2);
+//    tc.changeFactory(factory);
+//    runTest(&tc, "Многоуровневый метод (кв. корень)", "faster_sqrt");
 //    factory->setWidth((int)log2(tc.sizeX * tc.sizeY));
-//    runTest(&tc, "Faster Binary MC", "faster_binary");
+//    runTest(&tc, "Многоуровневый метод (бинарный)", "faster_binary");
 
-    factory->setWidth(3);
-    runTest(&tc, "Faster 3 MC", "faster_3");
-//    factory->setWidth(4);
-//    runTest(&tc, "Faster 5 MC", "faster_5");
-//    factory->setWidth(6);
-//    runTest(&tc, "Faster 6 MC", "faster_6");
-
+//    factory->setWidth(3);
+//    runTest(&tc, "Многоуровневый метод (4 уровня)", "faster_3");
 //    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
-//    runTest(&tc, "Faster Optimal (4) MC", "faster_optimal");
+//    runTest(&tc, "Многоуровневый метод (5 уровней)", "faster_optimal");
 
-    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext<OptimizedEventBasedSimulationContext> >);
-    runTest(&tc, "Optimized Rejection MC", "optimized-rejection");
+//    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext<OptimizedEventBasedSimulationContext> >);
+//    runTest(&tc, "Оптимизированный метод отказа", "optimized-rejection");
 //    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext<OptimizedEventBasedSimulationContext> >);
-//    runTest(&tc, "Optimized Rejection-free MC", "optimized-rejection-free");
+//    runTest(&tc, "Оптимизированный метод частичных сумм", "optimized-rejection-free");
 //    tc.changeFactory(new TypicalSimContextFactory<MuchOptimizedRejectionFreeSimulationContext>);
-//    runTest(&tc, "Much optimized Rejection-free MC", "much-optimized-rejection-free");
-    tc.changeFactory(new TypicalSimContextFactory<OptimizedDynamicSimulationContext>);
-    runTest(&tc, "Optimized Dynamic MC", "optimized-dynamic");
+//    runTest(&tc, "Более оптимизированный метод частичных сумм", "much-optimized-rejection-free");
+//    tc.changeFactory(new TypicalSimContextFactory<OptimizedDynamicSimulationContext>);
+//    runTest(&tc, "Оптимизированный динамический метод", "optimized-dynamic");
 
     return 0;
 }

@@ -9,7 +9,7 @@ public:
     FullNOCOReactorContext();
 
     int numOfSpecs() const { return 3; }
-    long double maxTime() const { return 250.0; }
+    long double maxTime() const { return 500.0; }
     long double timeStep() const { return 0.1; }
 //    long double timeStep() const { return 0.0405; }
 

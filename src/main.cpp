@@ -32,8 +32,8 @@ void run() {
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
 //    LotkaReactorContext reactor;
-    SimpleNOCOReactorContext reactor;
-//    FullNOCOReactorContext reactor;
+//    SimpleNOCOReactorContext reactor;
+    FullNOCOReactorContext reactor;
 
     std::string mcr = std::string(FILE_NAME) + std::string(".mcr");
     std::string mcs = std::string(FILE_NAME) + std::string(".mcs");
@@ -43,7 +43,11 @@ void run() {
 //    Point2D sizes = reader.areaSizes();
 //    std::cout << "Readed: x = " << sizes.x << ", y = " << sizes.y << std::endl;
 //    AreaData area(sizes.x, sizes.y);
+<<<<<<< HEAD:src/main.cpp
     AreaData area(50, 50);
+=======
+    AreaData area(120, 120);
+>>>>>>> flame:src/main.cpp
 
     long double dt, totalTime = 0;
     SimulationContext sc(&area, &reactor);
@@ -109,7 +113,7 @@ int main() {
 //    run<MuchOptimizedRejectionFreeSimulationContext>();
     run<OptimizedDynamicSimulationContext>();
 
-//    SimpleNOCOReactorContext reactor;
+//    FullNOCOReactorContext reactor;
 //    reactor.solve("odu.mcr");
 
     std::cout << "Complete :)" << std::endl;

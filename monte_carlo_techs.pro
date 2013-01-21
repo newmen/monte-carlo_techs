@@ -15,9 +15,6 @@ HEADERS += \
     src/contexts/sitebasedsimulation_context.h \
     src/contexts/kineticsimulation_context.h \
     src/contexts/treebasedsimulation_context.h \
-    src/contexts/optimizedsimplesimulation_context.h \
-    src/contexts/optimizedeventbasedsimulation_context.h \
-    src/contexts/muchoptimizedrejectionfreesimulation_context.h \
     src/contexts/store_context.h \
     src/contexts/store_concentrations_context.h \
     src/contexts/storeshot_context.h \
@@ -28,18 +25,14 @@ HEADERS += \
     src/contexts/abcdcellreactor_context.h \
     src/contexts/abcddimerreactor_context.h \
     src/contexts/rtreactor_context.h \
-    src/contexts/lateralreactor_context.h \
+    src/contexts/simplenocoreactor_context.h \
     src/contexts/lotkareactor_context.h \
     src/contexts/lotkathreereactor_context.h \
-    src/contexts/simplenocoreactor_context.h \
-    src/contexts/fullnocoreactor_context.h \
     src/contexts/basedistribution_context.h \
     src/contexts/simpledistribution_context.h \
     src/contexts/wavedistribution_context.h \
     src/contexts/flatwavedistribution_context.h \
     src/contexts/spiralwavedistribution_context.h \
-    src/contexts/read_context.h \
-    src/contexts/readshot_context.h \
     src/datas/area_data.h \
     src/datas/cell_data.h \
     src/datas/dimer_data.h \
@@ -52,13 +45,10 @@ HEADERS += \
     src/datas/dimerreactionexchange_data.h \
     src/datas/dimerreactionstabilization_data.h \
     src/datas/dimerreactiondualstabilization_data.h \
-    src/datas/dimerreactiondissociation_data.h \
     src/datas/reactionactivation_data.h \
-    src/datas/dimerreactionactivationexplosion_data.h \
     src/datas/lateralreaction_data.h \
     src/datas/celllateralreaction_data.h \
     src/datas/dimerlateralreactionexplosion_data.h \
-    src/datas/dimerlateralreactiondissociation_data.h \
     src/datas/baseevent_data.h \
     src/datas/event_data.h \
     src/datas/basepersite_data.h \
@@ -71,24 +61,28 @@ HEADERS += \
     src/datas/nodesite_data.h \
     src/datas/eventinfo_data.h \
     src/datas/eventrecord_data.h \
-    src/datas/point2d.h \
     src/roles/neighbouring_role.h \
     src/roles/node_role.h \
     src/roles/storingconcs_role.h \
     src/roles/storingshot_role.h \
-    src/contexts/optimizeddynamicsimulation_context.h \
-    src/contexts/commonoptimizedeventbasedsimulation_context.h
+    src/contexts/read_context.h \
+    src/contexts/readshot_context.h \
+    src/datas/point2d.h \
+    src/contexts/lateralreactor_context.h \
+    src/contexts/fullnocoreactor_context.h \
+    src/datas/dimerreactiondissociation_data.h \
+    src/datas/dimerlateralreactiondissociation_data.h \
+    src/datas/dimerreactionactivationexplosion_data.h
 
 SOURCES += \
     src/contexts/basesimulation_context.cpp \
     src/contexts/simplesimulation_context.cpp \
     src/contexts/eventbasedsimulation_context.cpp \
+    src/contexts/rejectionsimulation_context.cpp \
+    src/contexts/rejectionfreesimulation_context.cpp \
     src/contexts/dynamicsimulation_context.cpp \
     src/contexts/kineticsimulation_context.cpp \
     src/contexts/treebasedsimulation_context.cpp \
-    src/contexts/optimizedsimplesimulation_context.cpp \
-    src/contexts/optimizedeventbasedsimulation_context.cpp \
-    src/contexts/muchoptimizedrejectionfreesimulation_context.cpp \
     src/contexts/store_context.cpp \
     src/contexts/store_concentrations_context.cpp \
     src/contexts/storeshot_context.cpp \
@@ -99,15 +93,11 @@ SOURCES += \
     src/contexts/abcdcellreactor_context.cpp \
     src/contexts/abcddimerreactor_context.cpp \
     src/contexts/rtreactor_context.cpp \
-    src/contexts/lateralreactor_context.cpp \
+    src/contexts/simplenocoreactor_context.cpp \
     src/contexts/lotkareactor_context.cpp \
     src/contexts/lotkathreereactor_context.cpp \
-    src/contexts/simplenocoreactor_context.cpp \
-    src/contexts/fullnocoreactor_context.cpp \
     src/contexts/wavedistribution_context.cpp \
     src/contexts/simpledistribution_context.cpp \
-    src/contexts/read_context.cpp \
-    src/contexts/readshot_context.cpp \
     src/datas/area_data.cpp \
     src/datas/lateralsite_data.cpp \
     src/datas/lateralcell_data.cpp \
@@ -117,13 +107,10 @@ SOURCES += \
     src/datas/dimerreactionexchange_data.cpp \
     src/datas/dimerreactionstabilization_data.cpp \
     src/datas/dimerreactiondualstabilization_data.cpp \
-    src/datas/dimerreactiondissociation_data.cpp \
     src/datas/reactionactivation_data.cpp \
-    src/datas/dimerreactionactivationexplosion_data.cpp \
     src/datas/lateralreaction_data.cpp \
     src/datas/celllateralreaction_data.cpp \
     src/datas/dimerlateralreactionexplosion_data.cpp \
-    src/datas/dimerlateralreactiondissociation_data.cpp \
     src/datas/percell_data.cpp \
     src/datas/perdimer_data.cpp \
     src/datas/mctree_data.cpp \
@@ -132,8 +119,13 @@ SOURCES += \
     src/datas/eventinfo_data.cpp \
     src/datas/eventrecord_data.cpp \
     src/main.cpp \
-    src/contexts/optimizeddynamicsimulation_context.cpp \
-    src/contexts/commonoptimizedeventbasedsimulation_context.cpp
+    src/contexts/read_context.cpp \
+    src/contexts/readshot_context.cpp \
+    src/contexts/lateralreactor_context.cpp \
+    src/contexts/fullnocoreactor_context.cpp \
+    src/datas/dimerreactiondissociation_data.cpp \
+    src/datas/dimerlateralreactiondissociation_data.cpp \
+    src/datas/dimerreactionactivationexplosion_data.cpp
 
 OTHER_FILES += \
     .gitignore \
