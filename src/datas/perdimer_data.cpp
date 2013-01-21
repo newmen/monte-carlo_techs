@@ -15,8 +15,8 @@ void PerDimerData::updateAroundRates(const BaseSimulationContext *simulationCont
     if (depth == 0) return;
 
     // logical for depth = 1
-    int exsDimerIndex = (first()->site()->x() != second()->site()->x()) ? 3 : 2;
-    first()->updateAroundRates(simulationContext, depth);
+    int exsDimerIndex = (first()->site()->x() != second()->site()->x()) ? 3 : 0;
+    first()->updateAroundRates(simulationContext, depth, this);
     second()->updateAroundRates(simulationContext, depth, exsDimerIndex);
 }
 

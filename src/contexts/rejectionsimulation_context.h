@@ -1,9 +1,11 @@
 #ifndef REJECTIONSIMULATION_CONTEXT_H
 #define REJECTIONSIMULATION_CONTEXT_H
 
-#include "eventbasedsimulation_context.h"
+#include "basesimulation_context.h"
+#include "../datas/baseevent_data.h"
 
-class RejectionSimulationContext : public EventBasedSimulationContext
+template <class EBSimulationContext>
+class RejectionSimulationContext : public EBSimulationContext
 {
 public:
     RejectionSimulationContext(AreaData *area, const BaseReactorContext *reactor);
@@ -16,5 +18,33 @@ protected:
 private:
     long double _maxRate;
 };
+
+template <class EBSimulationContext>
+RejectionSimulationContext<EBSimulationContext>::RejectionSimulationContext(AreaData *area, const BaseReactorContext *reactor) :
+    EBSimulationContext(area, reactor), _maxRate(0) {}
+
+template <class EBSimulationContext>
+BaseEventData *RejectionSimulationContext<EBSimulationContext>::randomEvent() const {
+    long double r;
+    int n;
+    BaseEventData *selectedEvent;
+    do {
+        r = this->randomN01() * this->_events.size();
+        n = int(r);
+        selectedEvent = this->_events[n];
+    } while (n - r + 1 >= selectedEvent->rate() / _maxRate);
+    return selectedEvent;
+}
+
+template <class EBSimulationContext>
+void RejectionSimulationContext<EBSimulationContext>::clearAllEvents() {
+    EBSimulationContext::clearAllEvents();
+    _maxRate = 0;
+}
+
+template <class EBSimulationContext>
+void RejectionSimulationContext<EBSimulationContext>::doWhenEventAddedWithRate(long double rate) {
+    if (rate > _maxRate) _maxRate = rate;
+}
 
 #endif // REJECTIONSIMULATION_CONTEXT_H

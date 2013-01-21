@@ -22,6 +22,7 @@ public:
     void updateRates(const BaseSimulationContext *simulationContext);
     void updateAroundRates(const BaseSimulationContext *simulationContext, int depth);
     void updateAroundRates(const BaseSimulationContext *simulationContext, int depth, int woDimerIndex); // override only for PSData = PerCellData
+    void updateAroundRates(const BaseSimulationContext *simulationContext, int depth, PerDimerData *exceptDimer); // override only for PSData = PerCellData
 
     void reCount(const BaseSimulationContext *simulationContext);
     bool diagnoze() const;
@@ -61,6 +62,13 @@ void NodeRole<PSData>::updateAroundRates(const BaseSimulationContext *simulation
 template <class PSData>
 void NodeRole<PSData>::updateAroundRates(const BaseSimulationContext *simulationContext, int depth, int woDimerIndex) {
     PSData::updateAroundRates(simulationContext, depth, woDimerIndex);
+    updateSum();
+}
+
+// optimization again only for PSData = PerCellData
+template <class PSData>
+void NodeRole<PSData>::updateAroundRates(const BaseSimulationContext *simulationContext, int depth, PerDimerData *exceptDimer) {
+    PSData::updateAroundRates(simulationContext, depth, exceptDimer);
     updateSum();
 }
 

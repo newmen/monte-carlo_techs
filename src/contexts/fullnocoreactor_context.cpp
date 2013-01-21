@@ -26,7 +26,7 @@ FullNOCOReactorContext::FullNOCOReactorContext() : LateralReactorContext(410) {
     long double eps6[] = {-1.5e3, 0, -1.5e3};
     addReaction(new DimerLateralReactionDissociationData(1, 2, 4, 1, 5e14, 28e3, eps6, this));
 
-    double migrationRate = 250;
+    double migrationRate = 150;
     addReaction(new DimerReactionExchangeData(2, 1, migrationRate));
     addReaction(new DimerReactionExchangeData(3, 1, migrationRate));
     addReaction(new DimerReactionExchangeData(4, 1, migrationRate));

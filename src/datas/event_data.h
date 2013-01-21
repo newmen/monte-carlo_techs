@@ -21,6 +21,8 @@ public:
     SData *site() const { return _site; }
 //    ReactionData<SData> *reaction() const { return _reaction; }
 
+    void update() { resetRate(_reaction->rate(_site)); }
+
 private:
     SData *const _site;
     const ReactionData<SData> *_reaction;
