@@ -12,23 +12,12 @@ EventInfoData DynamicSimulationContext::doReaction() {
     EventInfoData ei(negativLogU() / _totalRate);
 
     long double r = randomN01() * _totalRate;
-
-    if ((int)r % 2 == 0) {
-        CellData *cell = findAndDoReaction(&r, _cells);
-        if (cell) {
-            ei.set(cell);
-        } else {
-            DimerData *dimer = findAndDoReaction(&r, _dimers);
-            ei.set(dimer);
-        }
+    CellData *cell = findAndDoReaction(&r, _cells);
+    if (cell) {
+        ei.set(cell);
     } else {
         DimerData *dimer = findAndDoReaction(&r, _dimers);
-        if (dimer) {
-            ei.set(dimer);
-        } else {
-            CellData *cell = findAndDoReaction(&r, _cells);
-            ei.set(cell);
-        }
+        ei.set(dimer);
     }
 
     return ei;

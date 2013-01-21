@@ -13,6 +13,9 @@ public:
     virtual EventInfoData info(long double dt) const = 0;
     long double rate() const { return _rate; }
 
+protected:
+    void resetRate(long double rate) { _rate = rate; }
+
 private:
     long double _rate;
 };

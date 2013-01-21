@@ -9,7 +9,7 @@ public:
     LotkaReactorContext();
 
     int numOfSpecs() const { return 2; }
-    long double maxTime() const { return 5000; }
+    long double maxTime() const { return 500; }
     long double timeStep() const { return 1; }
 
 protected:

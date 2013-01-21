@@ -10,9 +10,13 @@
 #include "contexts/simplenocoreactor_context.h"
 #include "contexts/fullnocoreactor_context.h"
 
+#include "contexts/eventbasedsimulation_context.h"
+#include "contexts/optimizedeventbasedsimulation_context.h"
 #include "contexts/rejectionsimulation_context.h"
 #include "contexts/rejectionfreesimulation_context.h"
+#include "contexts/muchoptimizedrejectionfreesimulation_context.h"
 #include "contexts/dynamicsimulation_context.h"
+#include "contexts/optimizeddynamicsimulation_context.h"
 #include "contexts/kineticsimulation_context.h"
 #include "contexts/treebasedsimulation_context.h"
 
@@ -28,8 +32,8 @@ void run() {
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
 //    LotkaReactorContext reactor;
-//    SimpleNOCOReactorContext reactor;
-    FullNOCOReactorContext reactor;
+    SimpleNOCOReactorContext reactor;
+//    FullNOCOReactorContext reactor;
 
     std::string mcr = std::string(FILE_NAME) + std::string(".mcr");
     std::string mcs = std::string(FILE_NAME) + std::string(".mcs");
@@ -39,7 +43,7 @@ void run() {
 //    Point2D sizes = reader.areaSizes();
 //    std::cout << "Readed: x = " << sizes.x << ", y = " << sizes.y << std::endl;
 //    AreaData area(sizes.x, sizes.y);
-    AreaData area(120, 120);
+    AreaData area(50, 50);
 
     long double dt, totalTime = 0;
     SimulationContext sc(&area, &reactor);
@@ -94,14 +98,18 @@ int main() {
 
     std::cout << "Running..." << std::endl;
 
-//    run<RejectionSimulationContext>();
-//    run<RejectionFreeSimulationContext>();
+//    run<RejectionSimulationContext<EventBasedSimulationContext> >();
+//    run<RejectionFreeSimulationContext<EventBasedSimulationContext> >();
 //    run<DynamicSimulationContext>();
 //    run<KineticSimulationContext>();
+//    run<TreeBasedSimulationContext>();
 
-    run<TreeBasedSimulationContext>();
+    run<RejectionSimulationContext<OptimizedEventBasedSimulationContext> >();
+//    run<RejectionFreeSimulationContext<OptimizedEventBasedSimulationContext> >();
+//    run<MuchOptimizedRejectionFreeSimulationContext>();
+    run<OptimizedDynamicSimulationContext>();
 
-//    FullNOCOReactorContext reactor;
+//    SimpleNOCOReactorContext reactor;
 //    reactor.solve("odu.mcr");
 
     std::cout << "Complete :)" << std::endl;

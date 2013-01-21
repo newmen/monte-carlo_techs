@@ -1,6 +1,6 @@
 #!/bin/sh
 
-min_size=50
+min_size=150
 max_size=150
 size_step=25
 repeats=3

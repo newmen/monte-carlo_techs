@@ -45,6 +45,12 @@ void PerCellData::updateAroundRates(const BaseSimulationContext *simulationConte
 // optimization
 void PerCellData::updateAroundRates(const BaseSimulationContext *simulationContext, int depth, int woDimerIndex) {
     updateRates(simulationContext);
+
+    int othersideWoDimerIndex;
+    if (woDimerIndex == -1) othersideWoDimerIndex = -1;
+    else if (woDimerIndex == 0) othersideWoDimerIndex = 2;
+    else if (woDimerIndex == 3) othersideWoDimerIndex = 1;
+
     for (int i = 0; i < PERDIMERS_NUM; ++i) {
         PerDimerData *perDimer = _perDimers[i];
         if (perDimer == 0) continue;
@@ -53,7 +59,22 @@ void PerCellData::updateAroundRates(const BaseSimulationContext *simulationConte
             if (i != woDimerIndex) perDimer->updateRates(simulationContext);
         } else {
             PerCellData *neighbourCell = (perDimer->first() == this) ? perDimer->second() : perDimer->first();
-            neighbourCell->updateAroundRates(simulationContext, depth - 1, woDimerIndex);
+            int updatedWoDimerIndex;
+            if (i == othersideWoDimerIndex) updatedWoDimerIndex = -1;
+            else updatedWoDimerIndex = woDimerIndex;
+            neighbourCell->updateAroundRates(simulationContext, depth - 1, updatedWoDimerIndex);
         }
+    }
+}
+
+void PerCellData::updateAroundRates(const BaseSimulationContext *simulationContext, int depth, PerDimerData *exceptDimer) {
+    updateRates(simulationContext);
+
+    for (int i = 0; i < PERDIMERS_NUM; ++i) {
+        PerDimerData *perDimer = _perDimers[i];
+        if (perDimer == 0 || perDimer == exceptDimer) continue;
+
+        PerCellData *neighbourCell = (perDimer->first() == this) ? perDimer->second() : perDimer->first();
+        neighbourCell->updateAroundRates(simulationContext, depth - 1, -1);
     }
 }

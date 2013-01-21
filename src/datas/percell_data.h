@@ -17,6 +17,7 @@ public:
 
     void updateAroundRates(const BaseSimulationContext *simulationContext, int depth);
     virtual void updateAroundRates(const BaseSimulationContext *simulationContext, int depth, int woDimerIndex); // optimization
+    virtual void updateAroundRates(const BaseSimulationContext *simulationContext, int depth, PerDimerData *exceptDimer); // optimization
 
 private:
     PerDimerData *_perDimers[PERDIMERS_NUM];

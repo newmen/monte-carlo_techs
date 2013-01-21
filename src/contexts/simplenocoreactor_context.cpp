@@ -25,8 +25,8 @@ SimpleNOCOReactorContext::SimpleNOCOReactorContext() : LateralReactorContext(406
 }
 
 bool SimpleNOCOReactorContext::isTorusArea() const {
-//    return true;
-    return false;
+    return true;
+//    return false;
 }
 
 BaseDistributionContext *SimpleNOCOReactorContext::createDistrubutor() const {
