@@ -10,7 +10,7 @@ BaseEventData *MuchOptimizedRejectionFreeSimulationContext::randomEvent() const 
         accRate += pRate->second;
         if (r < accRate) {
             accRate -= pRate->second;
-            auto events = _cellEvents.find(pRate->first)->second;
+            auto &events = _cellEvents.find(pRate->first)->second;
             for (auto pEvent = events.cbegin(); pEvent != events.cend(); ++pEvent) {
                 accRate += (*pEvent)->rate();
                 if (r < accRate) return *pEvent;
@@ -22,7 +22,7 @@ BaseEventData *MuchOptimizedRejectionFreeSimulationContext::randomEvent() const 
         accRate += pRate->second;
         if (r < accRate) {
             accRate -= pRate->second;
-            auto events = _dimerEvents.find(pRate->first)->second;
+            auto &events = _dimerEvents.find(pRate->first)->second;
             for (auto pEvent = events.cbegin(); pEvent != events.cend(); ++pEvent) {
                 accRate += (*pEvent)->rate();
                 if (r < accRate) return *pEvent;
