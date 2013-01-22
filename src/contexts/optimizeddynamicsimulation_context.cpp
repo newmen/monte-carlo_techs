@@ -42,31 +42,8 @@ BaseEventData *OptimizedDynamicSimulationContext::randomEvent() const {
     return 0;
 }
 
-// почти полностью скопипасчено из optimizedeventbased_context.cpp
 EventInfoData OptimizedDynamicSimulationContext::doEvent(BaseEventData *event) {
-    EventInfoData info = event->info(negativLogU() / totalRate());
-    EventData<CellData> *cellEvent;
-    EventData<DimerData> *dimerEvent;
-
-    long double oldRate;
-    if (info.cell()) {
-        cellEvent = static_cast<EventData<CellData> *>(event);
-        oldRate = countAround(cellEvent->site());
-    } else {
-        dimerEvent = static_cast<EventData<DimerData> *>(event);
-        oldRate = countAround(dimerEvent->site());
-    }
-
-    event->doIt();
-
-    long double newRate;
-    if (info.cell()) {
-        newRate = recountAround(cellEvent->site());
-    } else {
-        newRate = recountAround(dimerEvent->site());
-    }
-
-    incTotalRate(newRate - oldRate);
+    EventInfoData info = CommonOptimizedEventBasedSimulationContext::doEvent(event);
 
     if (++_steps > _sortEachStep) {
         sortSearchContainer();
@@ -95,8 +72,16 @@ void OptimizedDynamicSimulationContext::sortSearchContainer() {
     });
 }
 
+long double OptimizedDynamicSimulationContext::recountAround(CellData *const cell) {
+    return recountAroundSite(cell);
+}
+
+long double OptimizedDynamicSimulationContext::recountAround(DimerData *const dimer) {
+    return recountAroundSite(dimer);
+}
+
 template <class SData>
-long double OptimizedDynamicSimulationContext::recountAround(SData *const site) {
+long double OptimizedDynamicSimulationContext::recountAroundSite(SData *const site) {
     long double sum = 0;
     doAround(site, [this, &sum](CellData *cell) {
         this->reinitSite(cell);

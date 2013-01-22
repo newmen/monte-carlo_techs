@@ -13,7 +13,9 @@ public:
 protected:
     BaseEventData *randomEvent() const;
     void clearAllEvents();
+
     void doWhenEventAddedWithRate(long double rate);
+    void clearLocalVars();
 
 private:
     long double _maxRate;
@@ -39,12 +41,17 @@ BaseEventData *RejectionSimulationContext<EBSimulationContext>::randomEvent() co
 template <class EBSimulationContext>
 void RejectionSimulationContext<EBSimulationContext>::clearAllEvents() {
     EBSimulationContext::clearAllEvents();
-    _maxRate = 0;
+    clearLocalVars();
 }
 
 template <class EBSimulationContext>
 void RejectionSimulationContext<EBSimulationContext>::doWhenEventAddedWithRate(long double rate) {
     if (rate > _maxRate) _maxRate = rate;
+}
+
+template <class EBSimulationContext>
+void RejectionSimulationContext<EBSimulationContext>::clearLocalVars() {
+    _maxRate = 0;
 }
 
 #endif // REJECTIONSIMULATION_CONTEXT_H

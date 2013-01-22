@@ -15,43 +15,26 @@ void OptimizedEventBasedSimulationContext::storeEvent(BaseEventData *event) {
     _events.push_back(event);
 }
 
-EventInfoData OptimizedEventBasedSimulationContext::doEvent(BaseEventData *event) {
-    EventInfoData info = event->info(negativLogU() / totalRate());
-    EventData<CellData> *cellEvent;
-    EventData<DimerData> *dimerEvent;
-
-    long double oldRate;
-    if (info.cell()) {
-        cellEvent = static_cast<EventData<CellData> *>(event);
-        oldRate = countAround(cellEvent->site());
-    } else {
-        dimerEvent = static_cast<EventData<DimerData> *>(event);
-        oldRate = countAround(dimerEvent->site());
-    }
-
-    event->doIt();
-
-    long double newRate;
-    if (info.cell()) {
-        newRate = recountAround(cellEvent->site());
-    } else {
-        newRate = recountAround(dimerEvent->site());
-    }
-
-    incTotalRate(newRate - oldRate);
-
-    return info;
-}
-
 void OptimizedEventBasedSimulationContext::recountTotalRate() {
     clearTotalRate();
+    clearLocalVars();
     for (BaseEventData *event : _events) {
-        incTotalRate(event->rate());
+        long double rate = event->rate();
+        incTotalRate(rate);
+        doWhenEventAddedWithRate(rate);
     }
+}
+
+long double OptimizedEventBasedSimulationContext::recountAround(CellData *const cell) {
+    return recountAroundSite(cell);
+}
+
+long double OptimizedEventBasedSimulationContext::recountAround(DimerData *const dimer) {
+    return recountAroundSite(dimer);
 }
 
 template <class SData>
-long double OptimizedEventBasedSimulationContext::recountAround(SData *const site) {
+long double OptimizedEventBasedSimulationContext::recountAroundSite(SData *const site) {
     long double sum = 0;
     doAround(site, [this, &sum](CellData *cell) {
         this->reinitSite(cell);
