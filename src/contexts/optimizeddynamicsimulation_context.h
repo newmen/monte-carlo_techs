@@ -17,15 +17,20 @@ public:
 protected:
     void storeEvent(BaseEventData *event);
     BaseEventData *randomEvent() const;
+
     EventInfoData doEvent(BaseEventData *event);
+
     void recountTotalRate();
+
+    long double recountAround(CellData *const cell);
+    long double recountAround(DimerData *const dimer);
 
 private:
     void insertSearchPair(long double oneRate, const Events *events);
     void sortSearchContainer();
 
     template <class SData>
-    long double recountAround(SData *const site);
+    long double recountAroundSite(SData *const site);
 
     template <class SData>
     long double updateEvent(EventData<SData> *event);

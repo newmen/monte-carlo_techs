@@ -14,13 +14,17 @@ protected:
     void clearAllEvents() {} // cap
 
     void storeEvent(BaseEventData *event);
-    EventInfoData doEvent(BaseEventData *event);
     void recountTotalRate();
+
     virtual void doWhenEventAddedWithRate(long double) {}
+    virtual void clearLocalVars() {}
+
+    long double recountAround(CellData *const cell);
+    long double recountAround(DimerData *const dimer);
 
 private:
     template <class SData>
-    long double recountAround(SData *const site);
+    long double recountAroundSite(SData *const site);
 
     template <class SData>
     long double updateEvent(EventData<SData> *event);

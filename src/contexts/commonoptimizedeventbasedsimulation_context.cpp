@@ -37,6 +37,34 @@ void CommonOptimizedEventBasedSimulationContext::addDimerEvent(DimerData *const 
     addEvent(dimer, reaction);
 }
 
+EventInfoData CommonOptimizedEventBasedSimulationContext::doEvent(BaseEventData *event) {
+    EventInfoData info = event->info(negativLogU() / totalRate());
+    EventData<CellData> *cellEvent;
+    EventData<DimerData> *dimerEvent;
+
+    long double oldRate;
+    if (info.cell()) {
+        cellEvent = static_cast<EventData<CellData> *>(event);
+        oldRate = countAround(cellEvent->site());
+    } else {
+        dimerEvent = static_cast<EventData<DimerData> *>(event);
+        oldRate = countAround(dimerEvent->site());
+    }
+
+    event->doIt();
+
+    long double newRate;
+    if (info.cell()) {
+        newRate = recountAround(cellEvent->site());
+    } else {
+        newRate = recountAround(dimerEvent->site());
+    }
+
+    _totalRate += newRate - oldRate;
+
+    return info;
+}
+
 template <class SData>
 void CommonOptimizedEventBasedSimulationContext::addEvent(SData *const site, const ReactionData<SData> *const reaction) {
     long double rate = reaction->rate(site);

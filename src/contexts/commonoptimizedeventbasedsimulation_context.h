@@ -22,11 +22,13 @@ protected:
 
     virtual void storeEvent(BaseEventData *event) = 0;
     virtual BaseEventData *randomEvent() const = 0;
-    virtual EventInfoData doEvent(BaseEventData *event) = 0;
+
+    virtual EventInfoData doEvent(BaseEventData *event);
+
     virtual void recountTotalRate() = 0;
 
-    long double countAround(CellData *const cell);
-    long double countAround(DimerData *const dimer);
+    virtual long double recountAround(CellData *const cell) = 0;
+    virtual long double recountAround(DimerData *const dimer) = 0;
 
 private:
     template <class SData>
@@ -35,6 +37,8 @@ private:
     template <class SData>
     void assignEventToSite(SData *const site, EventData<SData> *const event);
 
+    long double countAround(CellData *const cell);
+    long double countAround(DimerData *const dimer);
     template <class SData>
     long double countAroundSite(SData *const site);
 
