@@ -2,22 +2,148 @@
 
 require 'docopt'
 require 'gnuplot'
+require 'singleton'
 
 EXT_MC = 'mcr'
 EXT_PERF = 'prf'
 
+def doc
+<<HEREHELP
+Usage:
+  #{__FILE__} -d RESULTS_DIR [options]
+
+Options:
+  -h, --help            Show this
+  -d DIR, --dir=DIR     Directory with results
+  -f, --format=ext      Format of output files (png|eps|svg) [default: png]
+  -c, --coding=encode   Encoding inscriptions, in the case of format eps (cp1251|uft8) [default: cp1251]
+  -k, --key=value       Key location as it setup in Gnuplot (top|left|center|right|bottom|reverse) [default: right top]
+  -l, --linetype=type   Type of lines (lines|linespoints|points) [default: linespoints]
+  -n, --normalize       Normalize the time by the number of iterations
+  -r, --recursively     Recursive searching a result files
+  -t, --time=unit       Mean unit of time (hour|min|sec) [default: sec]
+  -a, --abbreviations   Abbreviations of calculation methods
+  --font=fontname       Font to be used when output file is not png format [default: Times-New-Roman]
+  --fontsize=size       Font size to be used when output file is not png format [default: 32]
+  --notitles            Not include titles in pictures
+  --names=NAMES         Set the names of curves separated by commas
+
+Range options:
+  --time-x-range=min,max  or  --time-x-range=min,step,max   Values for X axis on time plots
+  --time-y-range=min,max  or  --time-y-range=min,step,max   Values for Y axis on time plots
+  --phases-range=min,max  or  --phases-range=min,step,max   Values for all axis on C-C plots
+  --pref-x-range=min,max  or  --pref-x-range=min,step,max   Values for X axis on preformance plots
+  --pref-y-range=min,max  or  --pref-y-range=min,step,max   Values for Y axis on preformance plots
+HEREHELP
+end
+
+class PlotsConfig
+  include Singleton
+
+  attr_reader :result_dir, :format, :coding, :linetype, :key, :names,
+              :normalize, :recursively, :abbreviations, :notitles
+
+  def initialize
+    options = Docopt::docopt(doc)
+    @result_dir = options.delete('--dir').first
+
+    @names = options.delete('--names')
+    @names = @names ? @names.split(',') : []
+
+    define_range_method = -> method_name, min, max do
+      self.class.class_eval do
+        define_method("#{method_name}range") { "[#{min}:#{max}]" }
+      end
+    end
+
+    num_rx = '[-+]?[0-9]+\.?[0-9]*(?:[eE][-+]?[0-9]+)?'
+
+    options.each do |dashed_k, v|
+      k = dashed_k[2..dashed_k.length]
+      if k =~ /range\Z/
+        if v
+          method_name = k.gsub('-', '_')
+          method_name['range'] = ''
+          if v =~ /(#{num_rx}),(#{num_rx})/
+            define_range_method[method_name, $1, $2]
+          elsif v =~ /(#{num_rx}),#{num_rx},(#{num_rx})/
+            define_range_method[method_name, $1, $2]
+            self.class.class_eval do
+              define_method("#{method_name}tics") { v }
+            end
+          else
+            raise Docopt::Exit, "Invalid #{k} value"
+          end
+        end
+      else
+        instance_variable_set("@#{k}".to_sym, v)
+      end
+    end
+
+    unless %w(hour min sec).include?(@time)
+      raise Docopt::Exit, "Invalid time value\n"
+    end
+
+    if @fontsize !~ /\A\d+\Z/
+      raise Docopt::Exit, "Invalid fontsize value\n"
+    end
+  end
+
+  def change_dir(dir)
+    @result_dir = dir
+  end
+
+  def seconds_step
+    time_value(3600, 60, 1).to_f
+  end
+
+  def time_unit
+    time_value('час', 'мин', 'сек')
+  end
+
+  def font_setup
+    %Q(font "#{@font},#{@fontsize}")
+  end
+
+  def method_missing(method_name, *args)
+    method_name =~ /(?:range|tics)\Z/ ? nil : super
+  end
+
+  private
+
+  def time_value(hour, min, sec)
+    case @time
+    when 'hour' then hour
+    when 'min' then min
+    when 'sec' then sec
+    end
+  end
+end
+
+def config
+  PlotsConfig.instance
+end
+
 def make_gnuplot(file_name, title, xlabel, ylabel, &block)
   Gnuplot.open do |gp|
     Gnuplot::Plot.new(gp) do |plot|
-      
-      plot.output("#{file_name}.png")
-      plot.terminal('png truecolor')
-#      plot.size("5,3")
+      plot.output("#{file_name}.#{config.format}")
+      case config.format
+      when 'eps'
+        plot.set("enc #{config.coding}")
+        plot.set("term postscript eps #{config.font_setup}")
+      when 'png'
+        plot.set('terminal png linewidth 2')
+      else
+        plot.set("terminal #{config.format} #{config.font_setup}")
+      end
 
-      # plot.title(title)
+      plot.set("key #{config.key}")
+
+      plot.title(title) unless config.notitles
       plot.xlabel(xlabel)
       plot.ylabel(ylabel)
-
+      
       block.call(plot)
     end
   end
@@ -25,38 +151,53 @@ end
 
 def make_mc_time_gnuplot(file_name, title, &block)
   make_gnuplot(file_name, title, 'Время (сек)', 'Концентрация (%)') do |plot|
-   # plot.xrange('[45:70]')
-   # plot.xrange('[0:120]')
+    plot.xrange(config.time_x_range) if config.time_x_range
+    plot.yrange(config.time_y_range) if config.time_y_range
+    plot.xtics(config.time_x_tics) if config.time_x_tics
+    plot.ytics(config.time_y_tics) if config.time_y_tics
     
     block.call(plot)
   end
 end
 
 def make_mc_concentrations_gnuplot(file_name, title, a_title, b_title, &block)
-  make_gnuplot(file_name, title, "Концентрация #{a_title} [%]", "Концентрация #{b_title} [%]") do |plot|
+  make_gnuplot(file_name, title, "Концентрация #{a_title} (%)", "Концентрация #{b_title} (%)") do |plot|
+    if config.phases_range
+      plot.xrange(config.phases_range)
+      plot.yrange(config.phases_range)
+    end
+    if config.phases_tics
+      plot.xtics(config.phases_tics)
+      plot.ytics(config.phases_tics)
+    end
+
     block.call(plot)
   end
 end
 
 def make_perf_gnuplot(file_name, title, ylabel, &block)
-  make_gnuplot(file_name, title, 'Размер поля (кол-во ячеек)', ylabel) do |plot|
+  make_gnuplot(file_name, title, 'Размер поля (кол-во ячеек x1000)', ylabel) do |plot|
+    plot.xrange(config.perf_x_range) if config.perf_x_range
+    plot.yrange(config.perf_y_range) if config.perf_y_range
+    plot.xtics(config.perf_x_tics) if config.perf_x_tics
+    plot.ytics(config.perf_y_tics) if config.perf_y_tics
+
     block.call(plot)
   end
 end
 
-def make_mc_time_data(data, ds_with, &block)
+def make_mc_time_data(data, &block)
   data[1].map do |name, arr_y|
     Gnuplot::DataSet.new([data[0], arr_y]) do |ds|
-      ds.with = ds_with
-
+      ds.with = config.linetype
       block.call(name, ds)
     end
   end
 end
 
-def make_mc_concentrations_data(a_data, b_data, ds_with, &block)
+def make_mc_concentrations_data(a_data, b_data, &block)
   Gnuplot::DataSet.new([a_data, b_data]) do |ds|
-    ds.with = ds_with
+    ds.with = config.linetype
     block.call(ds)
   end
 end
@@ -79,8 +220,7 @@ def original_concentrations_data(a_data, b_data)
 end
 
 def mc_concentrations_data(a_data, b_data)
-  # make_mc_concentrations_data(a_data, b_data, 'linespoints') do |ds|
-  make_mc_concentrations_data(a_data, b_data, 'lines') do |ds|
+  make_mc_concentrations_data(a_data, b_data) do |ds|
     # ds.title = 'MC time'
     ds.title = 'time'
   end
@@ -119,41 +259,77 @@ def draw_mc_time_graph(original, mc, file_name)
   make_mc_time_gnuplot(file_name, mc[2]) do |plot|
     org_data = []
     org_data += original_time_data(original) if original
-    # plot.data = org_data + make_mc_time_data(mc, 'linespoints') do |name, ds|
-    plot.data = org_data + make_mc_time_data(mc, 'lines') do |name, ds|
+    plot.data = org_data + make_mc_time_data(mc) do |name, ds|
       # ds.title = "MC #{name}"
       ds.title = name
     end
   end
 end
 
-def draw_perf_graph(arr_x, arrs_y, name)
+def draw_perf_graph(arr_x, arrs_y, file_name)
   title, ylabel = '', ''
-  case name
-  when 'times', 'faster'
+  case file_name
+  when /(faster|times)/
     title = 'Сравнение времён расчёта'
-    ylabel = 'Время расчёта (сек)'
+    ylabel = "Время расчёта (#{config.time_unit})"
+  when 'iterations'
+    title = 'Сравнение количества итераций'
+    ylabel = 'Всего итераций'
   when 'virtuals'
     title = 'Сравнение потребления памяти'
-    ylabel = 'Использовалось памяти (байт)'
+    ylabel = 'Использовано памяти (КБ)'
   when 'rss'
     title = 'Сравнение потребления памяти'
-    ylabel = 'Всего выделено памяти (байт)'
+    ylabel = 'Выделено памяти (КБ)'
   end
 
-  make_perf_gnuplot(name, title, ylabel) do |plot|
+  make_perf_gnuplot(file_name, title, ylabel) do |plot|
     plot.data = arrs_y.map do |c_name, arr_y|
+      # кусочек жести строкой ниже
+      next if file_name =~ /time/ && file_name !~ /\Afaster/ &&
+        fasters(arrs_y).include?(c_name) && c_name != most_faster(arrs_y)
+
+      if config.abbreviations
+        prefix = c_name =~ /птими|ptimi/ ? 'O' : ''
+        prefix = "M#{prefix}" if c_name =~ /(?:олее|ore) /
+        c_name = case c_name
+        when /инамический|ynamic/ then 'D'
+        when /инетический|inetic/ then 'K'
+        when /сумм|free/ then 'RF'
+        when /отказа/ then 'R'
+        else
+          if c_name =~ /\A.+\((\d) .+\)\Z/
+            c_name.sub(/\A.+\((\d) .+\)\Z/, 'F\1')
+          elsif c_name =~ /\A.+\(бинарный|binary\)\Z/
+            'FB'
+          else
+            'F2'
+          end
+        end
+        c_name = "#{prefix}#{c_name}"
+      end
+
       Gnuplot::DataSet.new([arr_x, arr_y]) do |ds|
-        ds.with = "linespoints"
-        ds.linewidth = 2
+        ds.with = config.linetype
         ds.title = c_name
       end
-    end
+    end.compact
   end
-
 end
 
-def read_mc_file(file_name, names)
+def most_faster(arrs_y)
+  @most_faster ||= arrs_y.map { |c_name, arr_y| [c_name, arr_y.max] }.min { |a, b| a[1] <=> b[1] }[0]
+end
+
+def most_max(arrs_y)
+  @most_max ||= arrs_y.map { |_, arr_y| arr_y.max }.max
+end
+
+def fasters(arrs_y)
+  @fasters ||= arrs_y.map { |c_name, arr_y| (arr_y.max < most_max(arrs_y) / 100) ? c_name : nil }.compact
+end
+
+def read_mc_file(file_name)
   name = ''
   arr_x = []
   arrs_y = {}
@@ -169,7 +345,7 @@ def read_mc_file(file_name, names)
         arr_x << values.shift
 
         if arrs_y.empty?
-          (names + ('A'..'Z').to_a)[0...(values.size)].each do |char|
+          (config.names + ('A'..'Z').to_a)[0...(values.size)].each do |char|
             arrs_y[char.to_sym] = []
           end
         end
@@ -210,8 +386,8 @@ def read_perf_file(file_name)
         arr_x << size
 
         i = 1
-        arrs_y.each do |k, v|
-          v << values[i].to_f
+        arrs_y.each do |_, arr_y|
+          arr_y << values[i].to_f
           i += 1
         end
       end
@@ -219,26 +395,28 @@ def read_perf_file(file_name)
   end
 
   puts " complete"
-  [arr_x, arrs_y]
+  [arr_x, arrs_y.to_a]
 end
 
 def draw_perf_file(arr_x, arrs_y, base_file_name)
   draw_perf_graph(arr_x, arrs_y, base_file_name)
 
   if base_file_name == 'times'
-    faster_arrs_y = {}
-    arrs_y.each do |k, v|
-      faster_arrs_y[k] = v if k =~ /\A(F|f)aster/ || k =~ /\A(М|м)ного/
-    end
-
+    faster_arrs_y = arrs_y.select { |c_name, arr_y| fasters(arrs_y).include?(c_name) }
     draw_perf_graph(arr_x, faster_arrs_y, 'faster-times')
   end
 end
 
-def read_and_draw_mc_plots(names)
+def decrease_each_y_value(arrs_y, coef)
+  arrs_y.map! do |name, values|
+    [name, values.map { |v| v / coef }]
+  end
+end
+
+def read_and_draw_mc_plots
   original_file = "original.#{EXT_MC}"
   if File.exist?(original_file) && File.size(original_file) > 0
-    original = read_mc_file(original_file, names)
+    original = read_mc_file(original_file)
     draw_original_time(original)
     draw_concentrations_graphs('original', original, nil)
   else
@@ -247,14 +425,14 @@ def read_and_draw_mc_plots(names)
 
   mc_files = Dir["*.#{EXT_MC}"] - [original_file]
   mc_files.each do |file_name|
-    mc = read_mc_file(file_name, names)
+    mc = read_mc_file(file_name)
     base_file_name = File.basename(file_name, ".#{EXT_MC}")
     draw_mc_time_graph(original, mc, base_file_name)
     draw_concentrations_graphs(base_file_name, original, mc)
   end
 end
 
-def read_and_draw_perf_plots(time_coef, is_average_time)
+def read_and_draw_perf_plots
   iterations_data = nil
   times_data = nil
 
@@ -262,13 +440,22 @@ def read_and_draw_perf_plots(time_coef, is_average_time)
     data = read_perf_file(file_name)
     arr_x, arrs_y = data
     base_file_name = File.basename(file_name, ".#{EXT_PERF}")
+    is_time_file = (base_file_name =~ /time/)
 
-    if is_average_time
-      iterations_data = data if base_file_name == 'iterations'
-      times_data = data if base_file_name == 'times'
+    arr_x.map! { |x| x * 0.001 }
+
+    if is_time_file
+      decrease_each_y_value(arrs_y, config.seconds_step)
+    elsif base_file_name =~ /(virtuals|rss)/
+      decrease_each_y_value(arrs_y, 1000.0)
     end
 
-    unless is_average_time && base_file_name == 'times'
+    if config.normalize
+      iterations_data = data if base_file_name == 'iterations'
+      times_data = data if is_time_file
+    end
+
+    if !config.normalize || !is_time_file
       draw_perf_file(arr_x, arrs_y, base_file_name)
     end
   end
@@ -279,111 +466,66 @@ def read_and_draw_perf_plots(time_coef, is_average_time)
   time_arr_x, time_arrs_y = times_data
   raise "Size values do not match" unless iter_arr_x == time_arr_x
   
-  average_iters = []
+  normalize_iters = []
   time_arrs_y.each do |name, values|
     values.each_index do |i|
       values[i] /= iter_arrs_y[name][i]
-      average_iters[i] ||= []
-      average_iters[i] << iter_arrs_y[name][i]
+      normalize_iters[i] ||= []
+      normalize_iters[i] << iter_arrs_y[name][i]
     end
   end
 
-  average_iters.map! do |slice|
-    sum = slice.inject(0) { |acc, x| acc + x }
-    sum / slice.size
+  normalize_iters.map! do |slice|
+    slice.inject(:+) / slice.size
   end
 
   time_arrs_y.each do |name, values|
     values.each_index do |i|
-      values[i] *= average_iters[i]
+      values[i] *= normalize_iters[i]
     end
   end
 
   draw_perf_file(time_arr_x, time_arrs_y, 'times')
 end
 
-def draw_into_dir(config)
+def draw_into_dir
   print "Entering into #{File.expand_path(config.result_dir)}..."
   Dir.chdir(config.result_dir)
   puts " complete"
 
-  read_and_draw_mc_plots(config.names)
-  read_and_draw_perf_plots(config.time, config.average)
+  read_and_draw_mc_plots
+  read_and_draw_perf_plots
 
   return unless config.recursively
 
   Dir['*/'].each do |dir|
     config.change_dir(dir)
-    draw_into_dir(config)
+    draw_into_dir
     Dir.chdir('..')
   end
 end
 
-class PlotsConfig
-  attr_reader :result_dir, :recursively, :average, :time, :names
-
-  def initialize(options)
-    @result_dir = options.delete('--dir').first
-
-    @names = options.delete('--names')
-    @names = @names ? @names.split(',') : []
-
-    options.each do |dashed_k, v|
-      k = dashed_k[2..dashed_k.length]
-      instance_variable_set("@#{k}".to_sym, v)
-    end
-
-    unless %w(hour min sec).include?(@time)
-      raise Docopt::Exit, "Invalid time value\n"
-    end
-  end
-
-  def change_dir(dir)
-    @result_dir = dir
-  end
-
-  def time
-    case @time
-    when 'hour' then 3600
-    when 'min' then 60
-    when 'sec' then 1
-    end
-  end
-end
-
 def main
-  doc = <<HEREHELP
-Usage: 
-  #{__FILE__} -d RESULTS_DIR [options]
-
-Options:
-  -h, --help         Show this
-  -d DIR, --dir=DIR  Directory with results
-  -r, --recursively  Recursive searching a result files
-  -a, --average      Average the time by the number of iterations
-  -t, --time=unit    Mean unit of time (hour|min|sec) [default: sec]
-  --names=NAMES      Set the names of curves separated by commas
-HEREHELP
-
   # TODO:
-  # 1. так и не запилен пересчёт времени, с учётом указанного параметра
-  # 2. нужно предоставлять возможность указывать логарифмическую шкалу времени
-  # 3. предоставлять возможность указывать какие из имеющихся результатов методов обрабатывать
-  # 4. выбирать диапазон рисуемых графиков концентраций (в секундах)
-  # 5. определять рисовать ли title графика
+  # 1. нужно предоставлять возможность указывать логарифмическую шкалу времени
+  # 2. предоставлять возможность указывать какие из имеющихся результатов методов обрабатывать
 
   begin
-    options = Docopt::docopt(doc)
-    config = PlotsConfig.new(options)
-
     if config.result_dir
-      draw_into_dir(config)
+      draw_into_dir
+
+      if config.format == 'eps' && config.coding != 'utf8'
+        Dir['*.eps'].each do |eps_file|
+          content = File.read(eps_file)#.encode(config.coding).gsub('x1000', '×1000')
+          File.open(eps_file, "w:#{config.coding}") { |f| f.write(content) }
+        end
+      end
     else
-      puts "Wrond run!"
       puts doc
     end
-  rescue Docopt::Exit
-    puts doc
+  rescue Docopt::Exit => e
+    puts e.message
+    # puts doc
   end
 end
 
