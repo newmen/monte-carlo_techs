@@ -1,6 +1,6 @@
-GCC_PATH = /share/home/tools/gcc-4.7.1
+GCC_PATH = /opt/gcc47
 CXX = $(GCC_PATH)/bin/g++
-CXXFLAGS = -Wall -O2 -std=c++0x -I$(GCC_PATH)/include/c++/4.7.1 -L$(GCC_PATH)/lib64 -I../../src
+CXXFLAGS = -Wall -O2 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64 -I../../src
 
 NAME = test_mc
 HEAP_NAME = heap_test
