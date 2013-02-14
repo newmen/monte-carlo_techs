@@ -174,8 +174,8 @@ int main(int argc, char *argv[]) {
 
 //    ABCDCellReactorContext reactor;
 //    ABCDDimerReactorContext reactor;
-    LotkaReactorContext reactor;
-//    SimpleNOCOReactorContext reactor;
+//    LotkaReactorContext reactor;
+    SimpleNOCOReactorContext reactor;
 //    FullNOCOReactorContext reactor;
     TestConfig tc(&reactor, argv[1], atoi(argv[2]), atoi(argv[3]), atoi(argv[4]),
                   (argc == 6 && strcmp(argv[5], "true") == 0));

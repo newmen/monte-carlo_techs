@@ -13,20 +13,22 @@ Usage:
   #{__FILE__} -d RESULTS_DIR [options]
 
 Options:
-  -h, --help            Show this
-  -d DIR, --dir=DIR     Directory with results
-  -f, --format=ext      Format of output files (png|eps|svg) [default: png]
-  -c, --coding=encode   Encoding inscriptions, in the case of format eps (cp1251|uft8) [default: cp1251]
-  -k, --key=value       Key location as it setup in Gnuplot (top|left|center|right|bottom|reverse) [default: right top]
-  -l, --linetype=type   Type of lines (lines|linespoints|points) [default: linespoints]
-  -n, --normalize       Normalize the time by the number of iterations
-  -r, --recursively     Recursive searching a result files
-  -t, --time=unit       Mean unit of time (hour|min|sec) [default: sec]
-  -a, --abbreviations   Abbreviations of calculation methods
-  --font=fontname       Font to be used when output file is not png format [default: Times-New-Roman]
-  --fontsize=size       Font size to be used when output file is not png format [default: 32]
-  --notitles            Not include titles in pictures
-  --names=NAMES         Set the names of curves separated by commas
+  -h, --help                Show this
+  -d DIR, --dir=DIR         Directory with results
+  -f, --format=ext          Format of output files (png|eps|svg) [default: png]
+  -c, --coding=encode       Encoding inscriptions, in the case of format eps (cp1251|uft8) [default: cp1251]
+  -k, --key=value           Key location as it setup in Gnuplot (top|left|center|right|bottom|reverse) [default: right top]
+  -l, --linetype=type       Type of lines (lines|linespoints|points) [default: linespoints]
+  -n, --normalize           Normalize the time by the number of iterations
+  -r, --recursively         Recursive searching a result files
+  -s, --size=width,height   Size of plots when output file has png format
+  -t, --time=unit           Mean unit of time (hour|min|sec) [default: sec]
+  -a, --abbreviations       Abbreviations of calculation methods
+  --font=fontname           Font to be used when output file is not png format [default: Times-New-Roman]
+  --fontsize=size           Font size to be used when output file is not png format [default: 32]
+  --notitles                Not include titles in pictures
+  --nolabels                Not include axis labels in pictures
+  --names=NAMES             Set the names of curves separated by commas
 
 Range options:
   --time-x-range=min,max  or  --time-x-range=min,step,max   Values for X axis on time plots
@@ -40,8 +42,8 @@ end
 class PlotsConfig
   include Singleton
 
-  attr_reader :result_dir, :format, :coding, :linetype, :key, :names,
-              :normalize, :recursively, :abbreviations, :notitles
+  attr_reader :result_dir, :format, :coding, :linetype, :key, :size, :names,
+              :normalize, :recursively, :abbreviations, :notitles, :nolabels
 
   def initialize
     options = Docopt::docopt(doc)
@@ -134,15 +136,19 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
         plot.set("term postscript eps #{config.font_setup}")
       when 'png'
         plot.set('terminal png linewidth 2')
+        plot.set('terminal png size #{config.size}') if config.size
       else
-        plot.set("terminal #{config.format} #{config.font_setup}")
+        plot.set("terminal #{config.format}")
+        # plot.set("terminal #{config.format} #{config.font_setup}")
       end
 
       plot.set("key #{config.key}")
 
       plot.title(title) unless config.notitles
-      plot.xlabel(xlabel)
-      plot.ylabel(ylabel)
+      unless config.nolabels
+        plot.xlabel(xlabel)
+        plot.ylabel(ylabel)
+      end
       
       block.call(plot)
     end
@@ -208,13 +214,13 @@ def configure_original(ds, name)
 end
 
 def original_time_data(original)
-  make_mc_time_data(original, 'lines') do |name, ds|
+  make_mc_time_data(original) do |name, ds|
     configure_original(ds, name)
   end
 end
 
 def original_concentrations_data(a_data, b_data)
-  make_mc_concentrations_data(a_data, b_data, 'lines') do |ds|
+  make_mc_concentrations_data(a_data, b_data) do |ds|
     configure_original(ds, 'time')
   end
 end
@@ -287,7 +293,7 @@ def draw_perf_graph(arr_x, arrs_y, file_name)
     plot.data = arrs_y.map do |c_name, arr_y|
       # кусочек жести строкой ниже
       next if file_name =~ /time/ && file_name !~ /\Afaster/ &&
-        fasters(arrs_y).include?(c_name) && c_name != most_faster(arrs_y)
+        fasters(arrs_y).include?(c_name) && c_name != slow_faster(arrs_y)
 
       if config.abbreviations
         prefix = c_name =~ /птими|ptimi/ ? 'O' : ''
@@ -317,8 +323,10 @@ def draw_perf_graph(arr_x, arrs_y, file_name)
   end
 end
 
-def most_faster(arrs_y)
-  @most_faster ||= arrs_y.map { |c_name, arr_y| [c_name, arr_y.max] }.min { |a, b| a[1] <=> b[1] }[0]
+def slow_faster(arrs_y)
+  @slow_faster ||= arrs_y.map do |c_name, arr_y|
+    [c_name, (fasters(arrs_y).include?(c_name) ? arr_y.max : 0)]
+  end.max { |a, b| a[1] <=> b[1] }[0]
 end
 
 def most_max(arrs_y)
