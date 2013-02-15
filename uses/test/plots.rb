@@ -19,6 +19,7 @@ Options:
   -c, --coding=encode       Encoding inscriptions, in the case of format eps (cp1251|uft8) [default: cp1251]
   -k, --key=value           Key location as it setup in Gnuplot (top|left|center|right|bottom|reverse) [default: right top]
   -l, --linetype=type       Type of lines (lines|linespoints|points) [default: linespoints]
+  -w, --linewidth=width     Width of lines [default: 1]
   -n, --normalize           Normalize the time by the number of iterations
   -r, --recursively         Recursive searching a result files
   -s, --size=width,height   Size of plots when output file has png format
@@ -42,7 +43,7 @@ end
 class PlotsConfig
   include Singleton
 
-  attr_reader :result_dir, :format, :coding, :linetype, :key, :size, :names,
+  attr_reader :result_dir, :format, :coding, :linetype, :linewidth, :key, :size, :names,
               :normalize, :recursively, :abbreviations, :notitles, :nolabels
 
   def initialize
@@ -135,7 +136,7 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
         plot.set("enc #{config.coding}")
         plot.set("term postscript eps #{config.font_setup}")
       when 'png'
-        plot.set('terminal png linewidth 2')
+        plot.set("terminal png linewidth #{config.linewidth}")
         plot.set('terminal png size #{config.size}') if config.size
       else
         plot.set("terminal #{config.format}")
@@ -209,7 +210,7 @@ def make_mc_concentrations_data(a_data, b_data, &block)
 end
 
 def configure_original(ds, name)
-  ds.linewidth = 2
+  ds.linewidth = config.linewidth
   ds.title = "Original #{name}"
 end
 
