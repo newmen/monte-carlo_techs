@@ -23,8 +23,9 @@ Options:
   -n, --normalize           Normalize the time by the number of iterations
   -r, --recursively         Recursive searching a result files
   -s, --size=width,height   Size of plots when output file has png format
-  -t, --time=unit           Mean unit of time (hour|min|sec) [default: sec]
   -a, --abbreviations       Abbreviations of calculation methods
+  -t, --time=unit           Mean unit of time (hour|min|sec) [default: sec]
+  --log                     Logarithmic performance time scale
   --font=fontname           Font to be used when output file is not png format [default: Times-New-Roman]
   --fontsize=size           Font size to be used when output file is not png format [default: 32]
   --notitles                Not include titles in pictures
@@ -35,8 +36,8 @@ Range options:
   --time-x-range=min,max  or  --time-x-range=min,step,max   Values for X axis on time plots
   --time-y-range=min,max  or  --time-y-range=min,step,max   Values for Y axis on time plots
   --phases-range=min,max  or  --phases-range=min,step,max   Values for all axis on C-C plots
-  --pref-x-range=min,max  or  --pref-x-range=min,step,max   Values for X axis on preformance plots
-  --pref-y-range=min,max  or  --pref-y-range=min,step,max   Values for Y axis on preformance plots
+  --perf-x-range=min,max  or  --perf-x-range=min,step,max   Values for X axis on performance plots
+  --perf-y-range=min,max  or  --perf-y-range=min,step,max   Values for Y axis on performance plots
 HEREHELP
 end
 
@@ -44,7 +45,7 @@ class PlotsConfig
   include Singleton
 
   attr_reader :result_dir, :format, :coding, :linetype, :linewidth, :key, :size, :names,
-              :normalize, :recursively, :abbreviations, :notitles, :nolabels
+              :normalize, :recursively, :abbreviations, :notitles, :nolabels, :log
 
   def initialize
     options = Docopt::docopt(doc)
@@ -67,13 +68,13 @@ class PlotsConfig
         if v
           method_name = k.gsub('-', '_')
           method_name['range'] = ''
-          if v =~ /(#{num_rx}),(#{num_rx})/
-            define_range_method[method_name, $1, $2]
-          elsif v =~ /(#{num_rx}),#{num_rx},(#{num_rx})/
+          if v =~ /(#{num_rx}),#{num_rx},(#{num_rx})/
             define_range_method[method_name, $1, $2]
             self.class.class_eval do
               define_method("#{method_name}tics") { v }
             end
+          elsif v =~ /(#{num_rx}),(#{num_rx})/
+            define_range_method[method_name, $1, $2]
           else
             raise Docopt::Exit, "Invalid #{k} value"
           end
@@ -101,7 +102,9 @@ class PlotsConfig
   end
 
   def time_unit
-    time_value('час', 'мин', 'сек')
+    unit = time_value('час', 'мин', 'сек')
+    unit = "log10(#{unit})" if log
+    unit
   end
 
   def font_setup
@@ -127,6 +130,14 @@ def config
   PlotsConfig.instance
 end
 
+def data_set(data, &block)
+  Gnuplot::DataSet.new(data) do |ds|
+    ds.with = config.linetype
+    ds.linewidth = config.linewidth
+    block.call(ds)
+  end
+end
+
 def make_gnuplot(file_name, title, xlabel, ylabel, &block)
   Gnuplot.open do |gp|
     Gnuplot::Plot.new(gp) do |plot|
@@ -136,7 +147,7 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
         plot.set("enc #{config.coding}")
         plot.set("term postscript eps #{config.font_setup}")
       when 'png'
-        plot.set("terminal png linewidth #{config.linewidth}")
+        plot.set('terminal png')
         plot.set('terminal png size #{config.size}') if config.size
       else
         plot.set("terminal #{config.format}")
@@ -150,7 +161,7 @@ def make_gnuplot(file_name, title, xlabel, ylabel, &block)
         plot.xlabel(xlabel)
         plot.ylabel(ylabel)
       end
-      
+
       block.call(plot)
     end
   end
@@ -162,7 +173,7 @@ def make_mc_time_gnuplot(file_name, title, &block)
     plot.yrange(config.time_y_range) if config.time_y_range
     plot.xtics(config.time_x_tics) if config.time_x_tics
     plot.ytics(config.time_y_tics) if config.time_y_tics
-    
+
     block.call(plot)
   end
 end
@@ -195,16 +206,14 @@ end
 
 def make_mc_time_data(data, &block)
   data[1].map do |name, arr_y|
-    Gnuplot::DataSet.new([data[0], arr_y]) do |ds|
-      ds.with = config.linetype
+    data_set([data[0], arr_y]) do |ds|
       block.call(name, ds)
     end
   end
 end
 
 def make_mc_concentrations_data(a_data, b_data, &block)
-  Gnuplot::DataSet.new([a_data, b_data]) do |ds|
-    ds.with = config.linetype
+  data_set([a_data, b_data]) do |ds|
     block.call(ds)
   end
 end
@@ -316,8 +325,7 @@ def draw_perf_graph(arr_x, arrs_y, file_name)
         c_name = "#{prefix}#{c_name}"
       end
 
-      Gnuplot::DataSet.new([arr_x, arr_y]) do |ds|
-        ds.with = config.linetype
+      data_set([arr_x, arr_y]) do |ds|
         ds.title = c_name
       end
     end.compact
@@ -335,7 +343,9 @@ def most_max(arrs_y)
 end
 
 def fasters(arrs_y)
-  @fasters ||= arrs_y.map { |c_name, arr_y| (arr_y.max < most_max(arrs_y) / 100) ? c_name : nil }.compact
+  @fasters ||= arrs_y.map do |c_name, arr_y|
+    (arr_y.max < most_max(arrs_y) / (config.log ? 2 : 100).to_f) ? c_name : nil
+  end.compact
 end
 
 def read_mc_file(file_name)
@@ -455,6 +465,11 @@ def read_and_draw_perf_plots
 
     if is_time_file
       decrease_each_y_value(arrs_y, config.seconds_step)
+      if config.log
+        arrs_y.map! do |name, values|
+          [name, values.map { |v| Math.log10(v) }]
+        end
+      end
     elsif base_file_name =~ /(virtuals|rss)/
       decrease_each_y_value(arrs_y, 1000.0)
     end
@@ -464,7 +479,7 @@ def read_and_draw_perf_plots
       times_data = data if is_time_file
     end
 
-    if !config.normalize || !is_time_file
+    unless config.normalize && is_time_file
       draw_perf_file(arr_x, arrs_y, base_file_name)
     end
   end
@@ -474,7 +489,7 @@ def read_and_draw_perf_plots
   iter_arr_x, iter_arrs_y = iterations_data
   time_arr_x, time_arrs_y = times_data
   raise "Size values do not match" unless iter_arr_x == time_arr_x
-  
+
   normalize_iters = []
   time_arrs_y.each do |name, values|
     values.each_index do |i|
