@@ -113,7 +113,9 @@ long double OptimizedDynamicSimulationContext::updateEvent(EventData<SData> *eve
         if (oldRate > 0) {
             Events &fromVector = this->_rateToEvents[oldRate];
             Events::iterator p = std::find(fromVector.begin(), fromVector.end(), event);
-            fromVector.erase(p);
+            Events::iterator last = fromVector.end();
+            std::swap(*p, *(--last));
+            fromVector.erase(last);
             this->_rateToSearchPair[oldRate]->first -= oldRate;
         }
         if (newRate > 0) {

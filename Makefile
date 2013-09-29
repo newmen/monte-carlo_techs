@@ -1,4 +1,4 @@
-GCC_PATH	:= /opt/gcc47
+GCC_PATH	:= /usr
 CXX		:= $(GCC_PATH)/bin/g++
 CXXFLAGS	:= -Wall -O2 -std=c++0x -I$(GCC_PATH)/include -L$(GCC_PATH)/lib64
 

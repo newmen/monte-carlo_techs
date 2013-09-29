@@ -210,16 +210,16 @@ int main(int argc, char *argv[]) {
 
     factory->setWidth(3);
     runTest(&tc, "Faster 3 MC", "faster_3");
-//    factory->setWidth(4);
-//    runTest(&tc, "Faster 5 MC", "faster_5");
+    factory->setWidth(4);
+    runTest(&tc, "Faster 5 MC", "faster_5");
 //    factory->setWidth(6);
 //    runTest(&tc, "Faster 6 MC", "faster_6");
 
 //    tc.changeFactory(new TypicalSimContextFactory<TreeBasedSimulationContext>);
 //    runTest(&tc, "Faster Optimal (4) MC", "faster_optimal");
 
-    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext<OptimizedEventBasedSimulationContext> >);
-    runTest(&tc, "Optimized Rejection MC", "optimized-rejection");
+//    tc.changeFactory(new TypicalSimContextFactory<RejectionSimulationContext<OptimizedEventBasedSimulationContext> >);
+//    runTest(&tc, "Optimized Rejection MC", "optimized-rejection");
 //    tc.changeFactory(new TypicalSimContextFactory<RejectionFreeSimulationContext<OptimizedEventBasedSimulationContext> >);
 //    runTest(&tc, "Optimized Rejection-free MC", "optimized-rejection-free");
 //    tc.changeFactory(new TypicalSimContextFactory<MuchOptimizedRejectionFreeSimulationContext>);
